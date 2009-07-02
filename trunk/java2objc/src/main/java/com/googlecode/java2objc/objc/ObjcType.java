@@ -26,29 +26,11 @@ public class ObjcType extends ObjcNode {
 
   private static Map<String, ObjcType> types = new HashMap<String, ObjcType>();
   static {
-    ObjcType nsIntegerType = new ObjcType("NSInteger", null, false);
-    types.put("int", nsIntegerType);
-    types.put("Integer", nsIntegerType);
-    types.put("byte", nsIntegerType);
-    types.put("Byte", nsIntegerType);
-    types.put("short", nsIntegerType);
-    types.put("Short", nsIntegerType);
-    types.put("long", nsIntegerType);
-    types.put("Long", nsIntegerType);
-    ObjcType nsDecimalType = new ObjcType("NSDecimal", null, false);
-    types.put("float", nsDecimalType);
-    types.put("Float", nsDecimalType);
-    types.put("double", nsDecimalType);
-    types.put("Double", nsDecimalType);
-    types.put("BigDecimal", nsDecimalType);
-    ObjcType nsBooleanType = new ObjcType("BOOL", null, false);
-    types.put("boolean", nsBooleanType);
-    types.put("Boolean", nsBooleanType);
-    ObjcType nsVoidType = new ObjcType("void", null, false);
-    types.put("void", nsVoidType);
+    for (ObjcTypes objcType : ObjcTypes.values()) {
+      objcType.registerTypes(types);
+    }
   }
 
-  public static final ObjcType NSOBJECT = getTypeFor("NSObject", null, true);
   public static final ObjcType ID = getTypeFor("id");
   private final String name;
   private final ObjcType baseClass;
@@ -58,11 +40,19 @@ public class ObjcType extends ObjcNode {
   private final Set<ObjcMethod> methods;
   private ObjcMethod currentMethod;
   
-  private ObjcType(String name) {
-    this(name, NSOBJECT, true);
+  protected ObjcType(ObjcTypes type) {
+    this(type.toString());
   }
 
-  private ObjcType(String name, ObjcType baseClass, boolean pointerType) {
+  protected ObjcType(String name) {
+    this(name, NSObject.INSTANCE, true);
+  }
+
+  protected ObjcType(ObjcTypes type, ObjcType baseClass, boolean pointerType) {
+    this(type.toString(), baseClass, pointerType);
+  }
+
+  protected ObjcType(String name, ObjcType baseClass, boolean pointerType) {
     this.name = name;
     this.baseClass = baseClass;
     this.pointerType = pointerType;
@@ -81,6 +71,7 @@ public class ObjcType extends ObjcNode {
   public ObjcMethod getCurrentMethod() {
     return currentMethod;
   }
+
   public String getName() {
     return name;
   }
@@ -140,11 +131,11 @@ public class ObjcType extends ObjcNode {
   }
 
   public static ObjcType getTypeFor(String name) {
-    return getTypeFor(name, NSOBJECT, true);
+    return getTypeFor(name, NSObject.INSTANCE, true);
   }
 
   public static ObjcType getTypeFor(String name, boolean pointerType) {
-    return getTypeFor(name, NSOBJECT, pointerType);
+    return getTypeFor(name, NSObject.INSTANCE, pointerType);
   }
 
   private static ObjcType getTypeFor(String name, ObjcType baseType, boolean pointerType) {
