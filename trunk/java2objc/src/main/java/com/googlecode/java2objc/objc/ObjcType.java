@@ -90,6 +90,10 @@ public class ObjcType extends ObjcNode {
     return name + ".h";
   }
   
+  public String getImplFileName() {
+    return name + ".m";
+  }
+  
   public void appendHeaderBody(SourceCodeWriter writer) throws IOException {
     for (ObjcType importedClass : importsInHeader) {
       writer.startLine().append("#import \"").append(importedClass.getHeaderFileName()).append("\"").endLine();
