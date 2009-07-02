@@ -19,6 +19,7 @@ import japa.parser.JavaParser;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -34,30 +35,26 @@ import com.googlecode.java2objc.util.Preconditions;
 public class Main {
 
   private static class Config {
-    private String packageName = null;
     private String outputDir = null;
 
     public void update(String arg) {
       Preconditions.assertTrue(arg.startsWith("--"));
-      arg = arg.substring(2); // remove --
       String[] parts = arg.split("=");
       String name = parts[0];
       String value = parts[1];
-      if (name.equals("package")) {
-        packageName = value;
-      } else if (name.equals("outputdir")) {
-          outputDir = value;
-        }
+      if (name.equals("--outputdir")) {
+        outputDir = value;
       }
+    }
 
     public static String availableOptions() {
-      return "--package=com.foo,--outputdir=/tmp";
+      return "--outputdir=/tmp";
     }    
   }
 
   private static void printUsageAndExit() {
-    System.err.println("Usage: java -jar java2objc.jar MyClass1.java MyClass2.java");
-    System.out.println(Config.availableOptions());
+    System.err.printf("Usage: java -jar %s java2objc.jar /path/to/MyClass1.java /path/to/second/MyClass2.java\n",
+        Config.availableOptions());
     System.exit(-1);
   }
 
@@ -91,21 +88,23 @@ public class Main {
     for (String javaFileName : javaFiles) { 
       Preconditions.assertTrue(javaFileName.endsWith(".java"));
       FileInputStream in = new FileInputStream(javaFileName);
-      String className = javaFileName.substring(0, javaFileName.indexOf('.'));
-      parseJavaFileAndWriteObjcType(in, className);
+      parseJavaFileAndWriteObjcType(in);
     }
   }
 
-  private void parseJavaFileAndWriteObjcType(InputStream in, String className)
-      throws ParseException, IOException {
-    SourceCodeWriter psHeader = new SourceCodeWriter(new PrintWriter(new FileOutputStream(className + ".h")));
-    SourceCodeWriter psImpl = new SourceCodeWriter(new PrintWriter(new FileOutputStream(className + ".m")));
+  private void parseJavaFileAndWriteObjcType(InputStream in) throws ParseException, IOException {
+    SourceCodeWriter psHeader = null;
+    SourceCodeWriter psImpl = null;
     try {
       CompilationUnit cu = JavaParser.parse(in);
       TranslateVisitor translateVisitor = new TranslateVisitor();
       GeneratorContext context = new GeneratorContext();
       translateVisitor.visit(cu, context);
       ObjcType currentType = context.getCurrentType();
+      File headerFile = new File(config.outputDir, currentType.getHeaderFileName());
+      psHeader = new SourceCodeWriter(new PrintWriter(new FileOutputStream(headerFile)));
+      File implFile = new File(config.outputDir, currentType.getImplFileName());
+      psImpl = new SourceCodeWriter(new PrintWriter(new FileOutputStream(implFile)));
       currentType.appendHeaderBody(psHeader);
       currentType.appendImplBody(psImpl);
     } finally {
