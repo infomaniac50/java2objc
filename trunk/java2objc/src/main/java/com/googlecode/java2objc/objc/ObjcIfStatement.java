@@ -17,8 +17,6 @@ package com.googlecode.java2objc.objc;
 
 import japa.parser.ast.stmt.IfStmt;
 
-import java.io.IOException;
-
 public class ObjcIfStatement extends ObjcStatement {
   private final ObjcExpression condition;
   private final ObjcStatement thenStmt;
@@ -32,11 +30,11 @@ public class ObjcIfStatement extends ObjcStatement {
   }
 
   @Override
-  public void append(Appendable writer) throws IOException {
-    writer.append("if (").append(condition.toString()).append(") {\n");
-    writer.append(thenStmt.toString()).append("\n");
-    writer.append("} else {\n");
-    writer.append(elseStmt.toString()).append("\n");
-    writer.append("}\n");
+  public void append(SourceCodeWriter writer) {
+    writer.startLine().append("if (").append(condition).append(") {").endLine();
+    writer.indent().appendLine(thenStmt).unIndent();
+    writer.appendLine("} else {");
+    writer.indent().appendLine(elseStmt).unIndent();
+    writer.appendLine("}");
   }
 }

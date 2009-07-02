@@ -49,19 +49,18 @@ public class ObjcMethod {
     this.methodBody = new ObjcMethodBody();    
   }
   
-  public void appendDeclaration(Appendable writer) throws IOException {
+  public void appendDeclaration(SourceCodeWriter writer) {
     appendMethodSignature(writer);
-    writer.append(";\n");
+    writer.append(";").endLine();
   }
   
-  public void appendDefinition(Appendable writer) throws IOException {
+  public void appendDefinition(SourceCodeWriter writer) {
     appendMethodSignature(writer);
-    methodBody.append(writer);
+    writer.append(methodBody);
   }
   
-  private void appendMethodSignature(Appendable writer) throws IOException {
-    writer.append("- (");
-    writer.append(returnType.getPointerTypeName()).append(") ");
+  private void appendMethodSignature(SourceCodeWriter writer) {
+    writer.append("- (").append(returnType.getPointerTypeName()).append(") ");
     writer.append(name);
     if (params == null || params.size() == 0) {
       return;

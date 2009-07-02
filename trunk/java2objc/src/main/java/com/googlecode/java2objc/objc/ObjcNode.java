@@ -15,11 +15,14 @@
  */
 package com.googlecode.java2objc.objc;
 
-import japa.parser.ast.stmt.Statement;
+/**
+ * Base class for all Objc nodes
+ * 
+ * @author inder
+ */
+public class ObjcNode {
 
-public class ObjcStatement extends ObjcNode {
-
-  public ObjcStatement(Statement stmt) {
+  public void append(SourceCodeWriter writer) {
+    writer.append(toString());
   }
-
 }
