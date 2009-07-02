@@ -17,7 +17,6 @@ package com.googlecode.java2objc.objc;
 
 import japa.parser.ast.type.Type;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -94,7 +93,16 @@ public class ObjcType extends ObjcNode {
     return name + ".m";
   }
   
-  public void appendHeaderBody(SourceCodeWriter writer) throws IOException {
+  @Override
+  public void append(SourceCodeWriter writer) {
+    if (writer.isWritingHeaderFile()) {
+      appendHeaderBody(writer);
+    } else {
+      appendImplBody(writer);
+    }
+  }
+
+  private void appendHeaderBody(SourceCodeWriter writer) {
     for (ObjcType importedClass : importsInHeader) {
       writer.startLine().append("#import \"").append(importedClass.getHeaderFileName()).append("\"").endLine();
     }
@@ -105,19 +113,19 @@ public class ObjcType extends ObjcNode {
     writer.unIndent();
     writer.appendLine("}");
     for (ObjcMethod m : methods) {
-      m.appendDeclaration(writer);
+      writer.append(m);
     }
     writer.appendLine("@end");
   }
   
-  public void appendImplBody(SourceCodeWriter writer) throws IOException {
+  private void appendImplBody(SourceCodeWriter writer) {
     for (ObjcType importedClass : importsInImpl) {
       writer.startLine().append("#import \"").append(importedClass.getHeaderFileName()).append("\"").endLine();
     }
     writer.appendBlankLine();
     writer.startLine().append("@implementation ").append(name).endLine().appendBlankLine();
     for (ObjcMethod m : methods) {
-      m.appendDefinition(writer);
+      writer.append(m);
     }
     writer.appendLine("@end");
   }

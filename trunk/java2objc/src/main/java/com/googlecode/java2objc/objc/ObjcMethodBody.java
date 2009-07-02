@@ -33,9 +33,11 @@ public class ObjcMethodBody extends ObjcNode {
   @Override
   public void append(SourceCodeWriter writer) {
     writer.append(" {").endLine();
+    writer.indent();
     for (ObjcStatement stmt : statements) {
-      writer.appendLine(stmt);
+      writer.append(stmt);
     }
+    writer.unIndent();
     writer.appendLine("}").appendBlankLine();
   }
 }
