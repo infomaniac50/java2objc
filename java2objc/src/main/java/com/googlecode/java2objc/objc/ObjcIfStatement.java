@@ -16,6 +16,7 @@
 package com.googlecode.java2objc.objc;
 
 import japa.parser.ast.stmt.IfStmt;
+import japa.parser.ast.stmt.Statement;
 
 public class ObjcIfStatement extends ObjcStatement {
   private final ObjcExpression condition;
@@ -26,15 +27,18 @@ public class ObjcIfStatement extends ObjcStatement {
     super(n);
     this.condition = new ObjcExpression(n.getCondition());
     this.thenStmt = new ObjcStatement(n.getThenStmt());
-    this.elseStmt = new ObjcStatement(n.getElseStmt());
+    Statement elseStmtNode = n.getElseStmt();
+    this.elseStmt = elseStmtNode == null ? null : new ObjcStatement(elseStmtNode);
   }
 
   @Override
   public void append(SourceCodeWriter writer) {
     writer.startLine().append("if (").append(condition).append(") {").endLine();
-    writer.indent().appendLine(thenStmt).unIndent();
-    writer.appendLine("} else {");
-    writer.indent().appendLine(elseStmt).unIndent();
-    writer.appendLine("}");
+    writer.indent().appendLine(thenStmt);
+    if (elseStmt != null) {
+      writer.unIndent().appendLine("} else {");
+      writer.indent().appendLine(elseStmt);      
+    }
+    writer.unIndent().appendLine("}");
   }
 }

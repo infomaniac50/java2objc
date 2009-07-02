@@ -19,11 +19,10 @@ import japa.parser.ast.body.ConstructorDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.Parameter;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ObjcMethod {
+public class ObjcMethod extends ObjcNode {
 
   private final List<ObjcMethodParam> params;
   private final ObjcType returnType;
@@ -37,7 +36,7 @@ public class ObjcMethod {
   public ObjcMethod(MethodDeclaration n) {
     this(n.getName(), ObjcType.getTypeFor(n.getType()), n.getParameters());
   }
-
+  
   public void addStatement(ObjcStatement stmt) {
     methodBody.addStatement(stmt);
   }
@@ -49,12 +48,21 @@ public class ObjcMethod {
     this.methodBody = new ObjcMethodBody();    
   }
   
-  public void appendDeclaration(SourceCodeWriter writer) {
+  @Override
+  public void append(SourceCodeWriter writer) {
+    if (writer.isWritingHeaderFile()) {
+      appendDeclaration(writer);
+    } else {
+      appendDefinition(writer);
+    }
+  }
+
+  private void appendDeclaration(SourceCodeWriter writer) {
     appendMethodSignature(writer);
     writer.append(";").endLine();
   }
   
-  public void appendDefinition(SourceCodeWriter writer) {
+  private void appendDefinition(SourceCodeWriter writer) {
     appendMethodSignature(writer);
     writer.append(methodBody);
   }

@@ -93,8 +93,8 @@ public class Main {
   }
 
   private void parseJavaFileAndWriteObjcType(InputStream in) throws ParseException, IOException {
-    SourceCodeWriter psHeader = null;
-    SourceCodeWriter psImpl = null;
+    SourceCodeWriter headerWriter = null;
+    SourceCodeWriter implWriter = null;
     try {
       CompilationUnit cu = JavaParser.parse(in);
       TranslateVisitor translateVisitor = new TranslateVisitor();
@@ -102,15 +102,15 @@ public class Main {
       translateVisitor.visit(cu, context);
       ObjcType currentType = context.getCurrentType();
       File headerFile = new File(config.outputDir, currentType.getHeaderFileName());
-      psHeader = new SourceCodeWriter(new PrintWriter(new FileOutputStream(headerFile)));
+      headerWriter = new SourceCodeWriter(new PrintWriter(new FileOutputStream(headerFile)), true);
+      headerWriter.append(currentType);
       File implFile = new File(config.outputDir, currentType.getImplFileName());
-      psImpl = new SourceCodeWriter(new PrintWriter(new FileOutputStream(implFile)));
-      currentType.appendHeaderBody(psHeader);
-      currentType.appendImplBody(psImpl);
+      implWriter = new SourceCodeWriter(new PrintWriter(new FileOutputStream(implFile)), false);
+      implWriter.append(currentType);
     } finally {
       in.close();
-      psHeader.close();
-      psImpl.close();
+      headerWriter.close();
+      implWriter.close();
     }
   }
 }

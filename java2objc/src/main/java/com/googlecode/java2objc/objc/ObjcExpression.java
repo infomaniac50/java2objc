@@ -17,14 +17,16 @@ package com.googlecode.java2objc.objc;
 
 import japa.parser.ast.expr.Expression;
 
-public class ObjcExpression extends ObjcNode{
+public class ObjcExpression extends ObjcNode {
+
+  private final Expression condition;
 
   public ObjcExpression(Expression condition) {
-    // TODO Auto-generated constructor stub
+    this.condition = condition;
   }
 
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.append("");
+    writer.append(condition.toString());
   }
 }

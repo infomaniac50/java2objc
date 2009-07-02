@@ -1,6 +1,5 @@
 package com.googlecode.java2objc.objc;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 
 public class SourceCodeWriter {
@@ -8,11 +7,21 @@ public class SourceCodeWriter {
   private static final String INDENT = "  ";
   
   private final PrintWriter writer;
-  
+  private boolean writingHeaderFile;  
   private int indentLevel;
-  public SourceCodeWriter(PrintWriter writer) {
+  
+  public SourceCodeWriter(PrintWriter writer, boolean writingHeaderFile) {
     this.writer = writer;
+    this.writingHeaderFile = writingHeaderFile;
     this.indentLevel = 0;
+  }
+
+  public boolean isWritingHeaderFile() {
+    return writingHeaderFile;
+  }
+
+  public void setWritingHeaderFile(boolean writingHeaderFile) {
+    this.writingHeaderFile = writingHeaderFile;
   }
 
   public SourceCodeWriter indent() {

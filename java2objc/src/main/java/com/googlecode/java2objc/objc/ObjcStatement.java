@@ -19,7 +19,14 @@ import japa.parser.ast.stmt.Statement;
 
 public class ObjcStatement extends ObjcNode {
 
+  private final Statement stmt;
+
   public ObjcStatement(Statement stmt) {
+    this.stmt = stmt;
   }
 
+  @Override
+  public void append(SourceCodeWriter writer) {
+    writer.append(stmt.toString());
+  }
 }
