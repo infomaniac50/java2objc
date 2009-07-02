@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class ObjcType {
+public class ObjcType extends ObjcNode {
 
   private static Map<String, ObjcType> types = new HashMap<String, ObjcType>();
   static {
@@ -90,29 +90,32 @@ public class ObjcType {
     return name + ".h";
   }
   
-  public void appendHeaderBody(Appendable writer) throws IOException {
+  public void appendHeaderBody(SourceCodeWriter writer) throws IOException {
     for (ObjcType importedClass : importsInHeader) {
-      writer.append("#import \"").append(importedClass.getHeaderFileName()).append("\"\n");
+      writer.startLine().append("#import \"").append(importedClass.getHeaderFileName()).append("\"").endLine();
     }
-    writer.append("\n");
-    writer.append("@interface ").append(name).append(" : ").append(baseClass.getName()).append(" {\n");
-    writer.append("}\n");
+    writer.appendBlankLine();
+    writer.startLine().append("@interface ").append(name).append(" : ").append(baseClass.getName()).append(" {").endLine();
+    writer.indent();
+    // TODO(inder): Append interface contents
+    writer.unIndent();
+    writer.appendLine("}");
     for (ObjcMethod m : methods) {
       m.appendDeclaration(writer);
     }
-    writer.append("@end");
+    writer.appendLine("@end");
   }
   
-  public void appendImplBody(Appendable writer) throws IOException {
+  public void appendImplBody(SourceCodeWriter writer) throws IOException {
     for (ObjcType importedClass : importsInImpl) {
-      writer.append("#import \"").append(importedClass.getHeaderFileName()).append("\"\n");
+      writer.startLine().append("#import \"").append(importedClass.getHeaderFileName()).append("\"").endLine();
     }
-    writer.append("\n");
-    writer.append("@implementation ").append(name).append("\n\n");
+    writer.appendBlankLine();
+    writer.startLine().append("@implementation ").append(name).endLine().appendBlankLine();
     for (ObjcMethod m : methods) {
       m.appendDefinition(writer);
     }
-    writer.append("@end\n");
+    writer.appendLine("@end");
   }
 
   public String getPointerTypeName() {

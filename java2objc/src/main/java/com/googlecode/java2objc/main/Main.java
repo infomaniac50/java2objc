@@ -20,23 +20,75 @@ import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.util.Collection;
+import java.util.LinkedList;
 
 import com.googlecode.java2objc.objc.ObjcType;
+import com.googlecode.java2objc.objc.SourceCodeWriter;
 import com.googlecode.java2objc.util.Preconditions;
 
-
 public class Main {
+
+  private static class Config {
+    private String packageName = null;
+    private String outputDir = null;
+
+    public void update(String arg) {
+      Preconditions.assertTrue(arg.startsWith("--"));
+      arg = arg.substring(2); // remove --
+      String[] parts = arg.split("=");
+      String name = parts[0];
+      String value = parts[1];
+      if (name.equals("package")) {
+        packageName = value;
+      } else if (name.equals("outputdir")) {
+          outputDir = value;
+        }
+      }
+
+    public static String availableOptions() {
+      return "--package=com.foo,--outputdir=/tmp";
+    }    
+  }
+
+  private static void printUsageAndExit() {
+    System.err.println("Usage: java -jar java2objc.jar MyClass1.java MyClass2.java");
+    System.out.println(Config.availableOptions());
+    System.exit(-1);
+  }
+
+  private final Config config;
+  private final Collection<String> javaFiles;
+  
+  public Main(Config config, Collection<String> javaFiles) {
+    this.config = config;
+    this.javaFiles = javaFiles;
+  }
 
   public static void main(String[] args) throws Exception {
     if (args.length == 0) {
       printUsageAndExit();
     }
-    for (String javaFileName : args) { 
+    Config config = new Config();
+    Collection<String> javaFiles = new LinkedList<String>();
+    for (String arg : args) {
+      if (arg.startsWith("--")) {
+        // A configuration setting
+        config.update(arg);
+      } else { // Probably a Java file
+        javaFiles.add(arg);
+      }
+    }
+    Main main = new Main(config, javaFiles);
+    main.execute();
+  }
+  
+  public void execute() throws IOException, ParseException {
+    for (String javaFileName : javaFiles) { 
       Preconditions.assertTrue(javaFileName.endsWith(".java"));
       FileInputStream in = new FileInputStream(javaFileName);
       String className = javaFileName.substring(0, javaFileName.indexOf('.'));
@@ -44,15 +96,10 @@ public class Main {
     }
   }
 
-  private static void printUsageAndExit() {
-    System.err.println("Usage: java -jar java2objc.jar MyClass1.java MyClass2.java");
-    System.exit(-1);
-  }
-
-  private static void parseJavaFileAndWriteObjcType(InputStream in, String className)
-      throws FileNotFoundException, ParseException, IOException {
-    PrintStream psHeader = new PrintStream(new FileOutputStream(className + ".h"));
-    PrintStream psImpl = new PrintStream(new FileOutputStream(className + ".m"));
+  private void parseJavaFileAndWriteObjcType(InputStream in, String className)
+      throws ParseException, IOException {
+    SourceCodeWriter psHeader = new SourceCodeWriter(new PrintWriter(new FileOutputStream(className + ".h")));
+    SourceCodeWriter psImpl = new SourceCodeWriter(new PrintWriter(new FileOutputStream(className + ".m")));
     try {
       CompilationUnit cu = JavaParser.parse(in);
       TranslateVisitor translateVisitor = new TranslateVisitor();

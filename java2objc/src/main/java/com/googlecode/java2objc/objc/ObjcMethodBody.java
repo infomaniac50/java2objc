@@ -15,11 +15,10 @@
  */
 package com.googlecode.java2objc.objc;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ObjcMethodBody {
+public class ObjcMethodBody extends ObjcNode {
 
   private final List<ObjcStatement> statements;
   
@@ -31,12 +30,12 @@ public class ObjcMethodBody {
     statements.add(stmt);
   }
 
-  public void append(Appendable writer) throws IOException {
-    writer.append(" {\n");
+  @Override
+  public void append(SourceCodeWriter writer) {
+    writer.append(" {").endLine();
     for (ObjcStatement stmt : statements) {
-      stmt.append(writer);
-      writer.append("\n");
+      writer.appendLine(stmt);
     }
-    writer.append("}\n\n");
+    writer.appendLine("}").appendBlankLine();
   }
 }
