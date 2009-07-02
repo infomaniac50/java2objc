@@ -17,15 +17,15 @@ package com.googlecode.java2objc.objc;
 
 import japa.parser.ast.stmt.Statement;
 
+import java.io.IOException;
+
 public class ObjcStatement {
 
   public ObjcStatement(Statement stmt) {
     // TODO Auto-generated constructor stub
   }
 
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    return sb.toString();
+  public void append(Appendable writer) throws IOException {
+	  
   }
 }

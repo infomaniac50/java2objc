@@ -15,6 +15,7 @@
  */
 package com.googlecode.java2objc.objc;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,14 +31,12 @@ public class ObjcMethodBody {
     statements.add(stmt);
   }
 
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append(" {\n");
+  public void append(Appendable writer) throws IOException {
+    writer.append(" {\n");
     for (ObjcStatement stmt : statements) {
-      sb.append(stmt.toString()).append("\n");
+      stmt.append(writer);
+      writer.append("\n");
     }
-    sb.append("}\n\n");
-    return sb.toString();
+    writer.append("}\n\n");
   }
 }

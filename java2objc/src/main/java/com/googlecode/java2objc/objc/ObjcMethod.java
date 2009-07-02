@@ -19,6 +19,7 @@ import japa.parser.ast.body.ConstructorDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.Parameter;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -48,37 +49,33 @@ public class ObjcMethod {
     this.methodBody = new ObjcMethodBody();    
   }
   
-  public String toDeclaration() {
-    StringBuilder sb = new StringBuilder();
-    appendMethodSignature(sb);
-    sb.append(";\n");
-    return sb.toString();
+  public void appendDeclaration(Appendable writer) throws IOException {
+    appendMethodSignature(writer);
+    writer.append(";\n");
   }
   
-  public String toDefinition() {
-    StringBuilder sb = new StringBuilder();
-    appendMethodSignature(sb);
-    sb.append(methodBody.toString());
-    return sb.toString();
+  public void appendDefinition(Appendable writer) throws IOException {
+    appendMethodSignature(writer);
+    methodBody.append(writer);
   }
   
-  private void appendMethodSignature(StringBuilder sb) {
-    sb.append("- (");
-    sb.append(returnType.getPointerTypeName()).append(") ");
-    sb.append(name);
+  private void appendMethodSignature(Appendable writer) throws IOException {
+    writer.append("- (");
+    writer.append(returnType.getPointerTypeName()).append(") ");
+    writer.append(name);
     if (params == null || params.size() == 0) {
       return;
     }
-    sb.append(": ");
+    writer.append(": ");
     boolean first = true;
     for (ObjcMethodParam param : params) {
       if (first) {
         first = false;
       } else {
-        sb.append(param.getName()).append(":");
+        writer.append(param.getName()).append(":");
       }
-      sb.append('(').append(param.getType().getPointerTypeName()).append(")");
-      sb.append(param.getName()).append(" ");
+      writer.append('(').append(param.getType().getPointerTypeName()).append(")");
+      writer.append(param.getName()).append(" ");
     }    
   }
 }

@@ -59,8 +59,8 @@ public class Main {
       GeneratorContext context = new GeneratorContext();
       translateVisitor.visit(cu, context);
       ObjcType currentType = context.getCurrentType();
-      psHeader.append(currentType.toHeaderBody());
-      psImpl.append(currentType.toImplBody());      
+      currentType.appendHeaderBody(psHeader);
+      currentType.appendImplBody(psImpl);
     } finally {
       in.close();
       psHeader.close();
