@@ -17,6 +17,7 @@ package com.googlecode.java2objc.objc;
 
 import japa.parser.ast.type.Type;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -89,33 +90,29 @@ public class ObjcType {
     return name + ".h";
   }
   
-  public String toHeaderBody() {
-    StringBuilder sb = new StringBuilder();
+  public void appendHeaderBody(Appendable writer) throws IOException {
     for (ObjcType importedClass : importsInHeader) {
-      sb.append("#import \"").append(importedClass.getHeaderFileName()).append("\"\n");
+      writer.append("#import \"").append(importedClass.getHeaderFileName()).append("\"\n");
     }
-    sb.append("\n");
-    sb.append("@interface ").append(name).append(" : ").append(baseClass.getName()).append(" {\n");
-    sb.append("}\n");
+    writer.append("\n");
+    writer.append("@interface ").append(name).append(" : ").append(baseClass.getName()).append(" {\n");
+    writer.append("}\n");
     for (ObjcMethod m : methods) {
-      sb.append(m.toDeclaration());
+      m.appendDeclaration(writer);
     }
-    sb.append("@end");
-    return sb.toString();
+    writer.append("@end");
   }
   
-  public String toImplBody() {
-    StringBuilder sb = new StringBuilder();
+  public void appendImplBody(Appendable writer) throws IOException {
     for (ObjcType importedClass : importsInImpl) {
-      sb.append("#import \"").append(importedClass.getHeaderFileName()).append("\"\n");
+      writer.append("#import \"").append(importedClass.getHeaderFileName()).append("\"\n");
     }
-    sb.append("\n");
-    sb.append("@implementation ").append(name).append("\n\n");
+    writer.append("\n");
+    writer.append("@implementation ").append(name).append("\n\n");
     for (ObjcMethod m : methods) {
-      sb.append(m.toDefinition());
+      m.appendDefinition(writer);
     }
-    sb.append("@end\n");
-    return sb.toString();
+    writer.append("@end\n");
   }
 
   public String getPointerTypeName() {
