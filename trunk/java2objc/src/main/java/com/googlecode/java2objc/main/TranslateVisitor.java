@@ -15,11 +15,6 @@
  */
 package com.googlecode.java2objc.main;
 
-import com.googlecode.java2objc.objc.ObjcIfStatement;
-import com.googlecode.java2objc.objc.ObjcMethod;
-import com.googlecode.java2objc.objc.ObjcStatement;
-import com.googlecode.java2objc.objc.ObjcType;
-
 import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.body.ConstructorDeclaration;
@@ -27,6 +22,12 @@ import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.stmt.BlockStmt;
 import japa.parser.ast.stmt.IfStmt;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
+
+import com.googlecode.java2objc.objc.ObjcIfStatement;
+import com.googlecode.java2objc.objc.ObjcMethod;
+import com.googlecode.java2objc.objc.ObjcMethodInit;
+import com.googlecode.java2objc.objc.ObjcStatement;
+import com.googlecode.java2objc.objc.ObjcType;
 
 class TranslateVisitor extends VoidVisitorAdapter<GeneratorContext> {
 
@@ -42,7 +43,7 @@ class TranslateVisitor extends VoidVisitorAdapter<GeneratorContext> {
 
   @Override
   public void visit(ConstructorDeclaration n, GeneratorContext context) {
-    context.getCurrentType().addMethod(new ObjcMethod(n));
+    context.getCurrentType().addMethod(new ObjcMethodInit(n));
   }
 
   @Override

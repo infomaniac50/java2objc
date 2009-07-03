@@ -31,6 +31,13 @@ public class ObjcIfStatement extends ObjcStatement {
     this.elseStmt = elseStmtNode == null ? null : new ObjcStatement(elseStmtNode);
   }
 
+  public ObjcIfStatement(ObjcExpression condition, ObjcStatement thenStmt, ObjcStatement elseStmt) {
+    super(null);  // TODO(inder): Figure out if we can do without passing null to the super class
+    this.condition = condition;
+    this.thenStmt = thenStmt;
+    this.elseStmt = elseStmt;
+  }
+
   @Override
   public void append(SourceCodeWriter writer) {
     writer.startLine().append("if (").append(condition).append(") {").endLine();
