@@ -15,7 +15,6 @@
  */
 package com.googlecode.java2objc.objc;
 
-import japa.parser.ast.body.ConstructorDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.Parameter;
 
@@ -29,10 +28,6 @@ public class ObjcMethod extends ObjcNode {
   private final String name;
   private final ObjcMethodBody methodBody;
   
-  public ObjcMethod(ConstructorDeclaration n) {
-    this("init", ObjcType.ID, n.getParameters());
-  }
-
   public ObjcMethod(MethodDeclaration n) {
     this(n.getName(), ObjcType.getTypeFor(n.getType()), n.getParameters());
   }

@@ -60,6 +60,7 @@ public class ObjcType extends ObjcNode {
     importsInImpl = new HashSet<ObjcType>();
     importsInImpl.add(this);
     methods = new HashSet<ObjcMethod>();
+    methods.add(new ObjcMethodDealloc(this));
     currentMethod = null;
   }
   
