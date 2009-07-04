@@ -25,14 +25,14 @@ public class ObjcIfStatement extends ObjcStatement {
   
   public ObjcIfStatement(IfStmt n) {
     super(n);
-    this.condition = new ObjcExpression(n.getCondition());
+    this.condition = new ObjcExpression(n.getCondition().toString());
     this.thenStmt = new ObjcStatement(n.getThenStmt());
     Statement elseStmtNode = n.getElseStmt();
     this.elseStmt = elseStmtNode == null ? null : new ObjcStatement(elseStmtNode);
   }
 
   public ObjcIfStatement(ObjcExpression condition, ObjcStatement thenStmt, ObjcStatement elseStmt) {
-    super(null);  // TODO(inder): Figure out if we can do without passing null to the super class
+    super("");
     this.condition = condition;
     this.thenStmt = thenStmt;
     this.elseStmt = elseStmt;
@@ -40,12 +40,11 @@ public class ObjcIfStatement extends ObjcStatement {
 
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.startLine().append("if (").append(condition).append(") {").endLine();
-    writer.indent().appendLine(thenStmt);
+    writer.startLine().append("if (").append(condition).append(") ");
+    writer.appendLine(thenStmt);
     if (elseStmt != null) {
-      writer.unIndent().appendLine("} else {");
-      writer.indent().appendLine(elseStmt);      
+      writer.append(" else ");
+      writer.append(elseStmt);      
     }
-    writer.unIndent().appendLine("}");
   }
 }

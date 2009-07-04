@@ -15,26 +15,27 @@
  */
 package com.googlecode.java2objc.objc;
 
-import japa.parser.ast.stmt.Statement;
+public class ObjcExpressionBooleanEquality extends ObjcExpressionBoolean {
 
-public class ObjcStatement extends ObjcNode {
+  private final ObjcExpression left;
+  private final ObjcExpression right;
 
-  private final String stmt;
-
-  public ObjcStatement() {
-    this((String) null);
+  public ObjcExpressionBooleanEquality(String expression) {
+    super(expression);
+    this.left = null;
+    this.right = null;
+  }
+  
+  public ObjcExpressionBooleanEquality(ObjcExpression left, ObjcExpression right) {
+    this.left = left;
+    this.right = right;
   }
 
-  public ObjcStatement(Statement stmt) {
-    this.stmt = stmt.toString();
+  public ObjcExpression getLeft() {
+    return left;
   }
 
-  public ObjcStatement(String stmt) {
-    this.stmt = stmt;
-  }
-
-  @Override
-  public void append(SourceCodeWriter writer) {
-    writer.appendLine(stmt);
+  public ObjcExpression getRight() {
+    return right;
   }
 }

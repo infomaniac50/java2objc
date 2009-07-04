@@ -15,18 +15,22 @@
  */
 package com.googlecode.java2objc.objc;
 
-import japa.parser.ast.expr.Expression;
-
 public class ObjcExpression extends ObjcNode {
 
-  private final Expression condition;
+  private final String expression;
+  
+  public ObjcExpression() {
+    this(null);
+  }
 
-  public ObjcExpression(Expression condition) {
-    this.condition = condition;
+  public ObjcExpression(String expression) {
+    this.expression = expression;
   }
 
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.append(condition.toString());
+    if (expression != null) {
+      writer.append(expression);
+    }
   }
 }
