@@ -15,26 +15,12 @@
  */
 package com.googlecode.java2objc.objc;
 
-import japa.parser.ast.stmt.Statement;
+public class ObjcExpressionBoolean extends ObjcExpression {
 
-public class ObjcStatement extends ObjcNode {
-
-  private final String stmt;
-
-  public ObjcStatement() {
-    this((String) null);
+  public ObjcExpressionBoolean() {
   }
 
-  public ObjcStatement(Statement stmt) {
-    this.stmt = stmt.toString();
-  }
-
-  public ObjcStatement(String stmt) {
-    this.stmt = stmt;
-  }
-
-  @Override
-  public void append(SourceCodeWriter writer) {
-    writer.appendLine(stmt);
+  public ObjcExpressionBoolean(String expression) {
+    super(expression);
   }
 }
