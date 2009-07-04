@@ -44,7 +44,7 @@
       	<configuration>
      	  <archive>
       	    <manifest>
-              <mainClass>main.Main</mainClass>
+              <mainClass>com.googlecode.java2objc.main.Main</mainClass>
             </manifest>
           </archive>
       	</configuration>

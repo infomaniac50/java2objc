@@ -53,7 +53,8 @@ public class Main {
   }
 
   private static void printUsageAndExit() {
-    System.err.printf("Usage: java -jar %s java2objc.jar /path/to/MyClass1.java /path/to/second/MyClass2.java\n",
+    System.err.printf(
+        "Usage: java -jar %s java2objc.jar /path/to/MyClass1.java /path/to/second/MyClass2.java\n",
         Config.availableOptions());
     System.exit(-1);
   }

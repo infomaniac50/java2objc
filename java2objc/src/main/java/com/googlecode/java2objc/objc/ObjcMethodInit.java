@@ -25,7 +25,7 @@ import japa.parser.ast.body.ConstructorDeclaration;
 public class ObjcMethodInit extends ObjcMethod {
 
   public ObjcMethodInit(ConstructorDeclaration n) {
-    super("init", ObjcType.ID, n.getParameters());
+    super("init", ObjcType.ID, n.getParameters(), n.getModifiers());
     // First add the conventional if statement for the init methods
     ObjcExpression condition = new ObjcExpression("self=[super init]");
     ObjcStatement thenStmt = new ObjcStatementBlock.Builder().build();

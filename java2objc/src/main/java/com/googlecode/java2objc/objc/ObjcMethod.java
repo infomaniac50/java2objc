@@ -16,6 +16,7 @@
 package com.googlecode.java2objc.objc;
 
 import japa.parser.ast.body.MethodDeclaration;
+import japa.parser.ast.body.ModifierSet;
 import japa.parser.ast.body.Parameter;
 
 import java.util.LinkedList;
@@ -27,20 +28,22 @@ public class ObjcMethod extends ObjcNode {
   private final ObjcType returnType;
   private final String name;
   private final ObjcMethodBody methodBody;
+  private final int modifiers;
   
   public ObjcMethod(MethodDeclaration n) {
-    this(n.getName(), ObjcType.getTypeFor(n.getType()), n.getParameters());
+    this(n.getName(), ObjcType.getTypeFor(n.getType()), n.getParameters(), n.getModifiers());
   }
   
   public void addStatement(ObjcStatement stmt) {
     methodBody.addStatement(stmt);
   }
 
-  public ObjcMethod(String name, ObjcType returnType, List<Parameter> params) {
+  public ObjcMethod(String name, ObjcType returnType, List<Parameter> params, int modifiers) {
     this.params = new LinkedList<ObjcMethodParam>();
     this.returnType = returnType;
     this.name = name;
     this.methodBody = new ObjcMethodBody();
+    this.modifiers = modifiers;
     if (params != null) {
       for (Parameter param : params) {
         ObjcType type = ObjcType.getTypeFor(param.getType());
@@ -69,8 +72,10 @@ public class ObjcMethod extends ObjcNode {
     writer.append(methodBody);
   }
   
-  private void appendMethodSignature(SourceCodeWriter writer) {
-    writer.append("- (").append(returnType.getPointerTypeName()).append(") ");
+  private void appendMethodSignature(SourceCodeWriter writer) {    
+    boolean isStatic = ModifierSet.isStatic(modifiers);
+    writer.append(isStatic ? "+" : "-");
+    writer.append(" (").append(returnType.getPointerTypeName()).append(") ");
     writer.append(name);
     if (params == null || params.size() == 0) {
       return;
