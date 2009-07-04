@@ -108,11 +108,9 @@ public class Main {
       implWriter = new SourceCodeWriter(new PrintWriter(new FileOutputStream(implFile)), false);
       implWriter.append(currentType);
     } finally {
-      if (in != null) {
-        in.close();
-      }
-      headerWriter.close();
-      implWriter.close();
+      if (in != null) in.close();
+      if (headerWriter != null) headerWriter.close();
+      if (implWriter != null) implWriter.close();
     }
-  }
+  }  
 }
