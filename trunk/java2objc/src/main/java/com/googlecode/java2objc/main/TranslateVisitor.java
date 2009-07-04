@@ -25,6 +25,7 @@ import japa.parser.ast.body.VariableDeclarator;
 import japa.parser.ast.stmt.BlockStmt;
 import japa.parser.ast.stmt.ExpressionStmt;
 import japa.parser.ast.stmt.IfStmt;
+import japa.parser.ast.stmt.ReturnStmt;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 
 import com.googlecode.java2objc.objc.ObjcField;
@@ -83,8 +84,14 @@ class TranslateVisitor extends VoidVisitorAdapter<GeneratorContext> {
     context.getCurrentMethod().addStatement(stmt);
   }
   
+  @Override
   public void visit(LineComment n, GeneratorContext context) {
     ObjcStatement stmt = new ObjcStatement("//" + n.getContent());
     context.getCurrentMethod().addStatement(stmt);
+  }
+
+  @Override
+  public void visit(ReturnStmt n, GeneratorContext context) {
+    context.getCurrentMethod().addStatement(new ObjcStatement(n.toString()));
   }
 }
