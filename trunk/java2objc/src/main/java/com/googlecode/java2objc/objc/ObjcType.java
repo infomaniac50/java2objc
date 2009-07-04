@@ -15,12 +15,10 @@
  */
 package com.googlecode.java2objc.objc;
 
-import japa.parser.ast.body.VariableDeclarator;
 import japa.parser.ast.type.Type;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,7 +31,7 @@ public class ObjcType extends ObjcNode {
     }
   }
 
-  public static final ObjcType ID = getTypeFor("id");
+  public static final ObjcType ID = getTypeFor("id", false);
   private final String name;
   private final ObjcType baseClass;
   private final boolean pointerType;
