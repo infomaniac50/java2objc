@@ -15,10 +15,12 @@
  */
 package com.googlecode.java2objc.objc;
 
+import japa.parser.ast.body.VariableDeclarator;
 import japa.parser.ast.type.Type;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -38,6 +40,7 @@ public class ObjcType extends ObjcNode {
   private final Set<ObjcType> importsInHeader;
   private final Set<ObjcType> importsInImpl;
   private final Set<ObjcMethod> methods;
+  private final Set<ObjcField> fields;
   private ObjcMethod currentMethod;
   
   protected ObjcType(ObjcTypes type) {
@@ -59,7 +62,8 @@ public class ObjcType extends ObjcNode {
     importsInHeader = new HashSet<ObjcType>();
     importsInImpl = new HashSet<ObjcType>();
     importsInImpl.add(this);
-    methods = new HashSet<ObjcMethod>();
+    fields = new HashSet<ObjcField>();
+    methods = new HashSet<ObjcMethod>();    
     methods.add(new ObjcMethodDealloc(this));
     currentMethod = null;
   }
@@ -67,6 +71,10 @@ public class ObjcType extends ObjcNode {
   public void addMethod(ObjcMethod method) {
     methods.add(method);
     currentMethod = method;
+  }
+
+  public void addField(ObjcField field) {
+    fields.add(field);
   }
 
   public ObjcMethod getCurrentMethod() {
@@ -101,7 +109,9 @@ public class ObjcType extends ObjcNode {
     writer.appendBlankLine();
     writer.startLine().append("@interface ").append(name).append(" : ").append(baseClass.getName()).append(" {").endLine();
     writer.indent();
-    // TODO(inder): Append interface contents
+    for (ObjcField field : fields) {
+      writer.append(field);
+    }
     writer.unIndent();
     writer.appendLine("}");
     for (ObjcMethod m : methods) {

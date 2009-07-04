@@ -18,11 +18,14 @@ package com.googlecode.java2objc.main;
 import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.body.ConstructorDeclaration;
+import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
+import japa.parser.ast.body.VariableDeclarator;
 import japa.parser.ast.stmt.BlockStmt;
 import japa.parser.ast.stmt.IfStmt;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 
+import com.googlecode.java2objc.objc.ObjcField;
 import com.googlecode.java2objc.objc.ObjcIfStatement;
 import com.googlecode.java2objc.objc.ObjcMethod;
 import com.googlecode.java2objc.objc.ObjcMethodInit;
@@ -63,4 +66,14 @@ class TranslateVisitor extends VoidVisitorAdapter<GeneratorContext> {
     context.getCurrentMethod().addStatement(stmt);
     super.visit(n, context);
   }
+  
+  @Override
+  public void visit(FieldDeclaration n, GeneratorContext context) {
+    ObjcType type = ObjcType.getTypeFor(n.getType());
+    for (VariableDeclarator var : n.getVariables()) {
+      ObjcField objcField = new ObjcField(n.getType(), var);
+      context.getCurrentType().addField(objcField);
+    }
+  }
+  
 }
