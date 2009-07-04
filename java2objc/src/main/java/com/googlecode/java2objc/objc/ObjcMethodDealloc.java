@@ -28,5 +28,6 @@ public class ObjcMethodDealloc extends ObjcMethod {
 
   public ObjcMethodDealloc(ObjcType parent) {
     super("dealloc", Void.INSTANCE, new LinkedList<Parameter>());
+    super.addStatement(new ObjcStatement("[super dealloc];"));
   }
 }

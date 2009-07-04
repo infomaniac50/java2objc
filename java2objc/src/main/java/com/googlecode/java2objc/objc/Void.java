@@ -20,6 +20,6 @@ public class Void extends ObjcType {
   public static final Void INSTANCE = new Void();
 
   private Void() {
-    super("void", null, true);
+    super("void", null, false);
   }
 }
