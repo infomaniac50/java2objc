@@ -15,6 +15,7 @@
  */
 package com.googlecode.java2objc.main;
 
+import japa.parser.ast.LineComment;
 import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.body.ConstructorDeclaration;
@@ -22,6 +23,7 @@ import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.VariableDeclarator;
 import japa.parser.ast.stmt.BlockStmt;
+import japa.parser.ast.stmt.ExpressionStmt;
 import japa.parser.ast.stmt.IfStmt;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 
@@ -69,11 +71,20 @@ class TranslateVisitor extends VoidVisitorAdapter<GeneratorContext> {
   
   @Override
   public void visit(FieldDeclaration n, GeneratorContext context) {
-    ObjcType type = ObjcType.getTypeFor(n.getType());
     for (VariableDeclarator var : n.getVariables()) {
       ObjcField objcField = new ObjcField(n.getType(), var);
       context.getCurrentType().addField(objcField);
     }
   }
   
+  @Override
+  public void visit(ExpressionStmt n, GeneratorContext context) {
+    ObjcStatement stmt = new ObjcStatement(n.getExpression().toString());
+    context.getCurrentMethod().addStatement(stmt);
+  }
+  
+  public void visit(LineComment n, GeneratorContext context) {
+    ObjcStatement stmt = new ObjcStatement("//" + n.getContent());
+    context.getCurrentMethod().addStatement(stmt);
+  }
 }
