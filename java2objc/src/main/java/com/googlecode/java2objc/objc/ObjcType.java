@@ -19,6 +19,7 @@ import japa.parser.ast.type.Type;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -66,6 +67,11 @@ public class ObjcType extends ObjcNode {
     currentMethod = null;
   }
   
+  public void addImports(List<ObjcType> types) {
+    // TODO(inder): figure out if the import can be moved to the impl only
+    importsInHeader.addAll(types);
+  }
+
   public void addMethod(ObjcMethod method) {
     methods.add(method);
     currentMethod = method;
@@ -102,10 +108,12 @@ public class ObjcType extends ObjcNode {
 
   private void appendHeaderBody(SourceCodeWriter writer) {
     for (ObjcType importedClass : importsInHeader) {
-      writer.startLine().append("#import \"").append(importedClass.getHeaderFileName()).append("\"").endLine();
+      writer.startLine().append("#import \"").append(importedClass.getHeaderFileName());
+      writer.append("\"").endLine();
     }
     writer.appendBlankLine();
-    writer.startLine().append("@interface ").append(name).append(" : ").append(baseClass.getName()).append(" {").endLine();
+    writer.startLine().append("@interface ").append(name).append(" : ");
+    writer.append(baseClass.getName()).append(" {").endLine();
     writer.indent();
     for (ObjcField field : fields) {
       writer.append(field);
@@ -120,7 +128,8 @@ public class ObjcType extends ObjcNode {
   
   private void appendImplBody(SourceCodeWriter writer) {
     for (ObjcType importedClass : importsInImpl) {
-      writer.startLine().append("#import \"").append(importedClass.getHeaderFileName()).append("\"").endLine();
+      writer.startLine().append("#import \"").append(importedClass.getHeaderFileName());
+      writer.append("\"").endLine();
     }
     writer.appendBlankLine();
     writer.startLine().append("@implementation ").append(name).endLine().appendBlankLine();
