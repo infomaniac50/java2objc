@@ -63,8 +63,10 @@ public class ObjcMethod extends ObjcNode {
   }
 
   private void appendDeclaration(SourceCodeWriter writer) {
-    appendMethodSignature(writer);
-    writer.append(";").endLine();
+    if (!ModifierSet.isPrivate(modifiers)) {
+      appendMethodSignature(writer);
+      writer.append(";").endLine();
+    }
   }
   
   private void appendDefinition(SourceCodeWriter writer) {
