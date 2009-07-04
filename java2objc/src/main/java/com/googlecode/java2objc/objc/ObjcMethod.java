@@ -40,7 +40,14 @@ public class ObjcMethod extends ObjcNode {
     this.params = new LinkedList<ObjcMethodParam>();
     this.returnType = returnType;
     this.name = name;
-    this.methodBody = new ObjcMethodBody();    
+    this.methodBody = new ObjcMethodBody();
+    if (params != null) {
+      for (Parameter param : params) {
+        ObjcType type = ObjcType.getTypeFor(param.getType());
+        String typeName = param.getId().getName();
+        this.params.add(new ObjcMethodParam(type, typeName));
+      }
+    }
   }
   
   @Override
