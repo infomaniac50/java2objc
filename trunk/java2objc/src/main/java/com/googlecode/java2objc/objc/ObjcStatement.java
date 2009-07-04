@@ -30,6 +30,12 @@ public class ObjcStatement extends ObjcNode {
   }
 
   public ObjcStatement(String stmt) {
+    if (stmt != null) {
+      if (!stmt.endsWith(";")) {
+        stmt = stmt + ";";
+      }
+      stmt = stmt.replace("this.", "");
+    }
     this.stmt = stmt;
   }
 
