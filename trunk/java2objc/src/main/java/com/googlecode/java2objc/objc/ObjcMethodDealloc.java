@@ -17,6 +17,7 @@ package com.googlecode.java2objc.objc;
 
 import japa.parser.ast.body.Parameter;
 
+import java.lang.reflect.Modifier;
 import java.util.LinkedList;
 
 /**
@@ -27,7 +28,7 @@ import java.util.LinkedList;
 public class ObjcMethodDealloc extends ObjcMethod {
 
   public ObjcMethodDealloc(ObjcType parent) {
-    super("dealloc", Void.INSTANCE, new LinkedList<Parameter>());
+    super("dealloc", Void.INSTANCE, new LinkedList<Parameter>(), Modifier.PRIVATE);
     super.addStatement(new ObjcStatement("[super dealloc];"));
   }
 }
