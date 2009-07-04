@@ -15,19 +15,29 @@
  */
 package com.googlecode.java2objc.main;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import com.googlecode.java2objc.objc.ObjcMethod;
 import com.googlecode.java2objc.objc.ObjcType;
 
 public class GeneratorContext {
 
+  private final List<ObjcType> imports = new LinkedList<ObjcType>();
   private ObjcType objcType;
   
   public void startClass(ObjcType objcClass) {
     this.objcType = objcClass;
+    this.objcType.addImports(imports);
+    imports.clear();
   }
   
   public ObjcType getCurrentType() {
     return objcType;
+  }
+  
+  public void addImport(ObjcType type) {
+    imports.add(type);
   }
   
   public ObjcMethod getCurrentMethod() {

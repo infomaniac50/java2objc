@@ -15,6 +15,7 @@
  */
 package com.googlecode.java2objc.main;
 
+import japa.parser.ast.ImportDeclaration;
 import japa.parser.ast.LineComment;
 import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
@@ -93,5 +94,11 @@ class TranslateVisitor extends VoidVisitorAdapter<GeneratorContext> {
   @Override
   public void visit(ReturnStmt n, GeneratorContext context) {
     context.getCurrentMethod().addStatement(new ObjcStatement(n.toString()));
+  }
+  
+  @Override
+  public void visit(ImportDeclaration n, GeneratorContext context) {
+    ObjcType type = ObjcType.getTypeFor(n.getName().getName());
+    context.addImport(type);
   }
 }
