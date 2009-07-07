@@ -15,27 +15,14 @@
  */
 package com.googlecode.java2objc.objc;
 
+import japa.parser.ast.stmt.BlockStmt;
+import japa.parser.ast.stmt.Statement;
+
 import java.util.LinkedList;
 import java.util.List;
 
-public class ObjcStatementBlock extends ObjcStatement {
 
-  private final List<ObjcStatement> stmts;
-  
-  private ObjcStatementBlock(List<ObjcStatement> stmts) {
-    this.stmts = stmts;
-  }
-  
-  @Override
-  public void append(SourceCodeWriter writer) {
-    writer.append("{").endLine();
-    writer.indent();
-    for (ObjcStatement stmt : stmts) {
-      writer.append(stmt);
-    }
-    writer.unIndent();
-    writer.startLine().append("}");
-  }
+public class ObjcStatementBlock extends ObjcStatement {
   
   public static class Builder {
     private final List<ObjcStatement> stmts;
@@ -49,5 +36,29 @@ public class ObjcStatementBlock extends ObjcStatement {
     public ObjcStatementBlock build() {
       return new ObjcStatementBlock(stmts);
     }
+  }
+
+  private final List<ObjcStatement> stmts;
+  
+  public ObjcStatementBlock(BlockStmt block) {
+    stmts = new LinkedList<ObjcStatement>();
+    for (Statement stmt : block.getStmts()) {
+      stmts.add(new ObjcStatement(stmt));
+    }    
+  }
+
+  private ObjcStatementBlock(List<ObjcStatement> stmts) {
+    this.stmts = stmts;
+  }
+  
+  @Override
+  public void append(SourceCodeWriter writer) {
+    writer.append("{").endLine();
+    writer.indent();
+    for (ObjcStatement stmt : stmts) {
+      writer.append(stmt);
+    }
+    writer.unIndent();
+    writer.startLine().append("}");
   }
 }

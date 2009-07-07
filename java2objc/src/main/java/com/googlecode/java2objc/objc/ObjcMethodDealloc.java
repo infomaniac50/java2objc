@@ -20,15 +20,21 @@ import japa.parser.ast.body.Parameter;
 
 import java.util.LinkedList;
 
+
 /**
  * Method for implementing dealloc for an object
  * 
  * @author Inderjeet Singh
  */
-public class ObjcMethodDealloc extends ObjcMethod {
+public final class ObjcMethodDealloc extends ObjcMethod {
 
   public ObjcMethodDealloc(ObjcType parent) {
-    super("dealloc", Void.INSTANCE, new LinkedList<Parameter>(), ModifierSet.PRIVATE);
-    super.addStatement(new ObjcStatement("[super dealloc];"));
+    super("dealloc", Void.INSTANCE, new LinkedList<Parameter>(), ModifierSet.PRIVATE, getDeallocBody());
+  }
+
+  private static ObjcStatementBlock getDeallocBody() {
+    return new ObjcStatementBlock.Builder()
+      .addStatement(new ObjcStatement("[super dealloc];"))
+      .build();    
   }
 }

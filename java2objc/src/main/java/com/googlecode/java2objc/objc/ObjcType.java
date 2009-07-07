@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+
 public class ObjcType extends ObjcNode {
 
   private static Map<String, ObjcType> types = new HashMap<String, ObjcType>();
@@ -41,6 +42,19 @@ public class ObjcType extends ObjcNode {
   private final Set<ObjcMethod> methods;
   private final Set<ObjcField> fields;
   private ObjcMethod currentMethod;
+  
+  public ObjcType(String name, ObjcType baseClass, Set<ObjcType> imports, 
+      Set<ObjcMethod> methods, Set<ObjcField> fields) {
+    this.name = name;
+    this.baseClass = baseClass;
+    this.pointerType = true;
+    importsInHeader = imports;
+    importsInImpl = new HashSet<ObjcType>();
+    importsInImpl.add(this);
+    this.fields = fields;
+    this.methods = methods;    
+    methods.add(new ObjcMethodDealloc(this));
+  }
   
   protected ObjcType(ObjcTypes type) {
     this(type.toString());

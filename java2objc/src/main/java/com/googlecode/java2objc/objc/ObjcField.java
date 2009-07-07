@@ -15,6 +15,7 @@
  */
 package com.googlecode.java2objc.objc;
 
+
 import japa.parser.ast.body.VariableDeclarator;
 import japa.parser.ast.type.Type;
 

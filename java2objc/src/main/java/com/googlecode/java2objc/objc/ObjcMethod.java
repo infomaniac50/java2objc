@@ -22,27 +22,24 @@ import japa.parser.ast.body.Parameter;
 import java.util.LinkedList;
 import java.util.List;
 
+
 public class ObjcMethod extends ObjcNode {
 
   private final List<ObjcMethodParam> params;
   private final ObjcType returnType;
   private final String name;
-  private final ObjcMethodBody methodBody;
+  private final ObjcStatementBlock methodBody;
   private final int modifiers;
   
   public ObjcMethod(MethodDeclaration n) {
-    this(n.getName(), ObjcType.getTypeFor(n.getType()), n.getParameters(), n.getModifiers());
-  }
-  
-  public void addStatement(ObjcStatement stmt) {
-    methodBody.addStatement(stmt);
+    this(n.getName(), ObjcType.getTypeFor(n.getType()), n.getParameters(), n.getModifiers(), new ObjcStatementBlock(n.getBody()));
   }
 
-  public ObjcMethod(String name, ObjcType returnType, List<Parameter> params, int modifiers) {
+  public ObjcMethod(String name, ObjcType returnType, List<Parameter> params, int modifiers, ObjcStatementBlock methodBody) {
     this.params = new LinkedList<ObjcMethodParam>();
     this.returnType = returnType;
     this.name = name;
-    this.methodBody = new ObjcMethodBody();
+    this.methodBody = methodBody;
     this.modifiers = modifiers;
     if (params != null) {
       for (Parameter param : params) {
@@ -72,6 +69,7 @@ public class ObjcMethod extends ObjcNode {
   private void appendDefinition(SourceCodeWriter writer) {
     appendMethodSignature(writer);
     writer.append(methodBody);
+    writer.endLine().endLine();
   }
   
   private void appendMethodSignature(SourceCodeWriter writer) {    

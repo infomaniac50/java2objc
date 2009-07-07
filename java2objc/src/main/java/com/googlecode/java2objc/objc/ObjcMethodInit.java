@@ -15,6 +15,7 @@
  */
 package com.googlecode.java2objc.objc;
 
+
 import japa.parser.ast.body.ConstructorDeclaration;
 
 /**
@@ -25,13 +26,16 @@ import japa.parser.ast.body.ConstructorDeclaration;
 public class ObjcMethodInit extends ObjcMethod {
 
   public ObjcMethodInit(ConstructorDeclaration n) {
-    super("init", ObjcType.ID, n.getParameters(), n.getModifiers());
-    // First add the conventional if statement for the init methods
+    super("init", ObjcType.ID, n.getParameters(), n.getModifiers(), getConstructorBody(n));
+  }
+  
+  private static ObjcStatementBlock getConstructorBody(ConstructorDeclaration n) {
     ObjcExpression condition = new ObjcExpression("self=[super init]");
-    ObjcStatement thenStmt = new ObjcStatementBlock.Builder().build();
-    ObjcIfStatement ifStmt = new ObjcIfStatement(condition, thenStmt, null); 
-    super.addStatement(ifStmt);
-    ObjcStatement returnStmt = new ObjcStatement("return self;");
-    super.addStatement(returnStmt);
+    ObjcStatement thenStmt = new ObjcStatementBlock(n.getBlock());
+    ObjcIfStatement ifStmt = new ObjcIfStatement(condition, thenStmt, null);     
+    return new ObjcStatementBlock.Builder()
+      .addStatement(ifStmt)
+      .addStatement(new ObjcStatement("return self;"))
+      .build();    
   }
 }
