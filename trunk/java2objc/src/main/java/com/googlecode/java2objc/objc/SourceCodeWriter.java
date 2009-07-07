@@ -2,6 +2,7 @@ package com.googlecode.java2objc.objc;
 
 import java.io.PrintWriter;
 
+
 public class SourceCodeWriter {
   
   private static final String INDENT = "  ";

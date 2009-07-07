@@ -34,24 +34,6 @@ import com.googlecode.java2objc.util.Preconditions;
 
 public class Main {
 
-  private static class Config {
-    private String outputDir = null;
-
-    public void update(String arg) {
-      Preconditions.assertTrue(arg.startsWith("--"));
-      String[] parts = arg.split("=");
-      String name = parts[0];
-      String value = parts[1];
-      if (name.equals("--outputdir")) {
-        outputDir = value;
-      }
-    }
-
-    public static String availableOptions() {
-      return "--outputdir=/tmp";
-    }    
-  }
-
   private static void printUsageAndExit() {
     System.err.printf(
         "Usage: java -jar %s java2objc.jar /path/to/MyClass1.java /path/to/second/MyClass2.java\n",
@@ -94,6 +76,12 @@ public class Main {
   }
 
   private void parseJavaFileAndWriteObjcType(InputStream in) throws ParseException, IOException {
+    CompilationUnit cu = JavaParser.parse(in);
+    CompilationUnitConverter conv = new CompilationUnitConverter(config, cu);
+    conv.generateSourceCode();
+  }
+
+  void parseJavaFileAndWriteObjcTypeOld(InputStream in) throws ParseException, IOException {
     SourceCodeWriter headerWriter = null;
     SourceCodeWriter implWriter = null;
     try {

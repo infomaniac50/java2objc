@@ -17,9 +17,14 @@ package com.googlecode.java2objc.objc;
 
 import japa.parser.ast.stmt.Statement;
 
+import java.util.LinkedList;
+import java.util.List;
+
+
 public class ObjcStatement extends ObjcNode {
 
   private final String stmt;
+  private final List<ObjcExpression> expressions = new LinkedList<ObjcExpression>();
 
   public ObjcStatement() {
     this((String) null);
@@ -39,8 +44,16 @@ public class ObjcStatement extends ObjcNode {
     this.stmt = stmt;
   }
 
+  public void addExpression(ObjcExpression expression) {
+    expressions.add(expression);
+  }
+
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.appendLine(stmt);
+    writer.startLine().append(stmt);
+    for (ObjcExpression expr : expressions) {
+      writer.append(expr);
+    }
+    writer.endLine();
   }
 }

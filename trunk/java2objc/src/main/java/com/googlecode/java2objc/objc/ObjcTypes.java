@@ -25,7 +25,8 @@ public enum ObjcTypes {
   NSDECIMAL(NSDecimal.INSTANCE, "float", "Float", "double", "Double", "BigDecimal"), 
   NSOBJECT(NSObject.INSTANCE, "Object"), 
   BOOL(Bool.INSTANCE, "boolean", "Boolean"),
-  VOID(Void.INSTANCE, "void");
+  VOID(Void.INSTANCE, "void"),
+  ENUM(ObjcEnumType.INSTANCE, "enum");
   
   private final ObjcType typeHandler;
   private final String[] javaTypesHandled;
