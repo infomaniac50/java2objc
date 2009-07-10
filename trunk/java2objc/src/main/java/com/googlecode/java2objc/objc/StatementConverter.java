@@ -7,6 +7,8 @@ import japa.parser.ast.stmt.ExpressionStmt;
 import japa.parser.ast.stmt.ForStmt;
 import japa.parser.ast.stmt.ForeachStmt;
 import japa.parser.ast.stmt.IfStmt;
+import japa.parser.ast.stmt.LabeledStmt;
+import japa.parser.ast.stmt.ReturnStmt;
 import japa.parser.ast.stmt.Statement;
 import japa.parser.ast.stmt.SwitchStmt;
 import japa.parser.ast.stmt.SynchronizedStmt;
@@ -35,6 +37,10 @@ public final class StatementConverter {
       return new ObjcExpressionStatement((ExpressionStmt)stmt);      
     } else if (stmt instanceof SynchronizedStmt) {
       return new ObjcSynchronizedStatement((SynchronizedStmt)stmt);
+    } else if (stmt instanceof ReturnStmt) {
+      return new ObjcReturnStatement((ReturnStmt)stmt);
+    } else if (stmt instanceof LabeledStmt) {
+      return new ObjcLabeledStmt((LabeledStmt)stmt);
     }
     return new ObjcStatement(stmt);
   }

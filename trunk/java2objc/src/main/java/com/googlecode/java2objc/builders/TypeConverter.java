@@ -22,14 +22,14 @@ import com.googlecode.java2objc.objc.ObjcType;
  * 
  * @author inder
  */
-public class TypeDeclarationToObjcTypeConverter {
+public class TypeConverter {
   private final Set<ObjcType> imports;
 
-  public TypeDeclarationToObjcTypeConverter(Set<ObjcType> imports) {
+  public TypeConverter(Set<ObjcType> imports) {
     this.imports = imports;
   }
 
-  public ObjcType createObjcType(ClassOrInterfaceDeclaration type) {
+  public ObjcType to(ClassOrInterfaceDeclaration type) {
     UserDefinedObjcTypeBuilder typeBuilder = 
       new UserDefinedObjcTypeBuilder(type.getName(), imports);
     buildType(typeBuilder, type);
@@ -46,7 +46,7 @@ public class TypeDeclarationToObjcTypeConverter {
       for (ClassOrInterfaceType implementedClass : type.getImplements()) {
         typeBuilder.addBaseClass(ObjcType.getTypeFor(implementedClass.getName()));
       }
-    }    
+    }
     List<BodyDeclaration> members = type.getMembers();
     for (BodyDeclaration member : members) {
       if (member instanceof FieldDeclaration) {

@@ -19,10 +19,8 @@ import japa.parser.ast.type.Type;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 
 public class ObjcType extends ObjcNode {
 
@@ -41,7 +39,6 @@ public class ObjcType extends ObjcNode {
   private final Set<ObjcType> importsInImpl;
   private final Set<ObjcMethod> methods;
   private final Set<ObjcField> fields;
-  private ObjcMethod currentMethod;
   
   public ObjcType(String name, ObjcType baseClass, Set<ObjcType> imports, 
       Set<ObjcMethod> methods, Set<ObjcField> fields) {
@@ -78,27 +75,8 @@ public class ObjcType extends ObjcNode {
     fields = new HashSet<ObjcField>();
     methods = new HashSet<ObjcMethod>();    
     methods.add(new ObjcMethodDealloc(this));
-    currentMethod = null;
   }
   
-  public void addImports(List<ObjcType> types) {
-    // TODO(inder): figure out if the import can be moved to the impl only
-    importsInHeader.addAll(types);
-  }
-
-  public void addMethod(ObjcMethod method) {
-    methods.add(method);
-    currentMethod = method;
-  }
-
-  public void addField(ObjcField field) {
-    fields.add(field);
-  }
-
-  public ObjcMethod getCurrentMethod() {
-    return currentMethod;
-  }
-
   public String getName() {
     return name;
   }

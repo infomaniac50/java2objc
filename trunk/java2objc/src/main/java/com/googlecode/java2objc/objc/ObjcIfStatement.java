@@ -16,6 +16,7 @@
 package com.googlecode.java2objc.objc;
 
 
+import japa.parser.ast.stmt.BlockStmt;
 import japa.parser.ast.stmt.IfStmt;
 import japa.parser.ast.stmt.Statement;
 
@@ -43,10 +44,30 @@ public class ObjcIfStatement extends ObjcStatement {
   public void append(SourceCodeWriter writer) {
     writer.startNewLine();
     writer.append("if (").append(condition).append(") ");
+    boolean isIfStmtABlock = thenStmt instanceof ObjcStatementBlock;
+    if (!isIfStmtABlock) {      
+      writer.indent();
+    }
     writer.append(thenStmt);
+    if (!isIfStmtABlock) {
+      writer.unIndent();
+    }
     if (elseStmt != null) {
-      writer.append(" else ");
+      if (isIfStmtABlock) {
+        writer.append(" ");
+      }
+      writer.append("else");      
+      boolean isElseABlock = elseStmt instanceof ObjcStatementBlock;
+      boolean isElseAnIfStmt = elseStmt instanceof ObjcIfStatement;
+      if (isElseABlock || isElseAnIfStmt) {
+        writer.append(" ");
+      } else {
+        writer.indent();
+      }
       writer.append(elseStmt);      
+      if (isElseABlock || isElseAnIfStmt) {
+        writer.unIndent();
+      }
     }
     writer.endLine();
   }

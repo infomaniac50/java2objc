@@ -15,7 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import com.googlecode.java2objc.builders.TypeDeclarationToObjcTypeConverter;
+import com.googlecode.java2objc.builders.TypeConverter;
 import com.googlecode.java2objc.objc.ObjcType;
 import com.googlecode.java2objc.objc.SourceCodeWriter;
 
@@ -32,11 +32,11 @@ public class CompilationUnitConverter {
   public void generateSourceCode() throws IOException {
     Collection<ObjcType> objcTypes = new LinkedList<ObjcType>();
     Set<ObjcType> imports = toObjcImports(cu.getImports());
-    TypeDeclarationToObjcTypeConverter objcTypeConverter = new TypeDeclarationToObjcTypeConverter(imports);    
+    TypeConverter objcTypeConverter = new TypeConverter(imports);
     if (cu.getTypes() != null) {
       for (TypeDeclaration type : cu.getTypes()) {
         if (type instanceof ClassOrInterfaceDeclaration) {
-          ObjcType objcType = objcTypeConverter.createObjcType((ClassOrInterfaceDeclaration)type);
+          ObjcType objcType = objcTypeConverter.to((ClassOrInterfaceDeclaration)type);
           if (objcType != null) {
             objcTypes.add(objcType);
           }
@@ -66,9 +66,11 @@ public class CompilationUnitConverter {
       File headerFile = new File(config.outputDir, currentType.getHeaderFileName());
       headerWriter = new SourceCodeWriter(new PrintWriter(new FileOutputStream(headerFile)), true);
       headerWriter.append(currentType);
+      System.out.printf("Generated %s\n", headerFile.getAbsolutePath());
       File implFile = new File(config.outputDir, currentType.getImplFileName());
       implWriter = new SourceCodeWriter(new PrintWriter(new FileOutputStream(implFile)), false);
       implWriter.append(currentType);
+      System.out.printf("Generated %s\n", implFile.getAbsolutePath());
     } finally {
       if (headerWriter != null) headerWriter.close();
       if (implWriter != null) implWriter.close();
