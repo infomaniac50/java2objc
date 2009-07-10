@@ -15,8 +15,12 @@
  */
 package com.googlecode.java2objc.objc;
 
-
-public class ObjcMethodParam extends ObjcNode {
+/**
+ * Parameter for an Objective C method
+ * 
+ * @author Inderjeet Singh
+ */
+public final class ObjcMethodParam extends ObjcNode {
 
   private final ObjcType type;
   private final String name;

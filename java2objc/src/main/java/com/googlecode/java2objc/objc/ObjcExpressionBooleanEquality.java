@@ -15,7 +15,12 @@
  */
 package com.googlecode.java2objc.objc;
 
-public class ObjcExpressionBooleanEquality extends ObjcExpressionBoolean {
+/**
+ * An Objective C boolean expression that is constructed by equating two expressions
+ * 
+ * @author Inderjeet Singh
+ */
+public final class ObjcExpressionBooleanEquality extends ObjcExpressionBoolean {
 
   private final ObjcExpression left;
   private final ObjcExpression right;

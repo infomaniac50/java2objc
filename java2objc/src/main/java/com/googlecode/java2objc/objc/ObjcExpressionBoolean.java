@@ -15,6 +15,11 @@
  */
 package com.googlecode.java2objc.objc;
 
+/**
+ * An objective C boolean expression.
+ * 
+ * @author Inderjeet Singh
+ */
 public class ObjcExpressionBoolean extends ObjcExpression {
 
   public ObjcExpressionBoolean() {

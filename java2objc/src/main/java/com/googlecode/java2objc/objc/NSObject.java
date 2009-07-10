@@ -15,7 +15,12 @@
  */
 package com.googlecode.java2objc.objc;
 
-public class NSObject extends ObjcType {
+/**
+ * Objective C native NSObject class
+ * 
+ * @author Inderjeet Singh
+ */
+public final class NSObject extends ObjcType {
 
   public static final NSObject INSTANCE = new NSObject();
 

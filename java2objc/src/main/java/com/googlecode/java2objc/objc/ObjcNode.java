@@ -18,7 +18,6 @@ package com.googlecode.java2objc.objc;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-
 /**
  * Base class for all Objc nodes
  * 

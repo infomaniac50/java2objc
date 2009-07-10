@@ -17,7 +17,12 @@ package com.googlecode.java2objc.objc;
 
 import java.util.Map;
 
-public class Bool extends ObjcType {
+/**
+ * Objective C BOOL type
+ * 
+ * @author Inderjeet Singh
+ */
+public final class Bool extends ObjcType {
 
   public static final Bool INSTANCE = new Bool();
   

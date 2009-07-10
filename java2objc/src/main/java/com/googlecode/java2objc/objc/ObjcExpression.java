@@ -15,6 +15,11 @@
  */
 package com.googlecode.java2objc.objc;
 
+/**
+ * Base class for all Objective C expressions
+ * 
+ * @author Inderjeet Singh
+ */
 public class ObjcExpression extends ObjcNode {
 
   // TODO(inder); convert this to self

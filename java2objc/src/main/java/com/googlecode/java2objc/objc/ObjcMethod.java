@@ -22,7 +22,11 @@ import japa.parser.ast.body.Parameter;
 import java.util.LinkedList;
 import java.util.List;
 
-
+/**
+ * Base class for all Objective C static or class methods
+ * 
+ * @author Inderjeet Singh
+ */
 public class ObjcMethod extends ObjcNode {
 
   private final List<ObjcMethodParam> params;

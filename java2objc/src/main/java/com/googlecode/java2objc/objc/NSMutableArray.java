@@ -15,7 +15,12 @@
  */
 package com.googlecode.java2objc.objc;
 
-public class NSMutableArray extends ObjcType {
+/**
+ * Objective C standard NSMutableArray class. It is used to substitute for Java Collections
+ * 
+ * @author Inderjeet Singh
+ */
+public final class NSMutableArray extends ObjcType {
 
   public static final NSMutableArray INSTANCE = new NSMutableArray();
     
