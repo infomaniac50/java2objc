@@ -36,7 +36,7 @@ public final class ObjcMethodCallExpression extends ObjcExpression {
   private final List<ObjcType> argTypes;
   private final List<ObjcExpression> args;
   private final int numParams;
-
+  
   public ObjcMethodCallExpression(String targetObjectName, MethodCallExpr expr) {
     this.targetObjectName = targetObjectName;
     methodName = expr.getName(); // Find out the right method name
@@ -54,17 +54,17 @@ public final class ObjcMethodCallExpression extends ObjcExpression {
         args.add(new ObjcExpression(arg.toString()));
       }
     }
-    Preconditions.assertEquals(args.size(), argTypes.size());
+// TODO:    Preconditions.assertEquals(args.size(), argTypes.size());
     numParams = args.size();
   }
-  
+
   @Override
   public void append(SourceCodeWriter writer) {
     writer.append("[").append(targetObjectName).append(" ");
     writer.append(methodName);
     if (numParams > 0) {
       // Write first argument
-      writer.append(":").append(args.get(0));
+      writer.append(" :").append(args.get(0));
     }
     // Write remaining params
     for (int i = 1; i < numParams; ++i) {

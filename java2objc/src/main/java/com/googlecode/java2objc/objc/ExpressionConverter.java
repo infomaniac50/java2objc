@@ -16,6 +16,7 @@
 package com.googlecode.java2objc.objc;
 
 import japa.parser.ast.expr.Expression;
+import japa.parser.ast.expr.MethodCallExpr;
 import japa.parser.ast.expr.StringLiteralExpr;
 
 import java.util.LinkedList;
@@ -41,8 +42,12 @@ public final class ExpressionConverter {
   public static ObjcExpression to(Expression expr) {
     if (expr instanceof StringLiteralExpr) {
       return new ObjcStringLiteralExpression(expr);
+    } else if (expr instanceof MethodCallExpr) {
+      String targetObjectName = "self";
+      return new ObjcMethodCallExpression(targetObjectName, (MethodCallExpr)expr); 
+    } else {
+      // TODO (inder): bring in real expression conversion
+      return new ObjcExpression(expr.toString());
     }
-    // TODO (inder): bring in real expression conversion
-    return new ObjcExpression(expr.toString());
   }
 }
