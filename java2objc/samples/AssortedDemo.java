@@ -20,12 +20,4 @@ public class AssortedDemo {
     }
     return value;
   }
-
-  public String getAnotherValue(String value) {
-    return "Value is: " + value;
-  }
-  
-  public String methodDemo() {
-    return getAnotherValue("foo");
-  }
 }
