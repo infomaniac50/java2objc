@@ -19,17 +19,12 @@ import japa.parser.JavaParser;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import com.googlecode.java2objc.objc.ObjcType;
-import com.googlecode.java2objc.objc.SourceCodeWriter;
 import com.googlecode.java2objc.util.Preconditions;
 
 public class Main {
@@ -79,27 +74,5 @@ public class Main {
     CompilationUnit cu = JavaParser.parse(in);
     CompilationUnitConverter conv = new CompilationUnitConverter(config, cu);
     conv.generateSourceCode();
-  }
-
-  void parseJavaFileAndWriteObjcTypeOld(InputStream in) throws ParseException, IOException {
-    SourceCodeWriter headerWriter = null;
-    SourceCodeWriter implWriter = null;
-    try {
-      CompilationUnit cu = JavaParser.parse(in);
-      TranslateVisitor translateVisitor = new TranslateVisitor();
-      GeneratorContext context = new GeneratorContext();
-      translateVisitor.visit(cu, context);
-      ObjcType currentType = context.getCurrentType();
-      File headerFile = new File(config.outputDir, currentType.getHeaderFileName());
-      headerWriter = new SourceCodeWriter(new PrintWriter(new FileOutputStream(headerFile)), true);
-      headerWriter.append(currentType);
-      File implFile = new File(config.outputDir, currentType.getImplFileName());
-      implWriter = new SourceCodeWriter(new PrintWriter(new FileOutputStream(implFile)), false);
-      implWriter.append(currentType);
-    } finally {
-      if (in != null) in.close();
-      if (headerWriter != null) headerWriter.close();
-      if (implWriter != null) implWriter.close();
-    }
   }  
 }

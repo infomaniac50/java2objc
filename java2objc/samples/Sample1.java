@@ -6,6 +6,18 @@ public class Sample1 {
     this.value = value;
   }
 
+  int labeledStatement() {
+    int value = 4;
+    for (int i = 0; i < value; ++i) {
+      if (i == 2) {
+        break;
+      } else {
+        continue;
+      }
+    }
+    label: value = 1;
+    return value;
+  }
   public String getValue() {
     return value;
   }

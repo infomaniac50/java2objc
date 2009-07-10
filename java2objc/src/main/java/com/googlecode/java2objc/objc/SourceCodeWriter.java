@@ -71,6 +71,10 @@ public class SourceCodeWriter {
     return this;
   }
     
+  public SourceCodeWriter endStatement() {
+    return append(";").endLine();
+  }
+
   public SourceCodeWriter endLine() {
     return append('\n');
   }
