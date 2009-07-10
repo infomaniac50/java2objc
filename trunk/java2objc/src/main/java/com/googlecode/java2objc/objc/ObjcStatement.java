@@ -26,11 +26,11 @@ public class ObjcStatement extends ObjcNode {
   private final String stmt;
   private final List<ObjcExpression> expressions = new LinkedList<ObjcExpression>();
 
-  public ObjcStatement() {
+  protected ObjcStatement() {
     this((String) null);
   }
 
-  public ObjcStatement(Statement stmt) {
+  protected ObjcStatement(Statement stmt) {
     this.stmt = stmt.toString();
   }
 
@@ -50,7 +50,11 @@ public class ObjcStatement extends ObjcNode {
 
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.startLine().append(stmt);
+    if (stmt.trim().equals("")) {
+      return;
+    }
+    writer.startNewLine();
+    writer.append(stmt);
     for (ObjcExpression expr : expressions) {
       writer.append(expr);
     }

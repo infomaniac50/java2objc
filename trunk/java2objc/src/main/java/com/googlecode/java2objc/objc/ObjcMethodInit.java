@@ -29,6 +29,8 @@ public class ObjcMethodInit extends ObjcMethod {
     super("init", ObjcType.ID, n.getParameters(), n.getModifiers(), getConstructorBody(n));
   }
   
+  // TODO(inder): constructor body should treat this() as a call to another init method
+  
   private static ObjcStatementBlock getConstructorBody(ConstructorDeclaration n) {
     ObjcExpression condition = new ObjcExpression("self=[super init]");
     ObjcStatement thenStmt = new ObjcStatementBlock(n.getBlock());

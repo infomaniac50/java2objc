@@ -41,11 +41,13 @@ public class ObjcIfStatement extends ObjcStatement {
 
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.startLine().append("if (").append(condition).append(") ");
-    writer.appendLine(thenStmt);
+    writer.startNewLine();
+    writer.append("if (").append(condition).append(") ");
+    writer.append(thenStmt);
     if (elseStmt != null) {
       writer.append(" else ");
       writer.append(elseStmt);      
     }
+    writer.endLine();
   }
 }

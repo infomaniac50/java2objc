@@ -122,11 +122,11 @@ public class ObjcType extends ObjcNode {
 
   private void appendHeaderBody(SourceCodeWriter writer) {
     for (ObjcType importedClass : importsInHeader) {
-      writer.startLine().append("#import \"").append(importedClass.getHeaderFileName());
+      writer.startNewLine();
+      writer.append("#import \"").append(importedClass.getHeaderFileName());
       writer.append("\"").endLine();
     }
-    writer.appendBlankLine();
-    writer.startLine().append("@interface ").append(name).append(" : ");
+    writer.startNewLine().append("@interface ").append(name).append(" : ");
     writer.append(baseClass.getName()).append(" {").endLine();
     writer.indent();
     for (ObjcField field : fields) {
@@ -142,11 +142,10 @@ public class ObjcType extends ObjcNode {
   
   private void appendImplBody(SourceCodeWriter writer) {
     for (ObjcType importedClass : importsInImpl) {
-      writer.startLine().append("#import \"").append(importedClass.getHeaderFileName());
+      writer.startNewLine().append("#import \"").append(importedClass.getHeaderFileName());
       writer.append("\"").endLine();
     }
-    writer.appendBlankLine();
-    writer.startLine().append("@implementation ").append(name).endLine().appendBlankLine();
+    writer.startNewLine().append("@implementation ").append(name).endLine().appendBlankLine();
     for (ObjcMethod m : methods) {
       writer.append(m);
     }

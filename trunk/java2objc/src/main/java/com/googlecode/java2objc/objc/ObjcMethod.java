@@ -68,8 +68,9 @@ public class ObjcMethod extends ObjcNode {
   
   private void appendDefinition(SourceCodeWriter writer) {
     appendMethodSignature(writer);
+    writer.append(" ");
     writer.append(methodBody);
-    writer.endLine().endLine();
+    writer.endLine();
   }
   
   private void appendMethodSignature(SourceCodeWriter writer) {    

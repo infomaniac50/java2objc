@@ -30,7 +30,7 @@ public class ObjcField extends ObjcNode {
 
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.startLine().append(type.getPointerTypeName()).append(" ");
+    writer.startNewLine().append(type.getPointerTypeName()).append(" ");
     writer.append(name).append(";").endLine();
   }
 }
