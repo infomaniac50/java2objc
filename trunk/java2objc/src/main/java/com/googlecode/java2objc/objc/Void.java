@@ -15,7 +15,12 @@
  */
 package com.googlecode.java2objc.objc;
 
-public class Void extends ObjcType {
+/**
+ * Objective C void type
+ * 
+ * @author Inderjeet Singh
+ */
+public final class Void extends ObjcType {
 
   public static final Void INSTANCE = new Void();
 

@@ -15,7 +15,6 @@
  */
 package com.googlecode.java2objc.objc;
 
-
 import japa.parser.ast.body.ConstructorDeclaration;
 
 /**
@@ -23,7 +22,7 @@ import japa.parser.ast.body.ConstructorDeclaration;
  * 
  * @author Inderjeet Singh
  */
-public class ObjcMethodInit extends ObjcMethod {
+public final class ObjcMethodInit extends ObjcMethod {
 
   public ObjcMethodInit(ConstructorDeclaration n) {
     super("init", ObjcType.ID, n.getParameters(), n.getModifiers(), getConstructorBody(n));

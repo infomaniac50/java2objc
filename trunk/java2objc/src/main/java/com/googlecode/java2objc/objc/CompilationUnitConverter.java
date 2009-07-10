@@ -1,4 +1,19 @@
-package com.googlecode.java2objc.main;
+/*
+ * Copyright (C) 2009 Inderjeet Singh
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.googlecode.java2objc.objc;
 
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.ImportDeclaration;
@@ -15,11 +30,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import com.googlecode.java2objc.builders.TypeConverter;
-import com.googlecode.java2objc.objc.ObjcType;
-import com.googlecode.java2objc.objc.SourceCodeWriter;
+import com.googlecode.java2objc.main.Config;
 
-public class CompilationUnitConverter {
+/**
+ * Converts a Java compilation unit into its equivalent Objective C classes
+ * 
+ * @author Inderjeet Singh
+ */
+public final class CompilationUnitConverter {
 
   private final CompilationUnit cu;
   private final Config config;
@@ -63,11 +81,11 @@ public class CompilationUnitConverter {
     SourceCodeWriter headerWriter = null;
     SourceCodeWriter implWriter = null;
     try {
-      File headerFile = new File(config.outputDir, currentType.getHeaderFileName());
+      File headerFile = new File(config.getOutputDir(), currentType.getHeaderFileName());
       headerWriter = new SourceCodeWriter(new PrintWriter(new FileOutputStream(headerFile)), true);
       headerWriter.append(currentType);
       System.out.printf("Generated %s\n", headerFile.getAbsolutePath());
-      File implFile = new File(config.outputDir, currentType.getImplFileName());
+      File implFile = new File(config.getOutputDir(), currentType.getImplFileName());
       implWriter = new SourceCodeWriter(new PrintWriter(new FileOutputStream(implFile)), false);
       implWriter.append(currentType);
       System.out.printf("Generated %s\n", implFile.getAbsolutePath());

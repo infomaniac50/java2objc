@@ -15,11 +15,15 @@
  */
 package com.googlecode.java2objc.objc;
 
-
 import japa.parser.ast.body.VariableDeclarator;
 import japa.parser.ast.type.Type;
 
-public class ObjcField extends ObjcNode {
+/**
+ * Field of an An Objective C class
+ * 
+ * @author Inderjeet Singh
+ */
+public final class ObjcField extends ObjcNode {
 
   private final ObjcType type;
   private final String name;

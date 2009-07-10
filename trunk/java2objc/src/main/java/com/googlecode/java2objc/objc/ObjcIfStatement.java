@@ -15,12 +15,15 @@
  */
 package com.googlecode.java2objc.objc;
 
-
-import japa.parser.ast.stmt.BlockStmt;
 import japa.parser.ast.stmt.IfStmt;
 import japa.parser.ast.stmt.Statement;
 
-public class ObjcIfStatement extends ObjcStatement {
+/**
+ * Objective C if-then-else statement
+ * 
+ * @author Inderjeet Singh
+ */
+public final class ObjcIfStatement extends ObjcStatement {
   private final ObjcExpression condition;
   private final ObjcStatement thenStmt;
   private final ObjcStatement elseStmt;

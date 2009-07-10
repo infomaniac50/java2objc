@@ -15,7 +15,12 @@
  */
 package com.googlecode.java2objc.objc;
 
-public class NSArray extends ObjcType {
+/**
+ * Objective C standard NSArray class to represent immutable collections
+ * 
+ * @author Inderjeet Singh
+ */
+public final class NSArray extends ObjcType {
 
   public static final NSArray INSTANCE = new NSArray();
 

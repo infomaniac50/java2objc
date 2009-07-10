@@ -20,7 +20,6 @@ import japa.parser.ast.body.Parameter;
 
 import java.util.LinkedList;
 
-
 /**
  * Method for implementing dealloc for an object
  * 
@@ -29,7 +28,8 @@ import java.util.LinkedList;
 public final class ObjcMethodDealloc extends ObjcMethod {
 
   public ObjcMethodDealloc(ObjcType parent) {
-    super("dealloc", Void.INSTANCE, new LinkedList<Parameter>(), ModifierSet.PRIVATE, getDeallocBody());
+    super("dealloc", Void.INSTANCE, new LinkedList<Parameter>(), ModifierSet.PRIVATE, 
+        getDeallocBody());
   }
 
   private static ObjcStatementBlock getDeallocBody() {

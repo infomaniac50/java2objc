@@ -25,9 +25,15 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import com.googlecode.java2objc.objc.CompilationUnitConverter;
 import com.googlecode.java2objc.util.Preconditions;
 
-public class Main {
+/**
+ * Main entry point for java2objc
+ * 
+ * @author Inderjeet Singh
+ */
+public final class Main {
 
   private static void printUsageAndExit() {
     System.err.printf(

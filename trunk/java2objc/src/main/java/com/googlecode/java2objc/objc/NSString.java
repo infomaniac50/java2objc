@@ -15,7 +15,12 @@
  */
 package com.googlecode.java2objc.objc;
 
-public class NSString extends ObjcType {
+/**
+ * Objective C native NSString class
+ * 
+ * @author Inderjeet Singh
+ */
+public final class NSString extends ObjcType {
   public static final NSString INSTANCE = new NSString();
   
   public static String JAVA_TYPE = "String";

@@ -15,7 +15,12 @@
  */
 package com.googlecode.java2objc.objc;
 
-public class NSInteger extends ObjcType {
+/**
+ * Objective C native NSInteger type.
+ * 
+ * @author Inderjeet Singh
+ */
+public final class NSInteger extends ObjcType {
 
   public static final NSInteger INSTANCE = new NSInteger();
 

@@ -15,6 +15,11 @@
  */
 package com.googlecode.java2objc.util;
 
+/**
+ * Utility class to assert preconditions for methods
+ * 
+ * @author Inderjeet Singh
+ */
 public final class Preconditions {
   public static void assertNotNull(Object target) {
     assertTrue(target != null);

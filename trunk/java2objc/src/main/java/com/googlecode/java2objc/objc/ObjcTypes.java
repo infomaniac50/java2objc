@@ -17,6 +17,11 @@ package com.googlecode.java2objc.objc;
 
 import java.util.Map;
 
+/**
+ * Predefined Objective C types
+ * 
+ * @author Inderjeet Singh
+ */
 public enum ObjcTypes {
   NSSTRING(NSString.INSTANCE, "String"), 
   NSARRAY(NSArray.INSTANCE, "Array"), 

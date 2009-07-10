@@ -20,9 +20,14 @@ import japa.parser.ast.stmt.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
-
+/**
+ * Base class for all Objective C statements
+ * 
+ * @author Inderjeet Singh
+ */
 public class ObjcStatement extends ObjcNode {
 
+  // TODO: Get rid of the String form of statement
   private final String stmt;
   private final List<ObjcExpression> expressions = new LinkedList<ObjcExpression>();
 

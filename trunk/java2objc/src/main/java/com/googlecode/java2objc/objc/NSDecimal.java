@@ -15,7 +15,12 @@
  */
 package com.googlecode.java2objc.objc;
 
-public class NSDecimal extends ObjcType {
+/**
+ * Objective C native NSDecimal class
+ * 
+ * @author Inderjeet Singh
+ */
+public final class NSDecimal extends ObjcType {
 
   public static final NSDecimal INSTANCE = new NSDecimal();
 

@@ -2,7 +2,12 @@ package com.googlecode.java2objc.objc;
 
 import japa.parser.ast.stmt.SynchronizedStmt;
 
-public class ObjcSynchronizedStatement extends ObjcStatement {
+/**
+ * Objective C equivalent of a Java synchronized block
+ * 
+ * @author Inderjeet Singh
+ */
+public final class ObjcSynchronizedStatement extends ObjcStatement {
 
   private ObjcExpression expr;
   private ObjcStatementBlock stmt;

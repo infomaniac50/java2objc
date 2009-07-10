@@ -21,8 +21,12 @@ import japa.parser.ast.stmt.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
-
-public class ObjcStatementBlock extends ObjcStatement {
+/**
+ * An Objective C statement block
+ * 
+ * @author Inderjeet Singh
+ */
+public final class ObjcStatementBlock extends ObjcStatement {
   
   public static class Builder {
     private final List<ObjcStatement> stmts;

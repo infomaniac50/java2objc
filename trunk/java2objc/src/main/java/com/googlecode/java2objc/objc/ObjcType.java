@@ -22,6 +22,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Base class for all Objective C types
+ * 
+ * @author Inderjeet Singh
+ */
 public class ObjcType extends ObjcNode {
 
   private static Map<String, ObjcType> types = new HashMap<String, ObjcType>();
