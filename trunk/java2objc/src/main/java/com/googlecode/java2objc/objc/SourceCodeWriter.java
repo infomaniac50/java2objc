@@ -88,6 +88,20 @@ public class SourceCodeWriter {
     return endLine();
   }
 
+  public SourceCodeWriter appendToDo(String comment) {
+    return appendComment("TODO: " + comment);
+  }
+
+  public SourceCodeWriter appendComment(String comment) {
+    String[] lines = comment.split("\n");
+    for (String line : lines) {
+      writer.append("\\\\ ");
+      writer.append(line);
+      writer.append("\n");
+    }
+    return this;
+  }
+
   public void close() {
     writer.close();
   }

@@ -4,7 +4,6 @@ import japa.parser.ast.stmt.SynchronizedStmt;
 
 public class ObjcSynchronizedStatement extends ObjcStatement {
 
-  @SuppressWarnings("unused")
   private ObjcExpression expr;
   private ObjcStatementBlock stmt;
   
@@ -15,6 +14,7 @@ public class ObjcSynchronizedStatement extends ObjcStatement {
   
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.append(stmt);
+    writer.startNewLine().appendToDo("handle synchronized " + expr);
+    writer.startNewLine().append(stmt);
   }
 }
