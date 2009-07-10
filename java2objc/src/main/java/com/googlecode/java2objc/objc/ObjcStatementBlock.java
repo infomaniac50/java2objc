@@ -43,7 +43,7 @@ public class ObjcStatementBlock extends ObjcStatement {
   public ObjcStatementBlock(BlockStmt block) {
     stmts = new LinkedList<ObjcStatement>();
     for (Statement stmt : block.getStmts()) {
-      stmts.add(new ObjcStatement(stmt));
+      stmts.add(StatementConverter.to(stmt));
     }    
   }
 
@@ -53,12 +53,12 @@ public class ObjcStatementBlock extends ObjcStatement {
   
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.append("{").endLine();
+    writer.append("{");
     writer.indent();
     for (ObjcStatement stmt : stmts) {
       writer.append(stmt);
     }
     writer.unIndent();
-    writer.startLine().append("}");
+    writer.appendLine("}");
   }
 }

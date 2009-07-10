@@ -15,9 +15,9 @@
  */
 package com.googlecode.java2objc.objc;
 
-
 public class ObjcExpression extends ObjcNode {
 
+  // TODO(inder); convert this to self
   private final String expression;
   
   public ObjcExpression() {

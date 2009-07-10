@@ -2,6 +2,7 @@ package com.googlecode.java2objc.builders;
 
 import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
+import japa.parser.ast.body.ConstructorDeclaration;
 import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.TypeDeclaration;
@@ -13,6 +14,7 @@ import java.util.Set;
 
 import com.googlecode.java2objc.objc.ObjcField;
 import com.googlecode.java2objc.objc.ObjcMethod;
+import com.googlecode.java2objc.objc.ObjcMethodInit;
 import com.googlecode.java2objc.objc.ObjcType;
 
 /**
@@ -56,6 +58,9 @@ public class TypeDeclarationToObjcTypeConverter {
       } else if (member instanceof MethodDeclaration) {
         MethodDeclaration method = (MethodDeclaration) member;
         typeBuilder.addMethod(new ObjcMethod(method));
+      } else if (member instanceof ConstructorDeclaration) {
+        ConstructorDeclaration constructor = (ConstructorDeclaration) member;
+        typeBuilder.addMethod(new ObjcMethodInit(constructor));
       }
     }
   }

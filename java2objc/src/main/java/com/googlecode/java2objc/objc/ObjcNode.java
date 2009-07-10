@@ -15,6 +15,9 @@
  */
 package com.googlecode.java2objc.objc;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 
 /**
  * Base class for all Objc nodes
@@ -25,5 +28,13 @@ public class ObjcNode {
 
   public void append(SourceCodeWriter writer) {
     writer.append(toString());
+  }
+  
+  @Override
+  public String toString() {
+    StringWriter sw = new StringWriter();
+    SourceCodeWriter scw = new SourceCodeWriter(new PrintWriter(sw), false);
+    append(scw);
+    return sw.toString();
   }
 }

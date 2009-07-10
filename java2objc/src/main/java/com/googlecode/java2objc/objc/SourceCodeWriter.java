@@ -1,6 +1,7 @@
 package com.googlecode.java2objc.objc;
 
 import java.io.PrintWriter;
+import java.util.List;
 
 
 public class SourceCodeWriter {
@@ -46,11 +47,11 @@ public class SourceCodeWriter {
   }
 
   public SourceCodeWriter appendLine(String line) {
-    for (int i = 0; i < indentLevel; ++i) {
-      writer.append(INDENT);
-    }
+    indentLine();
     writer.append(line);
-    writer.append("\n");
+    if (!line.endsWith("\n")) {
+      writer.append("\n");
+    }
     return this;
   }
   
@@ -59,7 +60,11 @@ public class SourceCodeWriter {
     return this;
   }
   
-  public SourceCodeWriter startLine() {
+  public SourceCodeWriter startNewLine() {
+    return endLine().indentLine();
+  }
+
+  private SourceCodeWriter indentLine() {
     for (int i = 0; i < indentLevel; ++i) {
       writer.append(INDENT);
     }
@@ -85,5 +90,25 @@ public class SourceCodeWriter {
 
   public void close() {
     writer.close();
+  }
+
+  /**
+   * Appends a list of nodes each separated by the specified separator.
+   * 
+   * @param <T>
+   * @param nodes
+   * @param separator
+   */
+  public <T extends ObjcNode> SourceCodeWriter append(List<T> nodes, String separator) {
+    boolean first = true;
+    for (T node : nodes) {
+      if (first) {
+        first = false;
+      } else {
+        writer.append(separator);
+      }
+      append(node);
+    }
+    return this;
   }
 }
