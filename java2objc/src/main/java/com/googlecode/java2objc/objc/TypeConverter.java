@@ -33,9 +33,11 @@ import java.util.Set;
  * @author Inderjeet Singh
  */
 public final class TypeConverter {
+  private final CompilationContext context;
   private final Set<ObjcType> imports;
 
-  public TypeConverter(Set<ObjcType> imports) {
+  public TypeConverter(CompilationContext context, Set<ObjcType> imports) {
+    this.context = context;
     this.imports = imports;
   }
 
@@ -68,10 +70,10 @@ public final class TypeConverter {
         }
       } else if (member instanceof MethodDeclaration) {
         MethodDeclaration method = (MethodDeclaration) member;
-        typeBuilder.addMethod(new ObjcMethod(method));
+        typeBuilder.addMethod(new ObjcMethod(context, method));
       } else if (member instanceof ConstructorDeclaration) {
         ConstructorDeclaration constructor = (ConstructorDeclaration) member;
-        typeBuilder.addMethod(new ObjcMethodInit(constructor));
+        typeBuilder.addMethod(new ObjcMethodInit(context, constructor));
       }
     }
   }

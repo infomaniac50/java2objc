@@ -24,15 +24,16 @@ import japa.parser.ast.body.ConstructorDeclaration;
  */
 public final class ObjcMethodInit extends ObjcMethod {
 
-  public ObjcMethodInit(ConstructorDeclaration n) {
-    super("init", ObjcType.ID, n.getParameters(), n.getModifiers(), getConstructorBody(n));
+  public ObjcMethodInit(CompilationContext context, ConstructorDeclaration n) {
+    super("init", ObjcType.ID, n.getParameters(), n.getModifiers(), getConstructorBody(context, n));
   }
   
   // TODO(inder): constructor body should treat this() as a call to another init method
   
-  private static ObjcStatementBlock getConstructorBody(ConstructorDeclaration n) {
+  private static ObjcStatementBlock getConstructorBody(CompilationContext context, 
+      ConstructorDeclaration n) {
     ObjcExpression condition = new ObjcExpression("self=[super init]");
-    ObjcStatement thenStmt = new ObjcStatementBlock(n.getBlock());
+    ObjcStatement thenStmt = new ObjcStatementBlock(context, n.getBlock());
     ObjcIfStatement ifStmt = new ObjcIfStatement(condition, thenStmt, null);     
     return new ObjcStatementBlock.Builder()
       .addStatement(ifStmt)

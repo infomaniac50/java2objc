@@ -31,11 +31,11 @@ public final class ObjcSwitchStatement extends ObjcStatement {
   private final ObjcExpression selector;
   private final List<ObjcSwitchEntryStatement> stmts;
 
-  public ObjcSwitchStatement(SwitchStmt stmt) {
-    selector = ExpressionConverter.to(stmt.getSelector());
+  public ObjcSwitchStatement(CompilationContext context, SwitchStmt stmt) {
+    selector = context.getExpressionConverter().to(stmt.getSelector());
     stmts = new LinkedList<ObjcSwitchEntryStatement>();
     for (SwitchEntryStmt entry : stmt.getEntries()) {
-      stmts.add(new ObjcSwitchEntryStatement(entry));
+      stmts.add(new ObjcSwitchEntryStatement(context, entry));
     }
   }  
   

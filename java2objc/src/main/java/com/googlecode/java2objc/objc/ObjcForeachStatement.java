@@ -29,12 +29,12 @@ public final class ObjcForeachStatement extends ObjcStatement {
   private final ObjcType varType;
   private final ObjcExpression iterable;
   private final ObjcStatement body;
-  public ObjcForeachStatement(ForeachStmt stmt) {
+  public ObjcForeachStatement(CompilationContext context, ForeachStmt stmt) {
     VariableDeclarationExpr variable = stmt.getVariable();
     this.varName = variable.getVars().get(0).getId().getName();
     this.varType = ObjcType.getTypeFor(variable.getType());
-    this.iterable = ExpressionConverter.to(stmt.getIterable());
-    this.body = StatementConverter.to(stmt.getBody());
+    this.iterable = context.getExpressionConverter().to(stmt.getIterable());
+    this.body = context.getStatementConverter().to(stmt.getBody());
   }
   
   @Override

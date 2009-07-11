@@ -30,11 +30,12 @@ public final class ObjcForStatement extends ObjcStatement {
   private final ObjcExpression compare;
   private final List<ObjcExpression> update;
   private final ObjcStatement body;
-  public ObjcForStatement(ForStmt stmt) {
-    this.init = ExpressionConverter.to(stmt.getInit());
-    this.compare = ExpressionConverter.to(stmt.getCompare());
-    this.update = ExpressionConverter.to(stmt.getUpdate());
-    this.body = StatementConverter.to(stmt.getBody());
+
+  public ObjcForStatement(CompilationContext context, ForStmt stmt) {
+    this.init = context.getExpressionConverter().to(stmt.getInit());
+    this.compare = context.getExpressionConverter().to(stmt.getCompare());
+    this.update = context.getExpressionConverter().to(stmt.getUpdate());
+    this.body = context.getStatementConverter().to(stmt.getBody());
   }
   
   @Override

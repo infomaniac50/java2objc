@@ -35,8 +35,9 @@ public class ObjcMethod extends ObjcNode {
   private final ObjcStatementBlock methodBody;
   private final int modifiers;
   
-  public ObjcMethod(MethodDeclaration n) {
-    this(n.getName(), ObjcType.getTypeFor(n.getType()), n.getParameters(), n.getModifiers(), new ObjcStatementBlock(n.getBody()));
+  public ObjcMethod(CompilationContext context, MethodDeclaration n) {
+    this(n.getName(), ObjcType.getTypeFor(n.getType()), n.getParameters(), n.getModifiers(), 
+        new ObjcStatementBlock(context, n.getBody()));
   }
 
   public ObjcMethod(String name, ObjcType returnType, List<Parameter> params, int modifiers, ObjcStatementBlock methodBody) {

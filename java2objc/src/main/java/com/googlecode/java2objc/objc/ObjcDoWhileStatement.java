@@ -27,9 +27,9 @@ public final class ObjcDoWhileStatement extends ObjcStatement {
   private final ObjcStatement body;
   private final ObjcExpression condition;
 
-  public ObjcDoWhileStatement(DoStmt stmt) {
-    body = StatementConverter.to(stmt.getBody());
-    condition = ExpressionConverter.to(stmt.getCondition());
+  public ObjcDoWhileStatement(CompilationContext context, DoStmt stmt) {
+    body = context.getStatementConverter().to(stmt.getBody());
+    condition = context.getExpressionConverter().to(stmt.getCondition());
   }
 
   @Override

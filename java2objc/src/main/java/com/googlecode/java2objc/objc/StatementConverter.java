@@ -36,31 +36,37 @@ import japa.parser.ast.stmt.WhileStmt;
  */
 public final class StatementConverter {
 
-  public static ObjcStatement to(Statement stmt) {
+  private final CompilationContext context;
+
+  public StatementConverter(CompilationContext context) {
+    this.context = context;
+  }
+
+  public ObjcStatement to(Statement stmt) {
     if (stmt instanceof IfStmt) {
       return new ObjcIfStatement((IfStmt)stmt);
     } else if (stmt instanceof BlockStmt) {
-      return new ObjcStatementBlock((BlockStmt)stmt);
+      return new ObjcStatementBlock(context, (BlockStmt)stmt);
     } else if (stmt instanceof ForStmt) {
-      return new ObjcForStatement((ForStmt)stmt);
+      return new ObjcForStatement(context, (ForStmt)stmt);
     } else if (stmt instanceof ForeachStmt) {
-      return new ObjcForeachStatement((ForeachStmt)stmt);
+      return new ObjcForeachStatement(context, (ForeachStmt)stmt);
     } else if (stmt instanceof SwitchStmt) {
-      return new ObjcSwitchStatement((SwitchStmt)stmt);
+      return new ObjcSwitchStatement(context, (SwitchStmt)stmt);
     } else if (stmt instanceof DoStmt) {
-      return new ObjcDoWhileStatement((DoStmt)stmt);
+      return new ObjcDoWhileStatement(context, (DoStmt)stmt);
     } else if (stmt instanceof WhileStmt) {
-      return new ObjcWhileStatement((WhileStmt)stmt);
+      return new ObjcWhileStatement(context, (WhileStmt)stmt);
     } else if (stmt instanceof EmptyStmt) {
       return new ObjcEmptyStatement((EmptyStmt)stmt);
     } else if (stmt instanceof ExpressionStmt) {
-      return new ObjcExpressionStatement((ExpressionStmt)stmt);      
+      return new ObjcExpressionStatement(context, (ExpressionStmt)stmt);      
     } else if (stmt instanceof SynchronizedStmt) {
-      return new ObjcSynchronizedStatement((SynchronizedStmt)stmt);
+      return new ObjcSynchronizedStatement(context, (SynchronizedStmt)stmt);
     } else if (stmt instanceof ReturnStmt) {
-      return new ObjcReturnStatement((ReturnStmt)stmt);
+      return new ObjcReturnStatement(context, (ReturnStmt)stmt);
     } else if (stmt instanceof LabeledStmt) {
-      return new ObjcLabeledStmt((LabeledStmt)stmt);
+      return new ObjcLabeledStmt(context, (LabeledStmt)stmt);
     }
     return new ObjcStatement(stmt);
   }

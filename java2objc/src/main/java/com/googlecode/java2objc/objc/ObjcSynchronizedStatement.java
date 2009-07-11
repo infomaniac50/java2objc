@@ -12,9 +12,9 @@ public final class ObjcSynchronizedStatement extends ObjcStatement {
   private ObjcExpression expr;
   private ObjcStatementBlock stmt;
   
-  public ObjcSynchronizedStatement(SynchronizedStmt stmt) {
-    this.expr = ExpressionConverter.to(stmt.getExpr());
-    this.stmt = new ObjcStatementBlock(stmt.getBlock());
+  public ObjcSynchronizedStatement(CompilationContext context, SynchronizedStmt stmt) {
+    this.expr = context.getExpressionConverter().to(stmt.getExpr());
+    this.stmt = new ObjcStatementBlock(context, stmt.getBlock());
   }
   
   @Override

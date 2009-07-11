@@ -29,7 +29,16 @@ import java.util.List;
  */
 public final class ExpressionConverter {
 
-  public static List<ObjcExpression> to(List<Expression> expressions) {
+  private final CompilationContext context;
+
+  /**
+   * @param compilationContext
+   */
+  public ExpressionConverter(CompilationContext context) {
+    this.context = context;
+  }
+
+  public List<ObjcExpression> to(List<Expression> expressions) {
     List<ObjcExpression> objcExpressions = new LinkedList<ObjcExpression>();
     if (expressions != null) {
       for (Expression expr : expressions) {
@@ -39,11 +48,11 @@ public final class ExpressionConverter {
     return objcExpressions;
   }
 
-  public static ObjcExpression to(Expression expr) {
+  public ObjcExpression to(Expression expr) {
     if (expr instanceof StringLiteralExpr) {
       return new ObjcStringLiteralExpression(expr);
     } else if (expr instanceof MethodCallExpr) {
-      return new ObjcMethodCallExpression((MethodCallExpr)expr); 
+      return new ObjcMethodCallExpression(context, (MethodCallExpr)expr); 
     } else {
       // TODO (inder): bring in real expression conversion
       return new ObjcExpression(expr.toString());
