@@ -36,16 +36,36 @@ public class ObjcMethod extends ObjcNode {
   private final int modifiers;
   
   public ObjcMethod(CompilationContext context, MethodDeclaration n) {
-    this(n.getName(), ObjcType.getTypeFor(n.getType()), n.getParameters(), n.getModifiers(), 
-        new ObjcStatementBlock(context, n.getBody()));
+    if (context != null) {
+      context.setCurentMethod(this);
+    }
+    this.returnType = ObjcType.getTypeFor(n.getType());
+    this.name = n.getName();
+    this.methodBody = new ObjcStatementBlock(context, n.getBody());
+    this.modifiers = n.getModifiers();
+    this.params = new LinkedList<ObjcMethodParam>();
+    if (n.getParameters() != null) {
+      for (Parameter param : n.getParameters()) {
+        ObjcType type = ObjcType.getTypeFor(param.getType());
+        String typeName = param.getId().getName();
+        this.params.add(new ObjcMethodParam(type, typeName));
+      }
+    }
+    if (context != null) {
+      context.setCurentMethod(null);
+    }
   }
 
-  public ObjcMethod(String name, ObjcType returnType, List<Parameter> params, int modifiers, ObjcStatementBlock methodBody) {
-    this.params = new LinkedList<ObjcMethodParam>();
+  public ObjcMethod(CompilationContext context, String name, ObjcType returnType, 
+      List<Parameter> params, int modifiers, ObjcStatementBlock methodBody) {
+    if (context != null) {
+      context.setCurentMethod(this);
+    }
     this.returnType = returnType;
     this.name = name;
     this.methodBody = methodBody;
     this.modifiers = modifiers;
+    this.params = new LinkedList<ObjcMethodParam>();
     if (params != null) {
       for (Parameter param : params) {
         ObjcType type = ObjcType.getTypeFor(param.getType());
@@ -53,6 +73,16 @@ public class ObjcMethod extends ObjcNode {
         this.params.add(new ObjcMethodParam(type, typeName));
       }
     }
+    if (context != null) {
+      context.setCurentMethod(null);
+    }
+  }
+
+  /**
+   * Returns true if this method is a static method
+   */
+  public boolean isStatic() {
+    return ModifierSet.isStatic(modifiers);
   }
   
   @Override
@@ -79,8 +109,7 @@ public class ObjcMethod extends ObjcNode {
   }
   
   private void appendMethodSignature(SourceCodeWriter writer) {    
-    boolean isStatic = ModifierSet.isStatic(modifiers);
-    writer.append(isStatic ? "+" : "-");
+    writer.append(isStatic() ? "+" : "-");
     writer.append(" (").append(returnType.getPointerTypeName()).append(") ");
     writer.append(name);
     if (params == null || params.size() == 0) {
@@ -97,5 +126,9 @@ public class ObjcMethod extends ObjcNode {
       writer.append('(').append(param.getType().getPointerTypeName()).append(")");
       writer.append(param.getName()).append(" ");
     }    
+  }
+
+  public Object getName() {
+    return name;
   }
 }

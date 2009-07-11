@@ -24,32 +24,29 @@ import java.util.Set;
  * @author Inderjeet Singh
  */
 public final class UserDefinedObjcTypeBuilder {
-  private final String name;
+  private final CompilationContext context;
+  private final ObjcType type;
   private final Set<ObjcType> baseClasses;
-  private final Set<ObjcType> imports;
   private final Set<ObjcMethod> methods;
   private final Set<ObjcField> fields;
-  private boolean isInterface;
   
-  public UserDefinedObjcTypeBuilder(String name, Set<ObjcType> imports) {
-    this.name = name;
-    this.imports = imports;
-    this.isInterface = false;
+  public UserDefinedObjcTypeBuilder(CompilationContext context, String name, boolean isInterface,
+      Set<ObjcType> imports) {
+    this.context = context;
     this.baseClasses = new HashSet<ObjcType>();
     this.methods = new HashSet<ObjcMethod>();
     this.fields = new HashSet<ObjcField>();
+    this.type = new ObjcType(context, name, isInterface, imports);
+    context.setCurrentType(type);
   }
 
   public ObjcType build() {
     ObjcType baseClass = baseClasses.isEmpty() ? NSObject.INSTANCE : baseClasses.iterator().next();
-    return new ObjcType(name, isInterface, baseClass, imports, methods, fields);
+    type.init(context, baseClass, methods, fields);
+    context.setCurrentType(null);
+    return type;
   }
   
-  public UserDefinedObjcTypeBuilder setIsInterface(boolean isInterface) {
-    this.isInterface = isInterface;
-    return this;
-  }
-
   public UserDefinedObjcTypeBuilder addBaseClass(ObjcType baseClass) {
     baseClasses.add(baseClass);
     return this;

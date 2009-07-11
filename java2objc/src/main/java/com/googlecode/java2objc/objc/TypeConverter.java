@@ -43,13 +43,12 @@ public final class TypeConverter {
 
   public ObjcType to(ClassOrInterfaceDeclaration type) {
     UserDefinedObjcTypeBuilder typeBuilder = 
-      new UserDefinedObjcTypeBuilder(type.getName(), imports);
+      new UserDefinedObjcTypeBuilder(context, type.getName(), type.isInterface(), imports);
     buildType(typeBuilder, type);
     return typeBuilder.build();
   }
 
   private void buildType(UserDefinedObjcTypeBuilder typeBuilder, ClassOrInterfaceDeclaration type) {
-    typeBuilder.setIsInterface(type.isInterface());
     if (type.getExtends() != null) {
       for (ClassOrInterfaceType extendedClass : type.getExtends()) {
         typeBuilder.addBaseClass(ObjcType.getTypeFor(extendedClass.getName()));

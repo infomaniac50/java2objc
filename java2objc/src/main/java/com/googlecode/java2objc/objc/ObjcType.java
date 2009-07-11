@@ -39,25 +39,31 @@ public class ObjcType extends ObjcNode {
   public static final ObjcType ID = getTypeFor("id", false);
   private final String name;
   private final boolean isInterface;
-  private final ObjcType baseClass;
+  private ObjcType baseClass;
   private final boolean pointerType;
   private final Set<ObjcType> importsInHeader;
   private final Set<ObjcType> importsInImpl;
   private final Set<ObjcMethod> methods;
   private final Set<ObjcField> fields;
   
-  public ObjcType(String name, boolean isInterface, ObjcType baseClass, Set<ObjcType> imports, 
-      Set<ObjcMethod> methods, Set<ObjcField> fields) {
+  public ObjcType(CompilationContext context, String name, boolean isInterface, 
+      Set<ObjcType> imports) {
     this.name = name;
     this.isInterface = isInterface;
-    this.baseClass = baseClass;
     this.pointerType = true;
     importsInHeader = imports;
     importsInImpl = new HashSet<ObjcType>();
     importsInImpl.add(this);
-    this.fields = fields;
-    this.methods = methods;    
-    methods.add(new ObjcMethodDealloc(this));
+    this.fields = new HashSet<ObjcField>();
+    this.methods = new HashSet<ObjcMethod>();    
+  }
+  
+  public void init(CompilationContext context, ObjcType baseClass, Set<ObjcMethod> methods, 
+      Set<ObjcField> fields) {
+    this.baseClass = baseClass;
+    this.fields.addAll(fields);
+    this.methods.addAll(methods);    
+    methods.add(new ObjcMethodDealloc(context, this));
   }
   
   protected ObjcType(ObjcTypes type) {
@@ -82,7 +88,7 @@ public class ObjcType extends ObjcNode {
     importsInImpl.add(this);
     fields = new HashSet<ObjcField>();
     methods = new HashSet<ObjcMethod>();    
-    methods.add(new ObjcMethodDealloc(this));
+    methods.add(new ObjcMethodDealloc(null, this));
   }
   
   public String getName() {
@@ -171,5 +177,14 @@ public class ObjcType extends ObjcNode {
       types.put(name, objcType);
     }
     return objcType;
+  }
+
+  public ObjcMethod getMethodWithName(String methodName) {
+    for (ObjcMethod method : methods) {
+      if (method.getName().equals(methodName)) {
+        return method;
+      }
+    }
+    return null;
   }
 }

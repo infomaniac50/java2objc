@@ -15,6 +15,8 @@
  */
 package com.googlecode.java2objc.objc;
 
+import japa.parser.ast.expr.MethodCallExpr;
+
 import java.util.Set;
 
 /**
@@ -27,6 +29,8 @@ public class CompilationContext {
   private final TypeConverter typeConverter;
   private final StatementConverter statementConverter;
   private final ExpressionConverter expressionConverter;
+  private ObjcMethod currentMethod;
+  private ObjcType currentType;
 
   public CompilationContext(Set<ObjcType> imports) {
     this.typeConverter = new TypeConverter(this, imports);
@@ -53,4 +57,22 @@ public class CompilationContext {
     return expressionConverter;
   }
 
+  /**
+   * @param method
+   */
+  public void setCurentMethod(ObjcMethod method) {
+    this.currentMethod = method;
+  }
+  
+  public ObjcMethod getCurrentMethod() {
+    return currentMethod;
+  }
+
+  public void setCurrentType(ObjcType type) {
+    this.currentType = type;
+  }
+
+  public ObjcType getCurrentType() {
+    return currentType;
+  }
 }

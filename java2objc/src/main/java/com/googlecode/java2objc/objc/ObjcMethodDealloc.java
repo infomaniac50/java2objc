@@ -27,8 +27,8 @@ import java.util.LinkedList;
  */
 public final class ObjcMethodDealloc extends ObjcMethod {
 
-  public ObjcMethodDealloc(ObjcType parent) {
-    super("dealloc", Void.INSTANCE, new LinkedList<Parameter>(), ModifierSet.PRIVATE, 
+  public ObjcMethodDealloc(CompilationContext context, ObjcType parent) {
+    super(context, "dealloc", Void.INSTANCE, new LinkedList<Parameter>(), ModifierSet.PRIVATE, 
         getDeallocBody());
   }
 
