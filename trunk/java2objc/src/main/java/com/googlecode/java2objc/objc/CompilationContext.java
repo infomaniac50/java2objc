@@ -27,6 +27,7 @@ import java.util.Set;
 public class CompilationContext {
 
   private final TypeConverter typeConverter;
+  private final MethodConverter methodConverter;
   private final StatementConverter statementConverter;
   private final ExpressionConverter expressionConverter;
   private ObjcMethod currentMethod;
@@ -34,6 +35,7 @@ public class CompilationContext {
 
   public CompilationContext(Set<ObjcType> imports) {
     this.typeConverter = new TypeConverter(this, imports);
+    this.methodConverter = new MethodConverter(this);
     this.statementConverter = new StatementConverter(this);
     this.expressionConverter = new ExpressionConverter(this);
   }
@@ -44,6 +46,11 @@ public class CompilationContext {
   public TypeConverter getTypeConverter() {
     return typeConverter;
   }
+
+  public MethodConverter getMethodConverter() {
+    return methodConverter;
+  }
+
   /**
    * @return the statementConverter
    */

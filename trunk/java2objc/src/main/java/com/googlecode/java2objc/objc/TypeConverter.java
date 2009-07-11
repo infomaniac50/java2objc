@@ -68,11 +68,9 @@ public final class TypeConverter {
           typeBuilder.addField(objcField);
         }
       } else if (member instanceof MethodDeclaration) {
-        MethodDeclaration method = (MethodDeclaration) member;
-        typeBuilder.addMethod(new ObjcMethod(context, method));
+        typeBuilder.addMethod(context.getMethodConverter().to((MethodDeclaration) member));
       } else if (member instanceof ConstructorDeclaration) {
-        ConstructorDeclaration constructor = (ConstructorDeclaration) member;
-        typeBuilder.addMethod(new ObjcMethodInit(context, constructor));
+        typeBuilder.addMethod(context.getMethodConverter().to((ConstructorDeclaration) member));
       }
     }
   }
