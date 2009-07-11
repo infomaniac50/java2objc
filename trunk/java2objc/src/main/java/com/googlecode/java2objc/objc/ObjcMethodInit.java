@@ -25,7 +25,8 @@ import japa.parser.ast.body.ConstructorDeclaration;
 public final class ObjcMethodInit extends ObjcMethod {
 
   public ObjcMethodInit(CompilationContext context, ConstructorDeclaration n) {
-    super("init", ObjcType.ID, n.getParameters(), n.getModifiers(), getConstructorBody(context, n));
+    super(context, "init", ObjcType.ID, n.getParameters(), n.getModifiers(), 
+        getConstructorBody(context, n));
   }
   
   // TODO(inder): constructor body should treat this() as a call to another init method

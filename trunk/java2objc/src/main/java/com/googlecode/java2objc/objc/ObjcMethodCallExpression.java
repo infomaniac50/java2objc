@@ -29,20 +29,28 @@ import java.util.List;
  */
 public final class ObjcMethodCallExpression extends ObjcExpression {
 
-  private final String targetObjectName;
+  private final String target;
   private final String methodName;
   private final List<ObjcType> argTypes;
   private final List<ObjcExpression> args;
   private final int numParams;
   
   public ObjcMethodCallExpression(CompilationContext context, MethodCallExpr expr) {
-    Expression scope = expr.getScope();
-    if (scope == null || "this".equals(scope.toString())) {
-      this.targetObjectName = "self";
-    } else {
-      this.targetObjectName = scope.toString();
-    }
     methodName = expr.getName();
+    Expression scope = expr.getScope();
+    if (scope == null) {
+      ObjcType enclosingType = context.getCurrentType();
+      ObjcMethod invokedMethod = enclosingType.getMethodWithName(methodName);
+      if (invokedMethod == null || invokedMethod.isStatic()) {
+        this.target = enclosingType.getName();
+      } else {
+        this.target = "self";
+      }
+    } else if ("this".equals(scope.toString())) {
+      this.target = "self";
+    } else {
+      this.target = scope.toString();
+    }
     argTypes = new LinkedList<ObjcType>();
     List<Type> typeArgs = expr.getTypeArgs();
     if (typeArgs != null) {
@@ -63,7 +71,7 @@ public final class ObjcMethodCallExpression extends ObjcExpression {
 
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.append("[").append(targetObjectName).append(" ");
+    writer.append("[").append(target).append(" ");
     writer.append(methodName);
     if (numParams > 0) {
       // Write first argument
