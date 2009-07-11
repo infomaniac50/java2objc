@@ -13,38 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package examples;
+
+package com.googlecode.java2objc.objc;
+
+import japa.parser.ast.body.MethodDeclaration;
 
 /**
- * Examples of how java2objc converts Java static and object method invocations into their 
- * Objective C equivalents
+ * Objective C equivalent of Java toString() method
  * 
  * @author Inderjeet Singh
  */
-public class MethodExamples {
+public class ObjcMethodToString extends ObjcMethod {
 
-  public static int staticMethod(int a, int b) {
-    return a+b;
-  }
-
-  public static int callAStaticMethod(int a, int b) {
-    return staticMethod(a, b);
-  }
-
-  public String method1(String value) {
-    return "Value is: " + value;
-  }
-  
-  public String callAMethodWithThis() {
-    return this.method1("foo");
-  }
-  
-  public String callAMethod() {
-    return method1("foo");
-  }
-  
-  @Override
-  public String toString() {
-    return "I am of type MethodExamples";
+  public ObjcMethodToString(CompilationContext context, MethodDeclaration method) {
+    super(context, method, "description");
   }
 }
