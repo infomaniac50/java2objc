@@ -16,8 +16,11 @@
 
 package com.googlecode.java2objc.objc;
 
+import java.util.List;
+
 import japa.parser.ast.body.ConstructorDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
+import japa.parser.ast.body.Parameter;
 
 /**
  * Converts Java methods to their equivalent Objective C methods
@@ -32,9 +35,17 @@ public class MethodConverter {
   }
 
   public ObjcMethod to(MethodDeclaration method) {
+    if (isToStringMethod(method)) {
+      return new ObjcMethodToString(context, method);
+    }
     return new ObjcMethod(context, method);
   }
   
+  private boolean isToStringMethod(MethodDeclaration method) {
+    List<Parameter> params = method.getParameters();
+    return method.getName().equals("toString") && (params == null || params.size() == 0); 
+  }
+
   public ObjcMethodInit to(ConstructorDeclaration constructor) {
     return new ObjcMethodInit(context, constructor);
   }
