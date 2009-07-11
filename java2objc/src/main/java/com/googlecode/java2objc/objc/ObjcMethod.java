@@ -29,6 +29,7 @@ import java.util.List;
  */
 public class ObjcMethod extends ObjcNode {
 
+  // TODO: Add special method classes for toString() and equals()
   private final List<ObjcMethodParam> params;
   private final ObjcType returnType;
   private final String name;
