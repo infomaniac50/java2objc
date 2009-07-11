@@ -27,30 +27,22 @@ import java.util.List;
  * 
  * @author Inderjeet Singh
  */
-public final class ObjcMethodCallExpression extends ObjcExpression {
+public class ObjcMethodCallExpression extends ObjcExpression {
 
-  private final String target;
-  private final String methodName;
-  private final List<ObjcType> argTypes;
-  private final List<ObjcExpression> args;
-  private final int numParams;
+  protected final String target;
+  protected final String methodName;
+  protected final List<ObjcType> argTypes;
+  protected final List<ObjcExpression> args;
+  protected final int numParams;
   
   public ObjcMethodCallExpression(CompilationContext context, MethodCallExpr expr) {
-    methodName = expr.getName();
-    Expression scope = expr.getScope();
-    if (scope == null) {
-      ObjcType enclosingType = context.getCurrentType();
-      ObjcMethod invokedMethod = enclosingType.getMethodWithName(methodName);
-      if (invokedMethod == null || invokedMethod.isStatic()) {
-        this.target = enclosingType.getName();
-      } else {
-        this.target = "self";
-      }
-    } else if ("this".equals(scope.toString())) {
-      this.target = "self";
-    } else {
-      this.target = scope.toString();
-    }
+    this(context, expr, getScope(context, expr), expr.getName());
+  }
+
+  protected ObjcMethodCallExpression(CompilationContext context, MethodCallExpr expr, 
+      String scope, String methodName) {
+    this.methodName = methodName;
+    this.target = scope;
     argTypes = new LinkedList<ObjcType>();
     List<Type> typeArgs = expr.getTypeArgs();
     if (typeArgs != null) {
@@ -65,8 +57,26 @@ public final class ObjcMethodCallExpression extends ObjcExpression {
         args.add(new ObjcExpression(arg.toString()));
       }
     }
-// TODO:    Preconditions.assertEquals(args.size(), argTypes.size());
+    //  TODO:    Preconditions.assertEquals(args.size(), argTypes.size());
     numParams = args.size();
+  }
+
+  private static String getScope(CompilationContext context, MethodCallExpr expr) {
+    Expression scope = expr.getScope();
+    String methodName = expr.getName();
+    if (scope == null) {
+      ObjcType enclosingType = context.getCurrentType();
+      ObjcMethod invokedMethod = enclosingType.getMethodWithName(methodName);
+      if (invokedMethod == null || invokedMethod.isStatic()) {
+        return enclosingType.getName();
+      } else {
+        return "self";
+      }
+    } else if ("this".equals(scope.toString())) {
+      return "self";
+    } else {
+      return scope.toString();
+    }
   }
 
   @Override

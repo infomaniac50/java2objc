@@ -52,10 +52,24 @@ public final class ExpressionConverter {
     if (expr instanceof StringLiteralExpr) {
       return new ObjcStringLiteralExpression(expr);
     } else if (expr instanceof MethodCallExpr) {
-      return new ObjcMethodCallExpression(context, (MethodCallExpr)expr); 
+      MethodCallExpr callExpr = (MethodCallExpr)expr;
+      if (isStringMethodCall(callExpr)) {
+        return new ObjcMethodCallExpressionString(context, callExpr);         
+      } else {
+        return new ObjcMethodCallExpression(context, callExpr);
+      }
     } else {
       // TODO (inder): bring in real expression conversion
       return new ObjcExpression(expr.toString());
     }
+  }
+
+  /**
+   * @param callExpr
+   * @return
+   */
+  private boolean isStringMethodCall(MethodCallExpr callExpr) {
+    Expression scope = callExpr.getScope();
+    return scope != null && scope.toString().equals("String");
   }
 }
