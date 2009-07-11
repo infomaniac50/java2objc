@@ -22,8 +22,6 @@ import japa.parser.ast.type.Type;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.googlecode.java2objc.util.Preconditions;
-
 /**
  * An Objective C expression involving a method call
  * 
@@ -37,9 +35,14 @@ public final class ObjcMethodCallExpression extends ObjcExpression {
   private final List<ObjcExpression> args;
   private final int numParams;
   
-  public ObjcMethodCallExpression(String targetObjectName, MethodCallExpr expr) {
-    this.targetObjectName = targetObjectName;
-    methodName = expr.getName(); // Find out the right method name
+  public ObjcMethodCallExpression(MethodCallExpr expr) {
+    Expression scope = expr.getScope();
+    if (scope == null || "this".equals(scope.toString())) {
+      this.targetObjectName = "self";
+    } else {
+      this.targetObjectName = scope.toString();
+    }
+    methodName = expr.getName();
     argTypes = new LinkedList<ObjcType>();
     List<Type> typeArgs = expr.getTypeArgs();
     if (typeArgs != null) {
@@ -69,7 +72,7 @@ public final class ObjcMethodCallExpression extends ObjcExpression {
     // Write remaining params
     for (int i = 1; i < numParams; ++i) {
       // TODO(inder): write formal parameter names as well
-      writer.append(":").append(args.get(i));
+      writer.append(" :").append(args.get(i));
     }
     writer.append("]");
   }

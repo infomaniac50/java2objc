@@ -43,8 +43,7 @@ public final class ExpressionConverter {
     if (expr instanceof StringLiteralExpr) {
       return new ObjcStringLiteralExpression(expr);
     } else if (expr instanceof MethodCallExpr) {
-      String targetObjectName = "self";
-      return new ObjcMethodCallExpression(targetObjectName, (MethodCallExpr)expr); 
+      return new ObjcMethodCallExpression((MethodCallExpr)expr); 
     } else {
       // TODO (inder): bring in real expression conversion
       return new ObjcExpression(expr.toString());
