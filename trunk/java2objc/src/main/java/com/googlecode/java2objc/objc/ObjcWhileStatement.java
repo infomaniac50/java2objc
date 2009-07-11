@@ -27,9 +27,9 @@ public final class ObjcWhileStatement extends ObjcStatement {
   private final ObjcExpression condition;
   private final ObjcStatement body;
 
-  public ObjcWhileStatement(WhileStmt stmt) {
-    this.condition = ExpressionConverter.to(stmt.getCondition());
-    this.body = StatementConverter.to(stmt.getBody());
+  public ObjcWhileStatement(CompilationContext context, WhileStmt stmt) {
+    this.condition = context.getExpressionConverter().to(stmt.getCondition());
+    this.body = context.getStatementConverter().to(stmt.getBody());
   }
 
   @Override

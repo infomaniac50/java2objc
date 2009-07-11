@@ -27,9 +27,9 @@ public final class ObjcLabeledStmt extends ObjcStatement {
   private final String label;
   private final ObjcStatement stmt;
 
-  public ObjcLabeledStmt(LabeledStmt stmt) {
+  public ObjcLabeledStmt(CompilationContext context, LabeledStmt stmt) {
     this.label = stmt.getLabel();
-    this.stmt = StatementConverter.to(stmt.getStmt());
+    this.stmt = context.getStatementConverter().to(stmt.getStmt());
   }
   
   @Override

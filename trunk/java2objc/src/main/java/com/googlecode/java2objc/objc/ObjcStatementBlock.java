@@ -44,11 +44,11 @@ public final class ObjcStatementBlock extends ObjcStatement {
 
   private final List<ObjcStatement> stmts;
   
-  public ObjcStatementBlock(BlockStmt block) {
+  public ObjcStatementBlock(CompilationContext context, BlockStmt block) {
     stmts = new LinkedList<ObjcStatement>();
     if (block != null) {
       for (Statement stmt : block.getStmts()) {
-        stmts.add(StatementConverter.to(stmt));
+        stmts.add(context.getStatementConverter().to(stmt));
       }    
     }
   }

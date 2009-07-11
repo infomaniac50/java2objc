@@ -35,7 +35,7 @@ public final class ObjcMethodCallExpression extends ObjcExpression {
   private final List<ObjcExpression> args;
   private final int numParams;
   
-  public ObjcMethodCallExpression(MethodCallExpr expr) {
+  public ObjcMethodCallExpression(CompilationContext context, MethodCallExpr expr) {
     Expression scope = expr.getScope();
     if (scope == null || "this".equals(scope.toString())) {
       this.targetObjectName = "self";

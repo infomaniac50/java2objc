@@ -50,11 +50,11 @@ public final class CompilationUnitConverter {
   public void generateSourceCode() throws IOException {
     Collection<ObjcType> objcTypes = new LinkedList<ObjcType>();
     Set<ObjcType> imports = toObjcImports(cu.getImports());
-    TypeConverter objcTypeConverter = new TypeConverter(imports);
+    CompilationContext context = new CompilationContext(imports);
     if (cu.getTypes() != null) {
       for (TypeDeclaration type : cu.getTypes()) {
         if (type instanceof ClassOrInterfaceDeclaration) {
-          ObjcType objcType = objcTypeConverter.to((ClassOrInterfaceDeclaration)type);
+          ObjcType objcType = context.getTypeConverter().to((ClassOrInterfaceDeclaration)type);
           if (objcType != null) {
             objcTypes.add(objcType);
           }

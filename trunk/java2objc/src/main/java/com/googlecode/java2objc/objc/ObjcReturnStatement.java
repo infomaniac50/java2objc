@@ -26,8 +26,8 @@ public final class ObjcReturnStatement extends ObjcStatement {
 
   private final ObjcExpression expr;
 
-  public ObjcReturnStatement(ReturnStmt stmt) {
-    this.expr = ExpressionConverter.to(stmt.getExpr());
+  public ObjcReturnStatement(CompilationContext context, ReturnStmt stmt) {
+    this.expr = context.getExpressionConverter().to(stmt.getExpr());
   }
 
   @Override

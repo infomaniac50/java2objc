@@ -32,8 +32,8 @@ public final class ObjcExpressionStatement extends ObjcStatement {
 
   private final ObjcExpression expr;
 
-  public ObjcExpressionStatement(ExpressionStmt stmt) {
-    this.expr = ExpressionConverter.to(stmt.getExpression());
+  public ObjcExpressionStatement(CompilationContext context, ExpressionStmt stmt) {
+    this.expr = context.getExpressionConverter().to(stmt.getExpression());
   }
 
   @Override
