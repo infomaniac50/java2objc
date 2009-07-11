@@ -29,10 +29,12 @@ public final class UserDefinedObjcTypeBuilder {
   private final Set<ObjcType> imports;
   private final Set<ObjcMethod> methods;
   private final Set<ObjcField> fields;
+  private boolean isInterface;
   
   public UserDefinedObjcTypeBuilder(String name, Set<ObjcType> imports) {
     this.name = name;
     this.imports = imports;
+    this.isInterface = false;
     this.baseClasses = new HashSet<ObjcType>();
     this.methods = new HashSet<ObjcMethod>();
     this.fields = new HashSet<ObjcField>();
@@ -40,18 +42,26 @@ public final class UserDefinedObjcTypeBuilder {
 
   public ObjcType build() {
     ObjcType baseClass = baseClasses.isEmpty() ? NSObject.INSTANCE : baseClasses.iterator().next();
-    return new ObjcType(name, baseClass, imports, methods, fields);
+    return new ObjcType(name, isInterface, baseClass, imports, methods, fields);
   }
   
-  public void addBaseClass(ObjcType baseClass) {
+  public UserDefinedObjcTypeBuilder setIsInterface(boolean isInterface) {
+    this.isInterface = isInterface;
+    return this;
+  }
+
+  public UserDefinedObjcTypeBuilder addBaseClass(ObjcType baseClass) {
     baseClasses.add(baseClass);
+    return this;
   }
 
-  public void addField(ObjcField objcField) {
+  public UserDefinedObjcTypeBuilder addField(ObjcField objcField) {
     fields.add(objcField);
+    return this;
   }
 
-  public void addMethod(ObjcMethod objcMethod) {
+  public UserDefinedObjcTypeBuilder addMethod(ObjcMethod objcMethod) {
     methods.add(objcMethod);
+    return this;
   }
 }

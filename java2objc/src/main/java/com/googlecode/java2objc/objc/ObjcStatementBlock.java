@@ -46,9 +46,11 @@ public final class ObjcStatementBlock extends ObjcStatement {
   
   public ObjcStatementBlock(BlockStmt block) {
     stmts = new LinkedList<ObjcStatement>();
-    for (Statement stmt : block.getStmts()) {
-      stmts.add(StatementConverter.to(stmt));
-    }    
+    if (block != null) {
+      for (Statement stmt : block.getStmts()) {
+        stmts.add(StatementConverter.to(stmt));
+      }    
+    }
   }
 
   private ObjcStatementBlock(List<ObjcStatement> stmts) {

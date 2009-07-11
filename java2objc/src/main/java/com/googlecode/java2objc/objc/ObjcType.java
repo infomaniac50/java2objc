@@ -38,6 +38,7 @@ public class ObjcType extends ObjcNode {
 
   public static final ObjcType ID = getTypeFor("id", false);
   private final String name;
+  private final boolean isInterface;
   private final ObjcType baseClass;
   private final boolean pointerType;
   private final Set<ObjcType> importsInHeader;
@@ -45,9 +46,10 @@ public class ObjcType extends ObjcNode {
   private final Set<ObjcMethod> methods;
   private final Set<ObjcField> fields;
   
-  public ObjcType(String name, ObjcType baseClass, Set<ObjcType> imports, 
+  public ObjcType(String name, boolean isInterface, ObjcType baseClass, Set<ObjcType> imports, 
       Set<ObjcMethod> methods, Set<ObjcField> fields) {
     this.name = name;
+    this.isInterface = isInterface;
     this.baseClass = baseClass;
     this.pointerType = true;
     importsInHeader = imports;
@@ -72,6 +74,7 @@ public class ObjcType extends ObjcNode {
 
   protected ObjcType(String name, ObjcType baseClass, boolean pointerType) {
     this.name = name;
+    this.isInterface = false;
     this.baseClass = baseClass;
     this.pointerType = pointerType;
     importsInHeader = new HashSet<ObjcType>();
@@ -84,6 +87,10 @@ public class ObjcType extends ObjcNode {
   
   public String getName() {
     return name;
+  }
+
+  public boolean isInterface() {
+    return isInterface;
   }
 
   public String getHeaderFileName() {
@@ -99,7 +106,9 @@ public class ObjcType extends ObjcNode {
     if (writer.isWritingHeaderFile()) {
       appendHeaderBody(writer);
     } else {
-      appendImplBody(writer);
+      if (!isInterface) {
+        appendImplBody(writer);
+      }
     }
   }
 
@@ -153,6 +162,9 @@ public class ObjcType extends ObjcNode {
   }
 
   private static ObjcType getTypeFor(String name, ObjcType baseType, boolean pointerType) {
+    if (name.endsWith("]")) {
+      return NSArray.INSTANCE;
+    }
     ObjcType objcType = types.get(name);
     if (objcType == null) {
       objcType = new ObjcType(name, baseType, pointerType);

@@ -85,10 +85,12 @@ public final class CompilationUnitConverter {
       headerWriter = new SourceCodeWriter(new PrintWriter(new FileOutputStream(headerFile)), true);
       headerWriter.append(currentType);
       System.out.printf("Generated %s\n", headerFile.getAbsolutePath());
-      File implFile = new File(config.getOutputDir(), currentType.getImplFileName());
-      implWriter = new SourceCodeWriter(new PrintWriter(new FileOutputStream(implFile)), false);
-      implWriter.append(currentType);
-      System.out.printf("Generated %s\n", implFile.getAbsolutePath());
+      if (!currentType.isInterface()) {
+        File implFile = new File(config.getOutputDir(), currentType.getImplFileName());
+        implWriter = new SourceCodeWriter(new PrintWriter(new FileOutputStream(implFile)), false);
+        implWriter.append(currentType);
+        System.out.printf("Generated %s\n", implFile.getAbsolutePath());
+      }
     } finally {
       if (headerWriter != null) headerWriter.close();
       if (implWriter != null) implWriter.close();

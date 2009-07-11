@@ -35,6 +35,10 @@ public class MethodExamples {
     return "Value is: " + value;
   }
   
+  public String callAMethodWithThis() {
+    return this.method1("foo");
+  }
+  
   public String callAMethod() {
     return method1("foo");
   }
