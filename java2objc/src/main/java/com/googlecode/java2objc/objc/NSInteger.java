@@ -20,7 +20,7 @@ package com.googlecode.java2objc.objc;
  * 
  * @author Inderjeet Singh
  */
-public final class NSInteger extends ObjcType {
+public final class NSInteger extends ObjcTypeStandard {
 
   public static final NSInteger INSTANCE = new NSInteger();
 

@@ -20,7 +20,7 @@ package com.googlecode.java2objc.objc;
  * 
  * @author Inderjeet Singh
  */
-public final class NSMutableArray extends ObjcType {
+public final class NSMutableArray extends ObjcTypeStandard {
 
   public static final NSMutableArray INSTANCE = new NSMutableArray();
     

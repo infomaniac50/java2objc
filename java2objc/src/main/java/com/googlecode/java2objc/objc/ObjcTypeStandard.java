@@ -13,18 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.googlecode.java2objc.objc;
 
 /**
- * Objective C standard NSArray class to represent immutable collections
+ * A predefined in Objective C available through the standard libraries
  * 
  * @author Inderjeet Singh
  */
-public final class NSArray extends ObjcTypeStandard {
+public abstract class ObjcTypeStandard extends ObjcType {
+  
+  /**
+   * @param name name of the type
+   * @param baseClass base class
+   * @param pointerType whether this is a pointer type or a primitive type
+   */
+  protected ObjcTypeStandard(String name, ObjcType baseClass, boolean pointerType) {
+    super(name, baseClass, pointerType);
+  }
 
-  public static final NSArray INSTANCE = new NSArray();
+  /**
+   * @param name name of the type
+   */
+  public ObjcTypeStandard(String name) {
+    super(name);
+  }
 
-  private NSArray() {
-    super("NSArray");
+  @Override
+  public void appendImport(SourceCodeWriter writer) {
+    // These are predefined types, so no need to add an import statement
   }
 }

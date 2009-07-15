@@ -119,16 +119,16 @@ public class ObjcMethod extends ObjcNode {
     if (params == null || params.size() == 0) {
       return;
     }
-    writer.append(": ");
+    writer.append(":");
     boolean first = true;
     for (ObjcMethodParam param : params) {
       if (first) {
         first = false;
       } else {
-        writer.append(param.getName()).append(":");
+        writer.append(" ").append(param.getName()).append(":");
       }
       writer.append('(').append(param.getType().getPointerTypeName()).append(")");
-      writer.append(param.getName()).append(" ");
+      writer.append(param.getName());
     }    
   }
 
