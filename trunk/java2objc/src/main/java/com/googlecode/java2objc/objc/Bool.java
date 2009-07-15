@@ -22,7 +22,7 @@ import java.util.Map;
  * 
  * @author Inderjeet Singh
  */
-public final class Bool extends ObjcType {
+public final class Bool extends ObjcTypeStandard {
 
   public static final Bool INSTANCE = new Bool();
   

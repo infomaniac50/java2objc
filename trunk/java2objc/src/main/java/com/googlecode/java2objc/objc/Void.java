@@ -20,7 +20,7 @@ package com.googlecode.java2objc.objc;
  * 
  * @author Inderjeet Singh
  */
-public final class Void extends ObjcType {
+public final class Void extends ObjcTypeStandard {
 
   public static final Void INSTANCE = new Void();
 

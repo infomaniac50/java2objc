@@ -20,7 +20,7 @@ package com.googlecode.java2objc.objc;
  * 
  * @author Inderjeet Singh
  */
-public final class NSObject extends ObjcType {
+public final class NSObject extends ObjcTypeStandard {
 
   public static final NSObject INSTANCE = new NSObject();
 

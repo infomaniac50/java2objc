@@ -15,8 +15,6 @@
  */
 package com.googlecode.java2objc.objc;
 
-import japa.parser.ast.expr.MethodCallExpr;
-
 import java.util.Set;
 
 /**

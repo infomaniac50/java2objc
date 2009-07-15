@@ -117,12 +117,15 @@ public class ObjcType extends ObjcNode {
       }
     }
   }
+  
+  public void appendImport(SourceCodeWriter writer) {
+    writer.append("#import \"").append(getHeaderFileName());
+    writer.append("\"").endLine();
+  }
 
   private void appendHeaderBody(SourceCodeWriter writer) {
     for (ObjcType importedClass : importsInHeader) {
-      writer.startNewLine();
-      writer.append("#import \"").append(importedClass.getHeaderFileName());
-      writer.append("\"").endLine();
+      importedClass.appendImport(writer);
     }
     writer.startNewLine().append("@interface ").append(name).append(" : ");
     writer.append(baseClass.getName()).append(" {").endLine();

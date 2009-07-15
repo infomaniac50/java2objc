@@ -20,7 +20,7 @@ package com.googlecode.java2objc.objc;
  * 
  * @author Inderjeet Singh
  */
-public final class NSDecimal extends ObjcType {
+public final class NSDecimal extends ObjcTypeStandard {
 
   public static final NSDecimal INSTANCE = new NSDecimal();
 
