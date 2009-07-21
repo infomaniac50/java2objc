@@ -25,6 +25,6 @@ public final class NSDecimal extends ObjcTypeStandard {
   public static final NSDecimal INSTANCE = new NSDecimal();
 
   private NSDecimal() {
-    super("NSDecimal", null, false);
+    super("NSDecimal", null, false, new JavaClass(Double.class));
   }
 }

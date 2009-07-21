@@ -33,17 +33,20 @@ import java.util.Set;
  * @author Inderjeet Singh
  */
 public final class TypeConverter {
+  private final String pkgName;
   private final CompilationContext context;
   private final Set<ObjcType> imports;
 
-  public TypeConverter(CompilationContext context, Set<ObjcType> imports) {
+  public TypeConverter(CompilationContext context, String pkgName, Set<ObjcType> imports) {
     this.context = context;
+    this.pkgName = pkgName;
     this.imports = imports;
   }
 
   public ObjcType to(ClassOrInterfaceDeclaration type) {
+    JavaClass javaClass = JavaUtils.getJavaType(pkgName, type.getName()); 
     UserDefinedObjcTypeBuilder typeBuilder = 
-      new UserDefinedObjcTypeBuilder(context, type.getName(), type.isInterface(), imports);
+      new UserDefinedObjcTypeBuilder(context, type.getName(), type.isInterface(), imports, javaClass);
     buildType(typeBuilder, type);
     return typeBuilder.build();
   }
@@ -51,12 +54,14 @@ public final class TypeConverter {
   private void buildType(UserDefinedObjcTypeBuilder typeBuilder, ClassOrInterfaceDeclaration type) {
     if (type.getExtends() != null) {
       for (ClassOrInterfaceType extendedClass : type.getExtends()) {
-        typeBuilder.addBaseClass(ObjcType.getTypeFor(extendedClass.getName()));
+        String pkgName = this.pkgName; // TODO(inder) :try finding the real pkage for the extends
+        typeBuilder.addBaseClass(ObjcType.getTypeFor(pkgName, extendedClass.getName()));
       }
     }
     if (type.getImplements() != null) {
       for (ClassOrInterfaceType implementedClass : type.getImplements()) {
-        typeBuilder.addBaseClass(ObjcType.getTypeFor(implementedClass.getName()));
+        String pkgName = this.pkgName; // TODO(inder) :try finding the real pkage for the extends
+        typeBuilder.addBaseClass(ObjcType.getTypeFor(pkgName, implementedClass.getName()));
       }
     }
     List<BodyDeclaration> members = type.getMembers();

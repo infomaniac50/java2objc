@@ -25,6 +25,6 @@ public final class NSInteger extends ObjcTypeStandard {
   public static final NSInteger INSTANCE = new NSInteger();
 
   private NSInteger() {
-    super("NSInteger", null, false);
+    super("NSInteger", null, false, new JavaClass(Integer.class));
   }
 }

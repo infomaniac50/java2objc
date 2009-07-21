@@ -32,7 +32,8 @@ public final class ObjcForeachStatement extends ObjcStatement {
   public ObjcForeachStatement(CompilationContext context, ForeachStmt stmt) {
     VariableDeclarationExpr variable = stmt.getVariable();
     this.varName = variable.getVars().get(0).getId().getName();
-    this.varType = ObjcType.getTypeFor(variable.getType());
+    String pkgName = null; // TODO(inder): Get the real package name for the type
+    this.varType = ObjcType.getTypeFor(pkgName, variable.getType());
     this.iterable = context.getExpressionConverter().to(stmt.getIterable());
     this.body = context.getStatementConverter().to(stmt.getBody());
   }

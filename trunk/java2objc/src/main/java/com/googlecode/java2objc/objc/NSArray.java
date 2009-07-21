@@ -15,6 +15,8 @@
  */
 package com.googlecode.java2objc.objc;
 
+import java.util.Collection;
+
 /**
  * Objective C standard NSArray class to represent immutable collections
  * 
@@ -25,6 +27,6 @@ public final class NSArray extends ObjcTypeStandard {
   public static final NSArray INSTANCE = new NSArray();
 
   private NSArray() {
-    super("NSArray");
+    super("NSArray", new JavaClass(Collection.class));
   }
 }
