@@ -31,8 +31,8 @@ public class CompilationContext {
   private ObjcMethod currentMethod;
   private ObjcType currentType;
 
-  public CompilationContext(Set<ObjcType> imports) {
-    this.typeConverter = new TypeConverter(this, imports);
+  public CompilationContext(String pkgName, Set<ObjcType> imports) {
+    this.typeConverter = new TypeConverter(this, pkgName, imports);
     this.methodConverter = new MethodConverter(this);
     this.statementConverter = new StatementConverter(this);
     this.expressionConverter = new ExpressionConverter(this);

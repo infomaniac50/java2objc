@@ -17,6 +17,7 @@ package com.googlecode.java2objc.objc;
 
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.ImportDeclaration;
+import japa.parser.ast.PackageDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.body.TypeDeclaration;
 
@@ -50,7 +51,9 @@ public final class CompilationUnitConverter {
   public void generateSourceCode() throws IOException {
     Collection<ObjcType> objcTypes = new LinkedList<ObjcType>();
     Set<ObjcType> imports = toObjcImports(cu.getImports());
-    CompilationContext context = new CompilationContext(imports);
+    PackageDeclaration pkg = cu.getPakage();
+    String pkgName = pkg.getName().getName();
+    CompilationContext context = new CompilationContext(pkgName, imports);
     if (cu.getTypes() != null) {
       for (TypeDeclaration type : cu.getTypes()) {
         if (type instanceof ClassOrInterfaceDeclaration) {
@@ -69,8 +72,11 @@ public final class CompilationUnitConverter {
   private static Set<ObjcType> toObjcImports(List<ImportDeclaration> importedTypes) {
     Set<ObjcType> imports = new HashSet<ObjcType>();
     if (importedTypes != null) {
-      for (ImportDeclaration importedType : importedTypes) {      
-        imports.add(ObjcType.getTypeFor(importedType.getName().getName()));
+      for (ImportDeclaration importedType : importedTypes) {
+        String fullyQualifiedClassName = importedType.getName().getName();
+        String pkgName = JavaUtils.getPkgName(fullyQualifiedClassName);
+        String className = JavaUtils.getClassName(fullyQualifiedClassName);
+        imports.add(ObjcType.getTypeFor(pkgName, className));
       }
     }
     return imports;

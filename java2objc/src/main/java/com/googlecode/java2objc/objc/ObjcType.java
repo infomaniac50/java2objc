@@ -36,7 +36,8 @@ public class ObjcType extends ObjcNode {
     }
   }
 
-  public static final ObjcType ID = getTypeFor("id", false);
+  public static final ObjcType ID = getTypeFor("id", false, new JavaClass(Object.class));
+  private final JavaClass javaClass;
   private final String name;
   private final boolean isInterface;
   private ObjcType baseClass;
@@ -47,10 +48,11 @@ public class ObjcType extends ObjcNode {
   private final Set<ObjcField> fields;
   
   public ObjcType(CompilationContext context, String name, boolean isInterface, 
-      Set<ObjcType> imports) {
+      Set<ObjcType> imports, JavaClass javaClass) {
     this.name = name;
     this.isInterface = isInterface;
     this.pointerType = true;
+    this.javaClass = javaClass;
     importsInHeader = imports;
     importsInImpl = new HashSet<ObjcType>();
     importsInImpl.add(this);
@@ -66,23 +68,24 @@ public class ObjcType extends ObjcNode {
     methods.add(new ObjcMethodDealloc(context, this));
   }
   
-  protected ObjcType(ObjcTypes type) {
-    this(type.toString());
+  protected ObjcType(ObjcTypes type, JavaClass javaClass) {
+    this(type.toString(), javaClass);
   }
 
-  protected ObjcType(String name) {
-    this(name, NSObject.INSTANCE, true);
+  protected ObjcType(String name, JavaClass javaClass) {
+    this(name, NSObject.INSTANCE, true, javaClass);
   }
 
-  protected ObjcType(ObjcTypes type, ObjcType baseClass, boolean pointerType) {
-    this(type.toString(), baseClass, pointerType);
+  protected ObjcType(ObjcTypes type, ObjcType baseClass, boolean pointerType, JavaClass javaClass) {
+    this(type.toString(), baseClass, pointerType, javaClass);
   }
 
-  protected ObjcType(String name, ObjcType baseClass, boolean pointerType) {
+  protected ObjcType(String name, ObjcType baseClass, boolean pointerType, JavaClass javaClass) {
     this.name = name;
     this.isInterface = false;
     this.baseClass = baseClass;
     this.pointerType = pointerType;
+    this.javaClass = javaClass;
     importsInHeader = new HashSet<ObjcType>();
     importsInImpl = new HashSet<ObjcType>();
     importsInImpl.add(this);
@@ -157,26 +160,31 @@ public class ObjcType extends ObjcNode {
     return pointerType ? name + " *" : name;
   }
 
-  public static synchronized ObjcType getTypeFor(Type type) {
+  public static synchronized ObjcType getTypeFor(String pkgName, Type type) {
     String name = type.toString();
-    return getTypeFor(name);
+    return getTypeFor(pkgName, name);
   }
 
-  public static ObjcType getTypeFor(String name) {
-    return getTypeFor(name, NSObject.INSTANCE, true);
+  public static ObjcType getTypeFor(String pkgName, String name) {
+    return getTypeFor(pkgName, name, NSObject.INSTANCE, true);
   }
 
-  public static ObjcType getTypeFor(String name, boolean pointerType) {
-    return getTypeFor(name, NSObject.INSTANCE, pointerType);
+  public static ObjcType getTypeFor(String name, boolean pointerType, JavaClass javaClass) {
+    return getTypeFor(name, NSObject.INSTANCE, pointerType, javaClass);
   }
 
-  private static ObjcType getTypeFor(String name, ObjcType baseType, boolean pointerType) {
+  private static ObjcType getTypeFor(String pkgName, String className, ObjcType baseType, boolean pointerType) {
+    JavaClass javaType = JavaUtils.getJavaType(pkgName, className);
+    return getTypeFor(className, baseType, pointerType, javaType);
+  }
+  
+  private static ObjcType getTypeFor(String name, ObjcType baseType, boolean pointerType, JavaClass javaClass) {
     if (name.endsWith("]")) {
       return NSArray.INSTANCE;
     }
     ObjcType objcType = types.get(name);
     if (objcType == null) {
-      objcType = new ObjcType(name, baseType, pointerType);
+      objcType = new ObjcType(name, baseType, pointerType, javaClass);
       types.put(name, objcType);
     }
     return objcType;

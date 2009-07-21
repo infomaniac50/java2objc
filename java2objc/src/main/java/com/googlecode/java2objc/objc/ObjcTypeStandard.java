@@ -28,15 +28,15 @@ public abstract class ObjcTypeStandard extends ObjcType {
    * @param baseClass base class
    * @param pointerType whether this is a pointer type or a primitive type
    */
-  protected ObjcTypeStandard(String name, ObjcType baseClass, boolean pointerType) {
-    super(name, baseClass, pointerType);
+  protected ObjcTypeStandard(String className, ObjcType baseClass, boolean pointerType, JavaClass javaClass) {
+    super(className, baseClass, pointerType, javaClass);
   }
 
   /**
    * @param name name of the type
    */
-  public ObjcTypeStandard(String name) {
-    super(name);
+  public ObjcTypeStandard(String name, JavaClass javaClass) {
+    super(name, javaClass);
   }
 
   @Override

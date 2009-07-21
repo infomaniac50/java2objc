@@ -28,7 +28,8 @@ public final class ObjcField extends ObjcNode {
   private final ObjcType type;
   private final String name;
   public ObjcField(Type type, VariableDeclarator var) {
-    this.type = ObjcType.getTypeFor(type);
+    String pkgName = null; // TODO(inder); get the right package name for the type
+    this.type = ObjcType.getTypeFor(pkgName, type);
     this.name = var.getId().getName();
   }
 

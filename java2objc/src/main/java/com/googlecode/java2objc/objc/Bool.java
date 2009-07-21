@@ -27,7 +27,7 @@ public final class Bool extends ObjcTypeStandard {
   public static final Bool INSTANCE = new Bool();
   
   private Bool() {
-    super("BOOL", null, false);
+    super("BOOL", null, false, new JavaClass(Boolean.class));
   }
 
   public void registerTypes(Map<String, ObjcType> types) {

@@ -25,6 +25,6 @@ public final class NSObject extends ObjcTypeStandard {
   public static final NSObject INSTANCE = new NSObject();
 
   private NSObject() {
-    super("NSObject");
+    super("NSObject", new JavaClass(Object.class));
   }
 }

@@ -31,12 +31,12 @@ public final class UserDefinedObjcTypeBuilder {
   private final Set<ObjcField> fields;
   
   public UserDefinedObjcTypeBuilder(CompilationContext context, String name, boolean isInterface,
-      Set<ObjcType> imports) {
+      Set<ObjcType> imports, JavaClass javaClass) {
     this.context = context;
     this.baseClasses = new HashSet<ObjcType>();
     this.methods = new HashSet<ObjcMethod>();
     this.fields = new HashSet<ObjcField>();
-    this.type = new ObjcType(context, name, isInterface, imports);
+    this.type = new ObjcType(context, name, isInterface, imports, javaClass);
     context.setCurrentType(type);
   }
 

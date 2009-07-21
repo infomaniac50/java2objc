@@ -25,6 +25,7 @@ public final class Void extends ObjcTypeStandard {
   public static final Void INSTANCE = new Void();
 
   private Void() {
-    super("void", null, false);
+    // TODO (inder): may be use a JavaClass for a special Void class instead of Object.class
+    super("void", null, false, new JavaClass(Object.class));
   }
 }

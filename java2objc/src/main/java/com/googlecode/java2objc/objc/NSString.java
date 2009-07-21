@@ -25,6 +25,6 @@ public final class NSString extends ObjcTypeStandard {
   
   public static String JAVA_TYPE = "String";
   private NSString() {
-    super("NSString");
+    super("NSString", new JavaClass(String.class));
   }
 }

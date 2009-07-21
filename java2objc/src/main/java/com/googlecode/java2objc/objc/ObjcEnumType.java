@@ -27,6 +27,6 @@ public final class ObjcEnumType extends ObjcType {
 
   protected ObjcEnumType(String name) {
     // TODO(inder): write canonical Objective C Enum and use that as the base type
-    super("name", NSObject.INSTANCE, true);
+    super("name", NSObject.INSTANCE, true, new JavaClass(Enum.class));
   }
 }

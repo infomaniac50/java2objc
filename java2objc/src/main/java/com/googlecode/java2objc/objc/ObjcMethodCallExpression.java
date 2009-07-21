@@ -47,7 +47,8 @@ public class ObjcMethodCallExpression extends ObjcExpression {
     List<Type> typeArgs = expr.getTypeArgs();
     if (typeArgs != null) {
       for (Type argType : typeArgs) {
-        argTypes.add(ObjcType.getTypeFor(argType));
+        String argPkgName = null; // TODO(inder): figure out the correct package name ofr the arg type
+        argTypes.add(ObjcType.getTypeFor(argPkgName, argType));
       }
     }    
     args = new LinkedList<ObjcExpression>();
