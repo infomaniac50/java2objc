@@ -28,8 +28,8 @@ import java.util.LinkedList;
 public final class ObjcMethodDealloc extends ObjcMethod {
 
   public ObjcMethodDealloc(CompilationContext context, ObjcType parent) {
-    super(context, "dealloc", Void.INSTANCE, new LinkedList<Parameter>(), ModifierSet.PRIVATE, 
-        getDeallocBody());
+    super(context, "dealloc", context.getTypeRepo().getNSVoid(), new LinkedList<Parameter>(), 
+        ModifierSet.PRIVATE, getDeallocBody());
   }
 
   private static ObjcStatementBlock getDeallocBody() {

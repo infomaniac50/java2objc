@@ -16,17 +16,15 @@
 package com.googlecode.java2objc.objc;
 
 /**
- * Representation of an Objective C Enum. Objective C doesn't have rich object based Enums like
- * Java does, so this type generates an equivalent pattern for enums.
+ * Objective C id type
  * 
  * @author Inderjeet Singh
  */
-public final class ObjcEnumType extends ObjcType {
+public final class NSId extends ObjcTypeStandard {
+  
+  public static final String[] JAVA_TYPES = {"id"};
 
-  public static final String[] JAVA_TYPES = {"enum", "Enum", "java.lang.Enum"};
-
-  protected ObjcEnumType(CompilationContext context, String name) {
-    // TODO(inder): write canonical Objective C Enum and use that as the base type
-    super(context, name, context.getTypeRepo().getNSObject(), true, JavaClass.getJavaClassFor(Enum.class));
+  NSId(CompilationContext context) {
+    super(context, "id", JavaClass.getJavaClassFor(Object.class));
   }
 }

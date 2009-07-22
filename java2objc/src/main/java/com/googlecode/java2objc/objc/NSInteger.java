@@ -22,9 +22,11 @@ package com.googlecode.java2objc.objc;
  */
 public final class NSInteger extends ObjcTypeStandard {
 
-  public static final NSInteger INSTANCE = new NSInteger();
+  public static final String[] JAVA_TYPES = {"int", "Integer", "java.lang.Integer", "byte", "Byte", "java.lang.Byte",
+    "short", "Short", "java.lang.Short", "long", "Long", "java.lang.Long"
+  };
 
-  private NSInteger() {
-    super("NSInteger", null, false, new JavaClass(Integer.class));
+  NSInteger(CompilationContext context) {
+    super(context, "NSInteger", null, false, JavaClass.getJavaClassFor(Integer.class));
   }
 }

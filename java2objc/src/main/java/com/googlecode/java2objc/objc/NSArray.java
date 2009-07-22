@@ -24,9 +24,8 @@ import java.util.Collection;
  */
 public final class NSArray extends ObjcTypeStandard {
 
-  public static final NSArray INSTANCE = new NSArray();
-
-  private NSArray() {
-    super("NSArray", new JavaClass(Collection.class));
+  public static final String[] JAVA_TYPES = {"Array"};
+  NSArray(CompilationContext context) {
+    super(context, "NSArray", JavaClass.getJavaClassFor(Collection.class));
   }
 }

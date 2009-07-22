@@ -25,7 +25,7 @@ import japa.parser.ast.body.ConstructorDeclaration;
 public final class ObjcMethodInit extends ObjcMethod {
 
   public ObjcMethodInit(CompilationContext context, ConstructorDeclaration n) {
-    super(context, "init", ObjcType.ID, n.getParameters(), n.getModifiers(), 
+    super(context, "init", context.getTypeRepo().getNSId(), n.getParameters(), n.getModifiers(), 
         getConstructorBody(context, n));
   }
   

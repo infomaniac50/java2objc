@@ -50,10 +50,14 @@ public final class CompilationUnitConverter {
   
   public void generateSourceCode() throws IOException {
     Collection<ObjcType> objcTypes = new LinkedList<ObjcType>();
-    Set<ObjcType> imports = toObjcImports(cu.getImports());
     PackageDeclaration pkg = cu.getPakage();
     String pkgName = pkg.getName().getName();
-    CompilationContext context = new CompilationContext(pkgName, imports);
+    CompilationContext context = new CompilationContext(pkgName);
+    ObjcTypeRepository repo = new ObjcTypeRepository(context);
+    context.initRepo(repo);
+    Set<ObjcType> imports = toObjcImports(repo, cu.getImports());
+    context.init(imports);
+    repo.init();
     if (cu.getTypes() != null) {
       for (TypeDeclaration type : cu.getTypes()) {
         if (type instanceof ClassOrInterfaceDeclaration) {
@@ -69,14 +73,14 @@ public final class CompilationUnitConverter {
     }
   }
 
-  private static Set<ObjcType> toObjcImports(List<ImportDeclaration> importedTypes) {
+  private static Set<ObjcType> toObjcImports(ObjcTypeRepository repo, List<ImportDeclaration> importedTypes) {
     Set<ObjcType> imports = new HashSet<ObjcType>();
     if (importedTypes != null) {
       for (ImportDeclaration importedType : importedTypes) {
         String fullyQualifiedClassName = importedType.getName().getName();
         String pkgName = JavaUtils.getPkgName(fullyQualifiedClassName);
         String className = JavaUtils.getClassName(fullyQualifiedClassName);
-        imports.add(ObjcType.getTypeFor(pkgName, className));
+        imports.add(repo.getTypeFor(pkgName, className));
       }
     }
     return imports;

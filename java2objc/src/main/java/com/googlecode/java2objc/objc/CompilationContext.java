@@ -24,18 +24,29 @@ import java.util.Set;
  */
 public class CompilationContext {
 
-  private final TypeConverter typeConverter;
+  private ObjcTypeRepository repo;
+  private final String pkgName;
+  private TypeConverter typeConverter;
   private final MethodConverter methodConverter;
   private final StatementConverter statementConverter;
   private final ExpressionConverter expressionConverter;
   private ObjcMethod currentMethod;
   private ObjcType currentType;
 
-  public CompilationContext(String pkgName, Set<ObjcType> imports) {
-    this.typeConverter = new TypeConverter(this, pkgName, imports);
+  public CompilationContext(String pkgName) {
+    this.repo = null;
+    this.pkgName = pkgName;
     this.methodConverter = new MethodConverter(this);
     this.statementConverter = new StatementConverter(this);
     this.expressionConverter = new ExpressionConverter(this);
+  }
+
+  void initRepo(ObjcTypeRepository repo) {
+    this.repo = repo;
+  }
+
+  void init(Set<ObjcType> imports) {
+    this.typeConverter = new TypeConverter(this, pkgName, imports);    
   }
 
   /**
@@ -79,5 +90,9 @@ public class CompilationContext {
 
   public ObjcType getCurrentType() {
     return currentType;
+  }
+  
+  public ObjcTypeRepository getTypeRepo() {
+    return repo;
   }
 }

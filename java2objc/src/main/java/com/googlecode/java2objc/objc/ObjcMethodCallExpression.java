@@ -45,10 +45,11 @@ public class ObjcMethodCallExpression extends ObjcExpression {
     this.target = scope;
     argTypes = new LinkedList<ObjcType>();
     List<Type> typeArgs = expr.getTypeArgs();
+    ObjcTypeRepository typeRepo = context.getTypeRepo();
     if (typeArgs != null) {
       for (Type argType : typeArgs) {
         String argPkgName = null; // TODO(inder): figure out the correct package name ofr the arg type
-        argTypes.add(ObjcType.getTypeFor(argPkgName, argType));
+        argTypes.add(typeRepo.getTypeFor(argPkgName, argType));
       }
     }    
     args = new LinkedList<ObjcExpression>();
