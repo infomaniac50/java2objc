@@ -15,23 +15,17 @@
  */
 package com.googlecode.java2objc.objc;
 
-import java.util.Map;
-
 /**
- * Objective C BOOL type
+ * Objective C void type
  * 
  * @author Inderjeet Singh
  */
-public final class Bool extends ObjcTypeStandard {
+public final class NSVoid extends ObjcTypeStandard {
 
-  public static final Bool INSTANCE = new Bool();
-  
-  private Bool() {
-    super("BOOL", null, false, new JavaClass(Boolean.class));
-  }
+  public static final String[] JAVA_TYPES = {"void"};
 
-  public void registerTypes(Map<String, ObjcType> types) {
-    types.put("boolean", Bool.INSTANCE);
-    types.put("Boolean", Bool.INSTANCE);
+  NSVoid(CompilationContext context) {
+    // TODO (inder): may be use a JavaClass for a special Void class instead of Object.class
+    super(context, JAVA_TYPES[0], null, false, JavaClass.getJavaClassFor(Object.class));
   }
 }

@@ -16,16 +16,15 @@
 package com.googlecode.java2objc.objc;
 
 /**
- * Objective C void type
+ * Objective C BOOL type
  * 
  * @author Inderjeet Singh
  */
-public final class Void extends ObjcTypeStandard {
+public final class NSBool extends ObjcTypeStandard {
 
-  public static final Void INSTANCE = new Void();
+  public static final String[] JAVA_TYPES = {"boolean", "Boolean", "java.lang.Boolean"};
 
-  private Void() {
-    // TODO (inder): may be use a JavaClass for a special Void class instead of Object.class
-    super("void", null, false, new JavaClass(Object.class));
+  NSBool(CompilationContext context) {
+    super(context, "BOOL", null, false, JavaClass.getJavaClassFor(Boolean.class));
   }
 }

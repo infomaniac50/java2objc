@@ -40,7 +40,7 @@ public final class JavaUtils {
     if (clazz == null) {
       clazz = Object.class;
     }
-    return new JavaClass(clazz);
+    return JavaClass.getJavaClassFor(clazz);
   }
 
   public static String getPkgName(String fullyQualifiedClassName) {

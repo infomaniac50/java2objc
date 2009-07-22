@@ -44,7 +44,8 @@ public class ObjcMethod extends ObjcNode {
       context.setCurentMethod(this);
     }
     String pkgName = null; // TODO(inder): get the real package name for the return type
-    this.returnType = ObjcType.getTypeFor(pkgName, n.getType());
+    ObjcTypeRepository typeRepo = context.getTypeRepo();
+    this.returnType = typeRepo.getTypeFor(pkgName, n.getType());
     this.name = name;
     this.methodBody = new ObjcStatementBlock(context, n.getBody());
     this.modifiers = n.getModifiers();
@@ -52,7 +53,7 @@ public class ObjcMethod extends ObjcNode {
     if (n.getParameters() != null) {
       for (Parameter param : n.getParameters()) {
         String paramPkgName = null; // TODO(inder): figure out the package name
-        ObjcType type = ObjcType.getTypeFor(paramPkgName, param.getType());
+        ObjcType type = typeRepo.getTypeFor(paramPkgName, param.getType());
         String typeName = param.getId().getName();
         this.params.add(new ObjcMethodParam(type, typeName));
       }
@@ -72,10 +73,11 @@ public class ObjcMethod extends ObjcNode {
     this.methodBody = methodBody;
     this.modifiers = modifiers;
     this.params = new LinkedList<ObjcMethodParam>();
+    ObjcTypeRepository typeRepo = context.getTypeRepo();
     if (params != null) {
       for (Parameter param : params) {
         String paramPkgName = null; // TODO(inder): figure out the correct package name fo rhte parameter
-        ObjcType type = ObjcType.getTypeFor(paramPkgName, param.getType());
+        ObjcType type = typeRepo.getTypeFor(paramPkgName, param.getType());
         String typeName = param.getId().getName();
         this.params.add(new ObjcMethodParam(type, typeName));
       }

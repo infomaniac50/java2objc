@@ -22,9 +22,9 @@ package com.googlecode.java2objc.objc;
  */
 public final class NSObject extends ObjcTypeStandard {
 
-  public static final NSObject INSTANCE = new NSObject();
+  public static final String[] JAVA_TYPES = {"Object", "java.lang.Object"};
 
-  private NSObject() {
-    super("NSObject", new JavaClass(Object.class));
+  NSObject(CompilationContext context) {
+    super(context, "NSObject", null, true, JavaClass.getJavaClassFor(Object.class));
   }
 }

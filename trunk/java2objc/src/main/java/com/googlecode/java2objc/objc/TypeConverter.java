@@ -55,13 +55,13 @@ public final class TypeConverter {
     if (type.getExtends() != null) {
       for (ClassOrInterfaceType extendedClass : type.getExtends()) {
         String pkgName = this.pkgName; // TODO(inder) :try finding the real pkage for the extends
-        typeBuilder.addBaseClass(ObjcType.getTypeFor(pkgName, extendedClass.getName()));
+        typeBuilder.addBaseClass(context.getTypeRepo().getTypeFor(pkgName, extendedClass.getName()));
       }
     }
     if (type.getImplements() != null) {
       for (ClassOrInterfaceType implementedClass : type.getImplements()) {
         String pkgName = this.pkgName; // TODO(inder) :try finding the real pkage for the extends
-        typeBuilder.addBaseClass(ObjcType.getTypeFor(pkgName, implementedClass.getName()));
+        typeBuilder.addBaseClass(context.getTypeRepo().getTypeFor(pkgName, implementedClass.getName()));
       }
     }
     List<BodyDeclaration> members = type.getMembers();
@@ -69,7 +69,7 @@ public final class TypeConverter {
       if (member instanceof FieldDeclaration) {
         FieldDeclaration field = (FieldDeclaration) member;
         for (VariableDeclarator var : field.getVariables()) {
-          ObjcField objcField = new ObjcField(field.getType(), var);
+          ObjcField objcField = new ObjcField(context, field.getType(), var);
           typeBuilder.addField(objcField);
         }
       } else if (member instanceof MethodDeclaration) {

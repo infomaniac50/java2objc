@@ -21,10 +21,8 @@ package com.googlecode.java2objc.objc;
  * @author Inderjeet Singh
  */
 public final class NSString extends ObjcTypeStandard {
-  public static final NSString INSTANCE = new NSString();
-  
-  public static String JAVA_TYPE = "String";
-  private NSString() {
-    super("NSString", new JavaClass(String.class));
+  public static final String[] JAVA_TYPES = {"String", "java.lang.String"};
+  NSString(CompilationContext context) {
+    super(context, "NSString", JavaClass.getJavaClassFor(String.class));
   }
 }

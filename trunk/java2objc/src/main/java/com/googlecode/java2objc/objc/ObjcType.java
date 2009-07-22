@@ -15,11 +15,7 @@
  */
 package com.googlecode.java2objc.objc;
 
-import japa.parser.ast.type.Type;
-
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -29,14 +25,6 @@ import java.util.Set;
  */
 public class ObjcType extends ObjcNode {
 
-  private static Map<String, ObjcType> types = new HashMap<String, ObjcType>();
-  static {
-    for (ObjcTypes objcType : ObjcTypes.values()) {
-      objcType.registerTypes(types);
-    }
-  }
-
-  public static final ObjcType ID = getTypeFor("id", false, new JavaClass(Object.class));
   private final JavaClass javaClass;
   private final String name;
   private final boolean isInterface;
@@ -68,19 +56,11 @@ public class ObjcType extends ObjcNode {
     methods.add(new ObjcMethodDealloc(context, this));
   }
   
-  protected ObjcType(ObjcTypes type, JavaClass javaClass) {
-    this(type.toString(), javaClass);
+  protected ObjcType(CompilationContext context, String name, JavaClass javaClass) {
+    this(context, name, context.getTypeRepo().getNSObject(), true, javaClass);
   }
 
-  protected ObjcType(String name, JavaClass javaClass) {
-    this(name, NSObject.INSTANCE, true, javaClass);
-  }
-
-  protected ObjcType(ObjcTypes type, ObjcType baseClass, boolean pointerType, JavaClass javaClass) {
-    this(type.toString(), baseClass, pointerType, javaClass);
-  }
-
-  protected ObjcType(String name, ObjcType baseClass, boolean pointerType, JavaClass javaClass) {
+  protected ObjcType(CompilationContext context, String name, ObjcType baseClass, boolean pointerType, JavaClass javaClass) {
     this.name = name;
     this.isInterface = false;
     this.baseClass = baseClass;
@@ -91,7 +71,7 @@ public class ObjcType extends ObjcNode {
     importsInImpl.add(this);
     fields = new HashSet<ObjcField>();
     methods = new HashSet<ObjcMethod>();    
-    methods.add(new ObjcMethodDealloc(null, this));
+//    methods.add(new ObjcMethodDealloc(context, this));
   }
   
   public String getName() {
@@ -158,36 +138,6 @@ public class ObjcType extends ObjcNode {
 
   public String getPointerTypeName() {
     return pointerType ? name + " *" : name;
-  }
-
-  public static synchronized ObjcType getTypeFor(String pkgName, Type type) {
-    String name = type.toString();
-    return getTypeFor(pkgName, name);
-  }
-
-  public static ObjcType getTypeFor(String pkgName, String name) {
-    return getTypeFor(pkgName, name, NSObject.INSTANCE, true);
-  }
-
-  public static ObjcType getTypeFor(String name, boolean pointerType, JavaClass javaClass) {
-    return getTypeFor(name, NSObject.INSTANCE, pointerType, javaClass);
-  }
-
-  private static ObjcType getTypeFor(String pkgName, String className, ObjcType baseType, boolean pointerType) {
-    JavaClass javaType = JavaUtils.getJavaType(pkgName, className);
-    return getTypeFor(className, baseType, pointerType, javaType);
-  }
-  
-  private static ObjcType getTypeFor(String name, ObjcType baseType, boolean pointerType, JavaClass javaClass) {
-    if (name.endsWith("]")) {
-      return NSArray.INSTANCE;
-    }
-    ObjcType objcType = types.get(name);
-    if (objcType == null) {
-      objcType = new ObjcType(name, baseType, pointerType, javaClass);
-      types.put(name, objcType);
-    }
-    return objcType;
   }
 
   public ObjcMethod getMethodWithName(String methodName) {

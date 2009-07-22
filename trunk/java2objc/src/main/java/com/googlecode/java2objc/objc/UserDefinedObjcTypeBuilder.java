@@ -41,7 +41,7 @@ public final class UserDefinedObjcTypeBuilder {
   }
 
   public ObjcType build() {
-    ObjcType baseClass = baseClasses.isEmpty() ? NSObject.INSTANCE : baseClasses.iterator().next();
+    ObjcType baseClass = baseClasses.isEmpty() ? context.getTypeRepo().getNSObject() : baseClasses.iterator().next();
     type.init(context, baseClass, methods, fields);
     context.setCurrentType(null);
     return type;

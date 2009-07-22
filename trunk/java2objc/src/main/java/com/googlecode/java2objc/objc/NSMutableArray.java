@@ -23,10 +23,11 @@ import java.util.Collection;
  * @author Inderjeet Singh
  */
 public final class NSMutableArray extends ObjcTypeStandard {
-
-  public static final NSMutableArray INSTANCE = new NSMutableArray();
     
-  protected NSMutableArray() {
-    super("NSMutableArray", new JavaClass(Collection.class));
+  public static final String[] JAVA_TYPES = {"Collection", "java.util.Collection", "List", "java.util.List",
+    "ArrayList", "java.util.ArrayList"
+  };
+  NSMutableArray(CompilationContext context) {
+    super(context, "NSMutableArray", JavaClass.getJavaClassFor(Collection.class));
   }
 }

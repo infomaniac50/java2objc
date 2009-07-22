@@ -22,9 +22,11 @@ package com.googlecode.java2objc.objc;
  */
 public final class NSDecimal extends ObjcTypeStandard {
 
-  public static final NSDecimal INSTANCE = new NSDecimal();
+  public static final String[] JAVA_TYPES = {"float", "Float", "java.lang.Float", 
+    "double", "Double", "java.lang.Double", "BigDecimal", "java.math.BigDecimal"
+  };
 
-  private NSDecimal() {
-    super("NSDecimal", null, false, new JavaClass(Double.class));
+  NSDecimal(CompilationContext context) {
+    super(context, "NSDecimal", null, false, JavaClass.getJavaClassFor(Double.class));
   }
 }
