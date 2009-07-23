@@ -1,6 +1,11 @@
 package com.googlecode.java2objc.objc;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public final class JavaClass {
+  private static final Map<Class<?>, JavaClass> cache = new HashMap<Class<?>, JavaClass>();
+  
   private final Class<?> clazz;
 
   private JavaClass(Class<?> clazz) {
@@ -12,7 +17,11 @@ public final class JavaClass {
   }
   
   public static JavaClass getJavaClassFor(Class<?> clazz) {
-    // TODO: maintain a cache to ensure object for the same class remain the same
-    return new JavaClass(clazz);
+    JavaClass javaClass = cache.get(clazz);
+    if (javaClass == null) {
+      javaClass = new JavaClass(clazz);
+      cache.put(clazz, javaClass);
+    }
+    return javaClass;
   }
 }
