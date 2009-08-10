@@ -16,6 +16,12 @@
 package com.googlecode.java2objc.objc;
 
 import japa.parser.ast.body.ConstructorDeclaration;
+import japa.parser.ast.body.Parameter;
+
+import java.util.List;
+
+import com.googlecode.java2objc.javatypes.JavaClass;
+import com.googlecode.java2objc.javatypes.JavaConstructor;
 
 /**
  * Method body for creating an init method
@@ -24,11 +30,27 @@ import japa.parser.ast.body.ConstructorDeclaration;
  */
 public final class ObjcMethodInit extends ObjcMethod {
 
-  public ObjcMethodInit(CompilationContext context, ConstructorDeclaration n) {
+  public ObjcMethodInit(CompilationContext context, ConstructorDeclaration n, JavaClass containingClass) {
     super(context, "init", context.getTypeRepo().getNSId(), n.getParameters(), n.getModifiers(), 
-        getConstructorBody(context, n));
+        getConstructorBody(context, n), getJavaConstructor(context, containingClass, n));
   }
   
+  private static JavaConstructor getJavaConstructor(CompilationContext context,
+      JavaClass containingClass, ConstructorDeclaration n) {
+    ObjcType[] parameterTypes = convert(context, containingClass, n);
+    return containingClass.getJavaConstructor(parameterTypes);
+  }
+
+  private static ObjcType[] convert(CompilationContext context, JavaClass containingClass,
+      ConstructorDeclaration n) {
+    List<Parameter> params = n.getParameters();
+    ObjcType[] paramClasses = new ObjcType[params.size()];
+    for (int i = 0; i < params.size(); ++i) {
+      paramClasses[i] = context.getTypeRepo().get(params.get(0).getType().toString());
+    }
+    return paramClasses;
+  }
+
   // TODO(inder): constructor body should treat this() as a call to another init method
   
   private static ObjcStatementBlock getConstructorBody(CompilationContext context, 

@@ -15,6 +15,8 @@
  */
 package com.googlecode.java2objc.objc;
 
+import com.googlecode.java2objc.javatypes.JavaClass;
+
 /**
  * Representation of an Objective C Enum. Objective C doesn't have rich object based Enums like
  * Java does, so this type generates an equivalent pattern for enums.

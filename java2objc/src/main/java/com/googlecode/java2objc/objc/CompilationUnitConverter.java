@@ -31,6 +31,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import com.googlecode.java2objc.javatypes.JavaUtils;
 import com.googlecode.java2objc.main.Config;
 
 /**
