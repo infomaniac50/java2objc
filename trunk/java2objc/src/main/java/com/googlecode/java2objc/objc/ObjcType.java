@@ -18,6 +18,8 @@ package com.googlecode.java2objc.objc;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.googlecode.java2objc.javatypes.JavaClass;
+
 /**
  * Base class for all Objective C types
  * 
@@ -53,7 +55,7 @@ public class ObjcType extends ObjcNode {
     this.baseClass = baseClass;
     this.fields.addAll(fields);
     this.methods.addAll(methods);    
-    methods.add(new ObjcMethodDealloc(context, this));
+    methods.add(new ObjcMethodDealloc(context, this, javaClass));
   }
   
   protected ObjcType(CompilationContext context, String name, JavaClass javaClass) {
@@ -147,5 +149,9 @@ public class ObjcType extends ObjcNode {
       }
     }
     return null;
+  }
+
+  public JavaClass getJavaClass() {
+    return javaClass;
   }
 }

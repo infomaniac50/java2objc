@@ -19,6 +19,9 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
+import com.googlecode.java2objc.javatypes.JavaClass;
+import com.googlecode.java2objc.javatypes.JavaUtils;
+
 /**
  * Unit test for {@link JavaUtils}
  * 

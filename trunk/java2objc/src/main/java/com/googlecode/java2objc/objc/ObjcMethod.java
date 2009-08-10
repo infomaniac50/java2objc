@@ -22,6 +22,8 @@ import japa.parser.ast.body.Parameter;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.googlecode.java2objc.javatypes.JavaMethod;
+
 /**
  * Base class for all Objective C static or class methods
  * 
@@ -35,11 +37,13 @@ public class ObjcMethod extends ObjcNode {
   private final String name;
   private final ObjcStatementBlock methodBody;
   private final int modifiers;
-  public ObjcMethod(CompilationContext context, MethodDeclaration n) {
-    this(context, n, n.getName());
+  private final JavaMethod javaMethod;
+  
+  public ObjcMethod(CompilationContext context, MethodDeclaration n, JavaMethod javaMethod) {
+    this(context, n, n.getName(), javaMethod);
   }
   
-  public ObjcMethod(CompilationContext context, MethodDeclaration n, String name) {
+  public ObjcMethod(CompilationContext context, MethodDeclaration n, String name, JavaMethod javaMethod) {
     if (context != null) {
       context.setCurentMethod(this);
     }
@@ -47,6 +51,7 @@ public class ObjcMethod extends ObjcNode {
     ObjcTypeRepository typeRepo = context.getTypeRepo();
     this.returnType = typeRepo.getTypeFor(pkgName, n.getType());
     this.name = name;
+    this.javaMethod = javaMethod;
     this.methodBody = new ObjcStatementBlock(context, n.getBody());
     this.modifiers = n.getModifiers();
     this.params = new LinkedList<ObjcMethodParam>();
@@ -64,13 +69,14 @@ public class ObjcMethod extends ObjcNode {
   }
 
   public ObjcMethod(CompilationContext context, String name, ObjcType returnType, 
-      List<Parameter> params, int modifiers, ObjcStatementBlock methodBody) {
+      List<Parameter> params, int modifiers, ObjcStatementBlock methodBody, JavaMethod javaMethod) {
     if (context != null) {
       context.setCurentMethod(this);
     }
     this.returnType = returnType;
     this.name = name;
     this.methodBody = methodBody;
+    this.javaMethod = javaMethod;
     this.modifiers = modifiers;
     this.params = new LinkedList<ObjcMethodParam>();
     ObjcTypeRepository typeRepo = context.getTypeRepo();

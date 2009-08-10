@@ -20,6 +20,9 @@ import japa.parser.ast.body.Parameter;
 
 import java.util.LinkedList;
 
+import com.googlecode.java2objc.javatypes.JavaClass;
+import com.googlecode.java2objc.javatypes.JavaMethod;
+
 /**
  * Method for implementing dealloc for an object
  * 
@@ -27,9 +30,11 @@ import java.util.LinkedList;
  */
 public final class ObjcMethodDealloc extends ObjcMethod {
 
-  public ObjcMethodDealloc(CompilationContext context, ObjcType parent) {
+  private static final JavaMethod DEALLOC_METHOD = new JavaMethod(null);
+
+  public ObjcMethodDealloc(CompilationContext context, ObjcType parent, JavaClass containingClass) {
     super(context, "dealloc", context.getTypeRepo().getNSVoid(), new LinkedList<Parameter>(), 
-        ModifierSet.PRIVATE, getDeallocBody());
+        ModifierSet.PRIVATE, getDeallocBody(), DEALLOC_METHOD);
   }
 
   private static ObjcStatementBlock getDeallocBody() {

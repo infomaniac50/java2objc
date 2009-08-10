@@ -17,6 +17,8 @@ package com.googlecode.java2objc.objc;
 
 import java.util.Collection;
 
+import com.googlecode.java2objc.javatypes.JavaClass;
+
 /**
  * Objective C standard NSArray class to represent immutable collections
  * 

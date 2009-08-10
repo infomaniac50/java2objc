@@ -18,6 +18,8 @@ package com.googlecode.java2objc.objc;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.googlecode.java2objc.javatypes.JavaClass;
+
 /**
  * A Builder to build a user-defined Objective C type 
  * 
@@ -47,6 +49,10 @@ public final class UserDefinedObjcTypeBuilder {
     return type;
   }
   
+  public JavaClass getJavaClass() {
+    return type.getJavaClass();
+  }
+
   public UserDefinedObjcTypeBuilder addBaseClass(ObjcType baseClass) {
     baseClasses.add(baseClass);
     return this;

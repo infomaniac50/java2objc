@@ -48,7 +48,7 @@ public class ObjcMethodCallExpression extends ObjcExpression {
     ObjcTypeRepository typeRepo = context.getTypeRepo();
     if (typeArgs != null) {
       for (Type argType : typeArgs) {
-        String argPkgName = null; // TODO(inder): figure out the correct package name ofr the arg type
+        String argPkgName = null; // TODO(inder): figure out the correct package name for the arg type
         argTypes.add(typeRepo.getTypeFor(argPkgName, argType));
       }
     }    

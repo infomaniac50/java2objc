@@ -16,6 +16,8 @@
 
 package com.googlecode.java2objc.objc;
 
+import com.googlecode.java2objc.javatypes.JavaClass;
+
 /**
  * A predefined in Objective C available through the standard libraries
  * 

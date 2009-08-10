@@ -18,6 +18,8 @@ package com.googlecode.java2objc.objc;
 
 import japa.parser.ast.body.MethodDeclaration;
 
+import com.googlecode.java2objc.javatypes.JavaMethod;
+
 /**
  * Objective C equivalent of Java toString() method
  * 
@@ -25,7 +27,7 @@ import japa.parser.ast.body.MethodDeclaration;
  */
 public class ObjcMethodToString extends ObjcMethod {
 
-  public ObjcMethodToString(CompilationContext context, MethodDeclaration method) {
-    super(context, method, "description");
+  public ObjcMethodToString(CompilationContext context, MethodDeclaration method, JavaMethod javaMethod) {
+    super(context, method, "description", javaMethod);
   }
 }

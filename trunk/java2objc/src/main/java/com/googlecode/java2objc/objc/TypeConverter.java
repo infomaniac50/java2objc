@@ -27,6 +27,9 @@ import japa.parser.ast.type.ClassOrInterfaceType;
 import java.util.List;
 import java.util.Set;
 
+import com.googlecode.java2objc.javatypes.JavaClass;
+import com.googlecode.java2objc.javatypes.JavaUtils;
+
 /**
  * Provides utility methods to convert {@link TypeDeclaration} to {@link ObjcType}
  * 
@@ -65,6 +68,7 @@ public final class TypeConverter {
       }
     }
     List<BodyDeclaration> members = type.getMembers();
+    JavaClass containingClass = typeBuilder.getJavaClass();
     for (BodyDeclaration member : members) {
       if (member instanceof FieldDeclaration) {
         FieldDeclaration field = (FieldDeclaration) member;
@@ -73,9 +77,9 @@ public final class TypeConverter {
           typeBuilder.addField(objcField);
         }
       } else if (member instanceof MethodDeclaration) {
-        typeBuilder.addMethod(context.getMethodConverter().to((MethodDeclaration) member));
+        typeBuilder.addMethod(context.getMethodConverter().to((MethodDeclaration) member, containingClass));
       } else if (member instanceof ConstructorDeclaration) {
-        typeBuilder.addMethod(context.getMethodConverter().to((ConstructorDeclaration) member));
+        typeBuilder.addMethod(context.getMethodConverter().to((ConstructorDeclaration) member, containingClass));
       }
     }
   }
