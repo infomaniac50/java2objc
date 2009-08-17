@@ -15,6 +15,7 @@
  */
 package com.googlecode.java2objc.objc;
 
+import japa.parser.ast.expr.BinaryExpr;
 import japa.parser.ast.expr.Expression;
 import japa.parser.ast.expr.MethodCallExpr;
 import japa.parser.ast.expr.StringLiteralExpr;
@@ -58,6 +59,8 @@ public final class ExpressionConverter {
       } else {
         return new ObjcMethodCallExpression(context, callExpr);
       }
+    } else if (expr instanceof BinaryExpr) {
+      return new ObjcBinaryExpression(context, (BinaryExpr) expr);
     } else {
       // TODO (inder): bring in real expression conversion
       return new ObjcExpression(expr.toString());

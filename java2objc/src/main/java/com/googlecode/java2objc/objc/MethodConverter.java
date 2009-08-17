@@ -51,6 +51,9 @@ public class MethodConverter {
   
   private ObjcType[] getParameterTypes(MethodDeclaration method) {
     List<Parameter> params = method.getParameters();
+    if (params == null) {
+      return new ObjcType[0];
+    }
     ObjcType[] types = new ObjcType[params.size()];
     for (int i = 0; i < params.size(); ++i) {
       Parameter param = params.get(i);
