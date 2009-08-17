@@ -25,7 +25,7 @@ import japa.parser.ast.expr.Expression;
 public final class ObjcStringLiteralExpression extends ObjcExpression {
 
   private ObjcStringLiteralExpression(String value) {
-    super("@\"" + value + "\"");
+    super("@" + value);
   }
 
   /**
