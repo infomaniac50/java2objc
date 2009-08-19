@@ -10,12 +10,12 @@ import japa.parser.ast.stmt.SynchronizedStmt;
  * 
  * @author Inderjeet Singh
  */
-public final class ObjcSynchronizedStatement extends ObjcStatement {
+public final class ObjcStatementSynchronized extends ObjcStatement {
 
   private ObjcExpression expr;
   private ObjcStatementBlock stmt;
   
-  public ObjcSynchronizedStatement(CompilationContext context, SynchronizedStmt stmt) {
+  public ObjcStatementSynchronized(CompilationContext context, SynchronizedStmt stmt) {
     this.expr = context.getExpressionConverter().to(stmt.getExpr());
     this.stmt = new ObjcStatementBlock(context, stmt.getBlock());
   }

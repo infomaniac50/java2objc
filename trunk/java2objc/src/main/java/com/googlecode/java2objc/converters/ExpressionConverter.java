@@ -23,11 +23,11 @@ import japa.parser.ast.expr.StringLiteralExpr;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.googlecode.java2objc.code.ObjcBinaryExpression;
+import com.googlecode.java2objc.code.ObjcExpressionBinary;
 import com.googlecode.java2objc.code.ObjcExpression;
-import com.googlecode.java2objc.code.ObjcMethodCallExpression;
-import com.googlecode.java2objc.code.ObjcMethodCallExpressionString;
-import com.googlecode.java2objc.code.ObjcStringLiteralExpression;
+import com.googlecode.java2objc.code.ObjcExpressionMethodCall;
+import com.googlecode.java2objc.code.ObjcExpressionMethodCallString;
+import com.googlecode.java2objc.code.ObjcExpressionStringLiteral;
 import com.googlecode.java2objc.objc.CompilationContext;
 
 /**
@@ -58,16 +58,16 @@ public final class ExpressionConverter {
 
   public ObjcExpression to(Expression expr) {
     if (expr instanceof StringLiteralExpr) {
-      return new ObjcStringLiteralExpression(expr);
+      return new ObjcExpressionStringLiteral(expr);
     } else if (expr instanceof MethodCallExpr) {
       MethodCallExpr callExpr = (MethodCallExpr)expr;
       if (isStringMethodCall(callExpr)) {
-        return new ObjcMethodCallExpressionString(context, callExpr);         
+        return new ObjcExpressionMethodCallString(context, callExpr);         
       } else {
-        return new ObjcMethodCallExpression(context, callExpr);
+        return new ObjcExpressionMethodCall(context, callExpr);
       }
     } else if (expr instanceof BinaryExpr) {
-      return new ObjcBinaryExpression(context, (BinaryExpr) expr);
+      return new ObjcExpressionBinary(context, (BinaryExpr) expr);
     } else {
       // TODO (inder): bring in real expression conversion
       return new ObjcExpression(expr.toString());

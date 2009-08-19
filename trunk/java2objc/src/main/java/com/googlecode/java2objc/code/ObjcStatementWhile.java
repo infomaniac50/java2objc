@@ -18,29 +18,34 @@ package com.googlecode.java2objc.code;
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.SourceCodeWriter;
 
-import japa.parser.ast.stmt.ExpressionStmt;
+import japa.parser.ast.stmt.WhileStmt;
 
 /**
- * An Objective C statement that consists of a single expression. Some examples of expression
- * statements are: 
- * <ul>
- * <li> ++i; </li>
- * <li> a*b; </li>
- * <li> a * foo:(NSInteger) a;</li>
- * </ul>
+ * An Objective C while statement
  * 
  * @author Inderjeet Singh
  */
-public final class ObjcExpressionStatement extends ObjcStatement {
+public final class ObjcStatementWhile extends ObjcStatement {
 
-  private final ObjcExpression expr;
+  private final ObjcExpression condition;
+  private final ObjcStatement body;
 
-  public ObjcExpressionStatement(CompilationContext context, ExpressionStmt stmt) {
-    this.expr = context.getExpressionConverter().to(stmt.getExpression());
+  public ObjcStatementWhile(CompilationContext context, WhileStmt stmt) {
+    this.condition = context.getExpressionConverter().to(stmt.getCondition());
+    this.body = context.getStatementConverter().to(stmt.getBody());
   }
 
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.startNewLine().append(expr).append(";").endLine();
+    writer.startNewLine();
+    writer.append("while (").append(condition).append(") ");
+    boolean isBlock = body instanceof ObjcStatementBlock;
+    if (!isBlock) {
+      writer.indent();
+    }
+    writer.append(body);
+    if (!isBlock) {
+      writer.unIndent();
+    }
   }
 }

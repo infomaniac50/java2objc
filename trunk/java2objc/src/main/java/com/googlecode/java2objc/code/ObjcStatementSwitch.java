@@ -15,40 +15,41 @@
  */
 package com.googlecode.java2objc.code;
 
-import japa.parser.ast.stmt.ForStmt;
+import japa.parser.ast.stmt.SwitchEntryStmt;
+import japa.parser.ast.stmt.SwitchStmt;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.SourceCodeWriter;
 
 /**
- * Objective C For statement
+ * An Objective C switch statement
  * 
  * @author Inderjeet Singh
  */
-public final class ObjcForStatement extends ObjcStatement {
-  
-  private final List<ObjcExpression> init;
-  private final ObjcExpression compare;
-  private final List<ObjcExpression> update;
-  private final ObjcStatement body;
+public final class ObjcStatementSwitch extends ObjcStatement {
 
-  public ObjcForStatement(CompilationContext context, ForStmt stmt) {
-    this.init = context.getExpressionConverter().to(stmt.getInit());
-    this.compare = context.getExpressionConverter().to(stmt.getCompare());
-    this.update = context.getExpressionConverter().to(stmt.getUpdate());
-    this.body = context.getStatementConverter().to(stmt.getBody());
-  }
+  private final ObjcExpression selector;
+  private final List<ObjcStatementSwitchEntry> stmts;
+
+  public ObjcStatementSwitch(CompilationContext context, SwitchStmt stmt) {
+    selector = context.getExpressionConverter().to(stmt.getSelector());
+    stmts = new LinkedList<ObjcStatementSwitchEntry>();
+    for (SwitchEntryStmt entry : stmt.getEntries()) {
+      stmts.add(new ObjcStatementSwitchEntry(context, entry));
+    }
+  }  
   
   @Override
   public void append(SourceCodeWriter writer) {
     writer.startNewLine();
-    writer.append("for(").append(init, ", ").append("; ");
-    writer.append(compare).append("; ");
-    writer.append(update, ", ").append(") ");
-    writer.append(body);
+    writer.append("switch (").append(selector).append(") {");
     writer.endLine();
-    
+    for (ObjcStatementSwitchEntry stmt : stmts) {
+      writer.append(stmt);
+    }
+    writer.appendLine("}");    
   }
 }

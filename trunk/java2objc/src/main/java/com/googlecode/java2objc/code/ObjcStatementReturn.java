@@ -15,24 +15,26 @@
  */
 package com.googlecode.java2objc.code;
 
+import com.googlecode.java2objc.objc.CompilationContext;
+import com.googlecode.java2objc.objc.SourceCodeWriter;
 
-import japa.parser.ast.expr.Expression;
+import japa.parser.ast.stmt.ReturnStmt;
 
 /**
- * A String literal in Objective C
+ * An objective C statement involving the return keyword.
  * 
  * @author Inderjeet Singh
  */
-public final class ObjcStringLiteralExpression extends ObjcExpression {
+public final class ObjcStatementReturn extends ObjcStatement {
 
-  private ObjcStringLiteralExpression(String value) {
-    super("@" + value);
+  private final ObjcExpression expr;
+
+  public ObjcStatementReturn(CompilationContext context, ReturnStmt stmt) {
+    this.expr = context.getExpressionConverter().to(stmt.getExpr());
   }
 
-  /**
-   * @param expr the Java expression
-   */
-  public ObjcStringLiteralExpression(Expression expr) {
-    this(expr.toString());
+  @Override
+  public void append(SourceCodeWriter writer) {
+    writer.startNewLine().append("return ").append(expr).endStatement();
   }
 }

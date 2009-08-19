@@ -15,19 +15,19 @@
  */
 package com.googlecode.java2objc.converters;
 
-import com.googlecode.java2objc.code.ObjcDoWhileStatement;
+import com.googlecode.java2objc.code.ObjcStatementDoWhile;
 import com.googlecode.java2objc.code.ObjcEmptyStatement;
-import com.googlecode.java2objc.code.ObjcExpressionStatement;
-import com.googlecode.java2objc.code.ObjcForStatement;
-import com.googlecode.java2objc.code.ObjcForeachStatement;
-import com.googlecode.java2objc.code.ObjcIfStatement;
-import com.googlecode.java2objc.code.ObjcLabeledStmt;
-import com.googlecode.java2objc.code.ObjcReturnStatement;
+import com.googlecode.java2objc.code.ObjcStatementExpression;
+import com.googlecode.java2objc.code.ObjcStatementFor;
+import com.googlecode.java2objc.code.ObjcStatementForeach;
+import com.googlecode.java2objc.code.ObjcStatementIf;
+import com.googlecode.java2objc.code.ObjcStatementLabeled;
+import com.googlecode.java2objc.code.ObjcStatementReturn;
 import com.googlecode.java2objc.code.ObjcStatement;
 import com.googlecode.java2objc.code.ObjcStatementBlock;
-import com.googlecode.java2objc.code.ObjcSwitchStatement;
-import com.googlecode.java2objc.code.ObjcSynchronizedStatement;
-import com.googlecode.java2objc.code.ObjcWhileStatement;
+import com.googlecode.java2objc.code.ObjcStatementSwitch;
+import com.googlecode.java2objc.code.ObjcStatementSynchronized;
+import com.googlecode.java2objc.code.ObjcStatementWhile;
 import com.googlecode.java2objc.objc.CompilationContext;
 
 import japa.parser.ast.stmt.BlockStmt;
@@ -59,29 +59,29 @@ public final class StatementConverter {
 
   public ObjcStatement to(Statement stmt) {
     if (stmt instanceof IfStmt) {
-      return new ObjcIfStatement((IfStmt)stmt);
+      return new ObjcStatementIf((IfStmt)stmt);
     } else if (stmt instanceof BlockStmt) {
       return new ObjcStatementBlock(context, (BlockStmt)stmt);
     } else if (stmt instanceof ForStmt) {
-      return new ObjcForStatement(context, (ForStmt)stmt);
+      return new ObjcStatementFor(context, (ForStmt)stmt);
     } else if (stmt instanceof ForeachStmt) {
-      return new ObjcForeachStatement(context, (ForeachStmt)stmt);
+      return new ObjcStatementForeach(context, (ForeachStmt)stmt);
     } else if (stmt instanceof SwitchStmt) {
-      return new ObjcSwitchStatement(context, (SwitchStmt)stmt);
+      return new ObjcStatementSwitch(context, (SwitchStmt)stmt);
     } else if (stmt instanceof DoStmt) {
-      return new ObjcDoWhileStatement(context, (DoStmt)stmt);
+      return new ObjcStatementDoWhile(context, (DoStmt)stmt);
     } else if (stmt instanceof WhileStmt) {
-      return new ObjcWhileStatement(context, (WhileStmt)stmt);
+      return new ObjcStatementWhile(context, (WhileStmt)stmt);
     } else if (stmt instanceof EmptyStmt) {
       return new ObjcEmptyStatement((EmptyStmt)stmt);
     } else if (stmt instanceof ExpressionStmt) {
-      return new ObjcExpressionStatement(context, (ExpressionStmt)stmt);      
+      return new ObjcStatementExpression(context, (ExpressionStmt)stmt);      
     } else if (stmt instanceof SynchronizedStmt) {
-      return new ObjcSynchronizedStatement(context, (SynchronizedStmt)stmt);
+      return new ObjcStatementSynchronized(context, (SynchronizedStmt)stmt);
     } else if (stmt instanceof ReturnStmt) {
-      return new ObjcReturnStatement(context, (ReturnStmt)stmt);
+      return new ObjcStatementReturn(context, (ReturnStmt)stmt);
     } else if (stmt instanceof LabeledStmt) {
-      return new ObjcLabeledStmt(context, (LabeledStmt)stmt);
+      return new ObjcStatementLabeled(context, (LabeledStmt)stmt);
     }
     return new ObjcStatement(stmt);
   }

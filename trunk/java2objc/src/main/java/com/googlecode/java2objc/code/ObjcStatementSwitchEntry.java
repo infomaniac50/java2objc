@@ -29,12 +29,12 @@ import com.googlecode.java2objc.objc.SourceCodeWriter;
  * 
  * @author Inderjeet Singh
  */
-public final class ObjcSwitchEntryStatement extends ObjcStatement {
+public final class ObjcStatementSwitchEntry extends ObjcStatement {
   private final ObjcExpression label;
   private final List<ObjcStatement> stmts;
   private boolean isDefault;
 
-  public ObjcSwitchEntryStatement(CompilationContext context, SwitchEntryStmt stmt) {
+  public ObjcStatementSwitchEntry(CompilationContext context, SwitchEntryStmt stmt) {
     isDefault = stmt.getLabel() == null;
     this.label = isDefault ? null : context.getExpressionConverter().to(stmt.getLabel());
     this.stmts = new LinkedList<ObjcStatement>();
