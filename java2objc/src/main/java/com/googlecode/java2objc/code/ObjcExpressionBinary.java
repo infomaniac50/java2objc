@@ -27,13 +27,13 @@ import japa.parser.ast.expr.BinaryExpr;
  * 
  * @author Inderjeet Singh
  */
-public class ObjcBinaryExpression extends ObjcExpression {
+public class ObjcExpressionBinary extends ObjcExpression {
 
   private final ObjcOperator operator;
   private final ObjcExpression left;
   private final ObjcExpression right;
 
-  public ObjcBinaryExpression(CompilationContext context, BinaryExpr expr) {
+  public ObjcExpressionBinary(CompilationContext context, BinaryExpr expr) {
     operator = new ObjcOperator(expr.getOperator());
     ExpressionConverter exprConverter = context.getExpressionConverter();
     this.left = exprConverter.to(expr.getLeft());

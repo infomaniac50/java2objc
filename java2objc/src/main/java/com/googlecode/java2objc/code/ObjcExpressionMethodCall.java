@@ -31,7 +31,7 @@ import com.googlecode.java2objc.objc.SourceCodeWriter;
  * 
  * @author Inderjeet Singh
  */
-public class ObjcMethodCallExpression extends ObjcExpression {
+public class ObjcExpressionMethodCall extends ObjcExpression {
 
   protected final String target;
   protected final String methodName;
@@ -39,11 +39,11 @@ public class ObjcMethodCallExpression extends ObjcExpression {
   protected final List<ObjcExpression> args;
   protected final int numParams;
   
-  public ObjcMethodCallExpression(CompilationContext context, MethodCallExpr expr) {
+  public ObjcExpressionMethodCall(CompilationContext context, MethodCallExpr expr) {
     this(context, expr, getScope(context, expr), expr.getName());
   }
 
-  protected ObjcMethodCallExpression(CompilationContext context, MethodCallExpr expr, 
+  protected ObjcExpressionMethodCall(CompilationContext context, MethodCallExpr expr, 
       String scope, String methodName) {
     this.methodName = methodName;
     this.target = scope;

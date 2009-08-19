@@ -25,12 +25,12 @@ import japa.parser.ast.stmt.Statement;
  * 
  * @author Inderjeet Singh
  */
-public final class ObjcIfStatement extends ObjcStatement {
+public final class ObjcStatementIf extends ObjcStatement {
   private final ObjcExpression condition;
   private final ObjcStatement thenStmt;
   private final ObjcStatement elseStmt;
   
-  public ObjcIfStatement(IfStmt n) {
+  public ObjcStatementIf(IfStmt n) {
     super(n);
     this.condition = new ObjcExpression(n.getCondition().toString());
     this.thenStmt = new ObjcStatement(n.getThenStmt());
@@ -38,7 +38,7 @@ public final class ObjcIfStatement extends ObjcStatement {
     this.elseStmt = elseStmtNode == null ? null : new ObjcStatement(elseStmtNode);
   }
 
-  public ObjcIfStatement(ObjcExpression condition, ObjcStatement thenStmt, ObjcStatement elseStmt) {
+  public ObjcStatementIf(ObjcExpression condition, ObjcStatement thenStmt, ObjcStatement elseStmt) {
     super("");
     this.condition = condition;
     this.thenStmt = thenStmt;
@@ -63,7 +63,7 @@ public final class ObjcIfStatement extends ObjcStatement {
       }
       writer.append("else");      
       boolean isElseABlock = elseStmt instanceof ObjcStatementBlock;
-      boolean isElseAnIfStmt = elseStmt instanceof ObjcIfStatement;
+      boolean isElseAnIfStmt = elseStmt instanceof ObjcStatementIf;
       if (isElseABlock || isElseAnIfStmt) {
         writer.append(" ");
       } else {

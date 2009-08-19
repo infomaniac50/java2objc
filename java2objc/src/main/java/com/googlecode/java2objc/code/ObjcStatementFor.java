@@ -15,41 +15,40 @@
  */
 package com.googlecode.java2objc.code;
 
-import japa.parser.ast.stmt.SwitchEntryStmt;
-import japa.parser.ast.stmt.SwitchStmt;
+import japa.parser.ast.stmt.ForStmt;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.SourceCodeWriter;
 
 /**
- * An Objective C switch statement
+ * Objective C For statement
  * 
  * @author Inderjeet Singh
  */
-public final class ObjcSwitchStatement extends ObjcStatement {
+public final class ObjcStatementFor extends ObjcStatement {
+  
+  private final List<ObjcExpression> init;
+  private final ObjcExpression compare;
+  private final List<ObjcExpression> update;
+  private final ObjcStatement body;
 
-  private final ObjcExpression selector;
-  private final List<ObjcSwitchEntryStatement> stmts;
-
-  public ObjcSwitchStatement(CompilationContext context, SwitchStmt stmt) {
-    selector = context.getExpressionConverter().to(stmt.getSelector());
-    stmts = new LinkedList<ObjcSwitchEntryStatement>();
-    for (SwitchEntryStmt entry : stmt.getEntries()) {
-      stmts.add(new ObjcSwitchEntryStatement(context, entry));
-    }
-  }  
+  public ObjcStatementFor(CompilationContext context, ForStmt stmt) {
+    this.init = context.getExpressionConverter().to(stmt.getInit());
+    this.compare = context.getExpressionConverter().to(stmt.getCompare());
+    this.update = context.getExpressionConverter().to(stmt.getUpdate());
+    this.body = context.getStatementConverter().to(stmt.getBody());
+  }
   
   @Override
   public void append(SourceCodeWriter writer) {
     writer.startNewLine();
-    writer.append("switch (").append(selector).append(") {");
+    writer.append("for(").append(init, ", ").append("; ");
+    writer.append(compare).append("; ");
+    writer.append(update, ", ").append(") ");
+    writer.append(body);
     writer.endLine();
-    for (ObjcSwitchEntryStatement stmt : stmts) {
-      writer.append(stmt);
-    }
-    writer.appendLine("}");    
+    
   }
 }

@@ -25,9 +25,9 @@ import japa.parser.ast.expr.MethodCallExpr;
  * 
  * @author Inderjeet Singh
  */
-public class ObjcMethodCallExpressionString extends ObjcMethodCallExpression {
+public class ObjcExpressionMethodCallString extends ObjcExpressionMethodCall {
 
-  public ObjcMethodCallExpressionString(CompilationContext context, MethodCallExpr expr) {
+  public ObjcExpressionMethodCallString(CompilationContext context, MethodCallExpr expr) {
     super(context, expr, "NSString", getMethodName(expr));
   }
 

@@ -26,13 +26,13 @@ import japa.parser.ast.stmt.ForeachStmt;
  * 
  * @author Inderjeet Singh
  */
-public final class ObjcForeachStatement extends ObjcStatement {
+public final class ObjcStatementForeach extends ObjcStatement {
 
   private final String varName;
   private final ObjcType varType;
   private final ObjcExpression iterable;
   private final ObjcStatement body;
-  public ObjcForeachStatement(CompilationContext context, ForeachStmt stmt) {
+  public ObjcStatementForeach(CompilationContext context, ForeachStmt stmt) {
     VariableDeclarationExpr variable = stmt.getVariable();
     this.varName = variable.getVars().get(0).getId().getName();
     String pkgName = null; // TODO(inder): Get the real package name for the type

@@ -58,7 +58,7 @@ public final class ObjcMethodInit extends ObjcMethod {
       ConstructorDeclaration n) {
     ObjcExpression condition = new ObjcExpression("self=[super init]");
     ObjcStatement thenStmt = new ObjcStatementBlock(context, n.getBlock());
-    ObjcIfStatement ifStmt = new ObjcIfStatement(condition, thenStmt, null);     
+    ObjcStatementIf ifStmt = new ObjcStatementIf(condition, thenStmt, null);     
     return new ObjcStatementBlock.Builder()
       .addStatement(ifStmt)
       .addStatement(new ObjcStatement("return self;"))

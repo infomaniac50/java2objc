@@ -18,27 +18,25 @@ package com.googlecode.java2objc.code;
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.SourceCodeWriter;
 
-import japa.parser.ast.stmt.DoStmt;
+import japa.parser.ast.stmt.LabeledStmt;
 
 /**
- * Representation of an Objective C do-while statement
- *
+ * Objective C labeled statement
+ * 
  * @author Inderjeet Singh
  */
-public final class ObjcDoWhileStatement extends ObjcStatement {
+public final class ObjcStatementLabeled extends ObjcStatement {
+  // TODO: Need to add handling of break label 
+  private final String label;
+  private final ObjcStatement stmt;
 
-  private final ObjcStatement body;
-  private final ObjcExpression condition;
-
-  public ObjcDoWhileStatement(CompilationContext context, DoStmt stmt) {
-    body = context.getStatementConverter().to(stmt.getBody());
-    condition = context.getExpressionConverter().to(stmt.getCondition());
+  public ObjcStatementLabeled(CompilationContext context, LabeledStmt stmt) {
+    this.label = stmt.getLabel();
+    this.stmt = context.getStatementConverter().to(stmt.getStmt());
   }
-
+  
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.startNewLine().append("do ");
-    writer.append(body);
-    writer.append(" while (").append(condition).append(");").endLine();
+    writer.startNewLine().append(label).append(": ").append(stmt);
   }
 }

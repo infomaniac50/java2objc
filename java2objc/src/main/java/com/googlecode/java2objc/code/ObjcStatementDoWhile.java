@@ -18,34 +18,27 @@ package com.googlecode.java2objc.code;
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.SourceCodeWriter;
 
-import japa.parser.ast.stmt.WhileStmt;
+import japa.parser.ast.stmt.DoStmt;
 
 /**
- * An Objective C while statement
- * 
+ * Representation of an Objective C do-while statement
+ *
  * @author Inderjeet Singh
  */
-public final class ObjcWhileStatement extends ObjcStatement {
+public final class ObjcStatementDoWhile extends ObjcStatement {
 
-  private final ObjcExpression condition;
   private final ObjcStatement body;
+  private final ObjcExpression condition;
 
-  public ObjcWhileStatement(CompilationContext context, WhileStmt stmt) {
-    this.condition = context.getExpressionConverter().to(stmt.getCondition());
-    this.body = context.getStatementConverter().to(stmt.getBody());
+  public ObjcStatementDoWhile(CompilationContext context, DoStmt stmt) {
+    body = context.getStatementConverter().to(stmt.getBody());
+    condition = context.getExpressionConverter().to(stmt.getCondition());
   }
 
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.startNewLine();
-    writer.append("while (").append(condition).append(") ");
-    boolean isBlock = body instanceof ObjcStatementBlock;
-    if (!isBlock) {
-      writer.indent();
-    }
+    writer.startNewLine().append("do ");
     writer.append(body);
-    if (!isBlock) {
-      writer.unIndent();
-    }
+    writer.append(" while (").append(condition).append(");").endLine();
   }
 }

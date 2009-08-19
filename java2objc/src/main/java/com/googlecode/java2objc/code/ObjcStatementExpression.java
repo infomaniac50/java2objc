@@ -18,23 +18,29 @@ package com.googlecode.java2objc.code;
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.SourceCodeWriter;
 
-import japa.parser.ast.stmt.ReturnStmt;
+import japa.parser.ast.stmt.ExpressionStmt;
 
 /**
- * An objective C statement involving the return keyword.
+ * An Objective C statement that consists of a single expression. Some examples of expression
+ * statements are: 
+ * <ul>
+ * <li> ++i; </li>
+ * <li> a*b; </li>
+ * <li> a * foo:(NSInteger) a;</li>
+ * </ul>
  * 
  * @author Inderjeet Singh
  */
-public final class ObjcReturnStatement extends ObjcStatement {
+public final class ObjcStatementExpression extends ObjcStatement {
 
   private final ObjcExpression expr;
 
-  public ObjcReturnStatement(CompilationContext context, ReturnStmt stmt) {
-    this.expr = context.getExpressionConverter().to(stmt.getExpr());
+  public ObjcStatementExpression(CompilationContext context, ExpressionStmt stmt) {
+    this.expr = context.getExpressionConverter().to(stmt.getExpression());
   }
 
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.startNewLine().append("return ").append(expr).endStatement();
+    writer.startNewLine().append(expr).append(";").endLine();
   }
 }
