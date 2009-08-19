@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.java2objc.objc;
+package com.googlecode.java2objc.converters;
 
 import japa.parser.ast.expr.BinaryExpr;
 import japa.parser.ast.expr.Expression;
@@ -22,6 +22,13 @@ import japa.parser.ast.expr.StringLiteralExpr;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import com.googlecode.java2objc.code.ObjcBinaryExpression;
+import com.googlecode.java2objc.code.ObjcExpression;
+import com.googlecode.java2objc.code.ObjcMethodCallExpression;
+import com.googlecode.java2objc.code.ObjcMethodCallExpressionString;
+import com.googlecode.java2objc.code.ObjcStringLiteralExpression;
+import com.googlecode.java2objc.objc.CompilationContext;
 
 /**
  * Converts Java expressions into Objective C expressions

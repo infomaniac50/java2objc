@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.java2objc.objc;
+package com.googlecode.java2objc.code;
 
 import japa.parser.ast.body.ModifierSet;
 import japa.parser.ast.body.Parameter;
@@ -22,6 +22,7 @@ import java.util.LinkedList;
 
 import com.googlecode.java2objc.javatypes.JavaClass;
 import com.googlecode.java2objc.javatypes.JavaMethod;
+import com.googlecode.java2objc.objc.CompilationContext;
 
 /**
  * Method for implementing dealloc for an object

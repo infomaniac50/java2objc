@@ -13,32 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.java2objc.objc;
+package com.googlecode.java2objc.code;
 
-import japa.parser.ast.expr.BinaryExpr;
+import com.googlecode.java2objc.objc.ObjcNode;
+import com.googlecode.java2objc.objc.SourceCodeWriter;
 
 /**
- * A binary expression in Objective C
+ * Base class for all Objective C expressions
  * 
  * @author Inderjeet Singh
  */
-public class ObjcBinaryExpression extends ObjcExpression {
+public class ObjcExpression extends ObjcNode {
 
-  private final ObjcOperator operator;
-  private final ObjcExpression left;
-  private final ObjcExpression right;
-
-  public ObjcBinaryExpression(CompilationContext context, BinaryExpr expr) {
-    operator = new ObjcOperator(expr.getOperator());
-    ExpressionConverter exprConverter = context.getExpressionConverter();
-    this.left = exprConverter.to(expr.getLeft());
-    this.right = exprConverter.to(expr.getRight());
-  }
+  // TODO(inder); convert this to self
+  private final String expression;
   
+  public ObjcExpression() {
+    this(null);
+  }
+
+  public ObjcExpression(String expression) {
+    this.expression = expression;
+  }
+
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.append(left).append(" ");
-    writer.append(operator).append(" ");
-    writer.append(right);
+    if (expression != null) {
+      writer.append(expression);
+    }
   }
 }

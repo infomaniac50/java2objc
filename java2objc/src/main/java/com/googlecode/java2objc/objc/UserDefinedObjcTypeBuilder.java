@@ -18,6 +18,8 @@ package com.googlecode.java2objc.objc;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.googlecode.java2objc.code.ObjcMethod;
+import com.googlecode.java2objc.code.ObjcType;
 import com.googlecode.java2objc.javatypes.JavaClass;
 
 /**

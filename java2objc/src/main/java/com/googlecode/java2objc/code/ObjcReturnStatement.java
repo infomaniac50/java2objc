@@ -13,29 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.java2objc.objc;
+package com.googlecode.java2objc.code;
 
-import japa.parser.ast.stmt.DoStmt;
+import com.googlecode.java2objc.objc.CompilationContext;
+import com.googlecode.java2objc.objc.SourceCodeWriter;
+
+import japa.parser.ast.stmt.ReturnStmt;
 
 /**
- * Representation of an Objective C do-while statement
- *
+ * An objective C statement involving the return keyword.
+ * 
  * @author Inderjeet Singh
  */
-public final class ObjcDoWhileStatement extends ObjcStatement {
+public final class ObjcReturnStatement extends ObjcStatement {
 
-  private final ObjcStatement body;
-  private final ObjcExpression condition;
+  private final ObjcExpression expr;
 
-  public ObjcDoWhileStatement(CompilationContext context, DoStmt stmt) {
-    body = context.getStatementConverter().to(stmt.getBody());
-    condition = context.getExpressionConverter().to(stmt.getCondition());
+  public ObjcReturnStatement(CompilationContext context, ReturnStmt stmt) {
+    this.expr = context.getExpressionConverter().to(stmt.getExpr());
   }
 
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.startNewLine().append("do ");
-    writer.append(body);
-    writer.append(" while (").append(condition).append(");").endLine();
+    writer.startNewLine().append("return ").append(expr).endStatement();
   }
 }

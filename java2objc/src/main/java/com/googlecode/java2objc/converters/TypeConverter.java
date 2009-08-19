@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.java2objc.objc;
+package com.googlecode.java2objc.converters;
 
 import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
@@ -27,8 +27,12 @@ import japa.parser.ast.type.ClassOrInterfaceType;
 import java.util.List;
 import java.util.Set;
 
+import com.googlecode.java2objc.code.ObjcType;
 import com.googlecode.java2objc.javatypes.JavaClass;
 import com.googlecode.java2objc.javatypes.JavaUtils;
+import com.googlecode.java2objc.objc.CompilationContext;
+import com.googlecode.java2objc.objc.ObjcField;
+import com.googlecode.java2objc.objc.UserDefinedObjcTypeBuilder;
 
 /**
  * Provides utility methods to convert {@link TypeDeclaration} to {@link ObjcType}

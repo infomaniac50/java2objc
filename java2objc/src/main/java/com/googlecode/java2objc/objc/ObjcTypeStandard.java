@@ -16,6 +16,7 @@
 
 package com.googlecode.java2objc.objc;
 
+import com.googlecode.java2objc.code.ObjcType;
 import com.googlecode.java2objc.javatypes.JavaClass;
 
 /**

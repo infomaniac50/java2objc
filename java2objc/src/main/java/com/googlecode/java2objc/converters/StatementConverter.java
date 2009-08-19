@@ -13,7 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.java2objc.objc;
+package com.googlecode.java2objc.converters;
+
+import com.googlecode.java2objc.code.ObjcDoWhileStatement;
+import com.googlecode.java2objc.code.ObjcEmptyStatement;
+import com.googlecode.java2objc.code.ObjcExpressionStatement;
+import com.googlecode.java2objc.code.ObjcForStatement;
+import com.googlecode.java2objc.code.ObjcForeachStatement;
+import com.googlecode.java2objc.code.ObjcIfStatement;
+import com.googlecode.java2objc.code.ObjcLabeledStmt;
+import com.googlecode.java2objc.code.ObjcReturnStatement;
+import com.googlecode.java2objc.code.ObjcStatement;
+import com.googlecode.java2objc.code.ObjcStatementBlock;
+import com.googlecode.java2objc.code.ObjcSwitchStatement;
+import com.googlecode.java2objc.code.ObjcSynchronizedStatement;
+import com.googlecode.java2objc.code.ObjcWhileStatement;
+import com.googlecode.java2objc.objc.CompilationContext;
 
 import japa.parser.ast.stmt.BlockStmt;
 import japa.parser.ast.stmt.DoStmt;

@@ -25,7 +25,7 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import com.googlecode.java2objc.objc.CompilationUnitConverter;
+import com.googlecode.java2objc.converters.CompilationUnitConverter;
 import com.googlecode.java2objc.util.Preconditions;
 
 /**

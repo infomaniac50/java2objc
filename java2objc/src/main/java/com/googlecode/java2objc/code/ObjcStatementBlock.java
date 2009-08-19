@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.java2objc.objc;
+package com.googlecode.java2objc.code;
 
 import japa.parser.ast.stmt.BlockStmt;
 import japa.parser.ast.stmt.Statement;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import com.googlecode.java2objc.objc.CompilationContext;
+import com.googlecode.java2objc.objc.SourceCodeWriter;
 
 /**
  * An Objective C statement block

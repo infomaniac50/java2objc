@@ -19,6 +19,7 @@ import japa.parser.ast.type.Type;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.googlecode.java2objc.code.ObjcType;
 import com.googlecode.java2objc.javatypes.JavaClass;
 import com.googlecode.java2objc.javatypes.JavaUtils;
 
