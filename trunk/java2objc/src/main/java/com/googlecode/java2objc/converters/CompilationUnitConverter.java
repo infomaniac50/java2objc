@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.java2objc.objc;
+package com.googlecode.java2objc.converters;
 
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.ImportDeclaration;
@@ -31,8 +31,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import com.googlecode.java2objc.code.ObjcType;
 import com.googlecode.java2objc.javatypes.JavaUtils;
 import com.googlecode.java2objc.main.Config;
+import com.googlecode.java2objc.objc.CompilationContext;
+import com.googlecode.java2objc.objc.ObjcTypeRepository;
+import com.googlecode.java2objc.objc.SourceCodeWriter;
 
 /**
  * Converts a Java compilation unit into its equivalent Objective C classes

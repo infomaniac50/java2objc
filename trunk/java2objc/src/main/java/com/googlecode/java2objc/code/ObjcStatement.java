@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.java2objc.objc;
+package com.googlecode.java2objc.code;
 
 import japa.parser.ast.stmt.Statement;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import com.googlecode.java2objc.objc.ObjcNode;
+import com.googlecode.java2objc.objc.SourceCodeWriter;
 
 /**
  * Base class for all Objective C statements
@@ -35,7 +38,7 @@ public class ObjcStatement extends ObjcNode {
     this((String) null);
   }
 
-  protected ObjcStatement(Statement stmt) {
+  public ObjcStatement(Statement stmt) {
     this.stmt = stmt.toString();
   }
 

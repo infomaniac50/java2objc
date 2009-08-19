@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.googlecode.java2objc.objc;
+package com.googlecode.java2objc.converters;
 
 import japa.parser.ast.body.ConstructorDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
@@ -22,8 +22,12 @@ import japa.parser.ast.body.Parameter;
 
 import java.util.List;
 
+import com.googlecode.java2objc.code.ObjcMethod;
+import com.googlecode.java2objc.code.ObjcMethodInit;
+import com.googlecode.java2objc.code.ObjcType;
 import com.googlecode.java2objc.javatypes.JavaClass;
 import com.googlecode.java2objc.javatypes.JavaMethod;
+import com.googlecode.java2objc.objc.CompilationContext;
 
 /**
  * Converts Java methods to their equivalent Objective C methods

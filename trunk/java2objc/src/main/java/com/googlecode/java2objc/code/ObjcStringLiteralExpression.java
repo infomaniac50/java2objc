@@ -13,27 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.java2objc.objc;
+package com.googlecode.java2objc.code;
 
-import japa.parser.ast.stmt.LabeledStmt;
+
+import japa.parser.ast.expr.Expression;
 
 /**
- * Objective C labeled statement
+ * A String literal in Objective C
  * 
  * @author Inderjeet Singh
  */
-public final class ObjcLabeledStmt extends ObjcStatement {
-  // TODO: Need to add handling of break label 
-  private final String label;
-  private final ObjcStatement stmt;
+public final class ObjcStringLiteralExpression extends ObjcExpression {
 
-  public ObjcLabeledStmt(CompilationContext context, LabeledStmt stmt) {
-    this.label = stmt.getLabel();
-    this.stmt = context.getStatementConverter().to(stmt.getStmt());
+  private ObjcStringLiteralExpression(String value) {
+    super("@" + value);
   }
-  
-  @Override
-  public void append(SourceCodeWriter writer) {
-    writer.startNewLine().append(label).append(": ").append(stmt);
+
+  /**
+   * @param expr the Java expression
+   */
+  public ObjcStringLiteralExpression(Expression expr) {
+    this(expr.toString());
   }
 }

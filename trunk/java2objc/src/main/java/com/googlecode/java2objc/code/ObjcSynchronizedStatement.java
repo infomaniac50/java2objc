@@ -1,4 +1,7 @@
-package com.googlecode.java2objc.objc;
+package com.googlecode.java2objc.code;
+
+import com.googlecode.java2objc.objc.CompilationContext;
+import com.googlecode.java2objc.objc.SourceCodeWriter;
 
 import japa.parser.ast.stmt.SynchronizedStmt;
 

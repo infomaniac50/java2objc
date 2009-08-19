@@ -4,7 +4,7 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.googlecode.java2objc.objc.ObjcType;
+import com.googlecode.java2objc.code.ObjcType;
 
 public final class JavaClass {
   private static final Map<Class<?>, JavaClass> cache = new HashMap<Class<?>, JavaClass>();

@@ -13,22 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.java2objc.objc;
+package com.googlecode.java2objc.code;
 
-import japa.parser.ast.stmt.EmptyStmt;
+import com.googlecode.java2objc.objc.CompilationContext;
+import com.googlecode.java2objc.objc.SourceCodeWriter;
+
+import japa.parser.ast.stmt.LabeledStmt;
 
 /**
- * An empty Objective C statement.
+ * Objective C labeled statement
  * 
  * @author Inderjeet Singh
  */
-public final class ObjcEmptyStatement extends ObjcStatement {
+public final class ObjcLabeledStmt extends ObjcStatement {
+  // TODO: Need to add handling of break label 
+  private final String label;
+  private final ObjcStatement stmt;
 
-  public ObjcEmptyStatement(EmptyStmt stmt) {
+  public ObjcLabeledStmt(CompilationContext context, LabeledStmt stmt) {
+    this.label = stmt.getLabel();
+    this.stmt = context.getStatementConverter().to(stmt.getStmt());
   }
   
   @Override
   public void append(SourceCodeWriter writer) {
-    // do nothing
+    writer.startNewLine().append(label).append(": ").append(stmt);
   }
 }

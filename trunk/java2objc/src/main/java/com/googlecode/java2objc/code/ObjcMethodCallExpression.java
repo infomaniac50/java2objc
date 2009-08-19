@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.java2objc.objc;
+package com.googlecode.java2objc.code;
 
 import japa.parser.ast.expr.Expression;
 import japa.parser.ast.expr.MethodCallExpr;
@@ -21,6 +21,10 @@ import japa.parser.ast.type.Type;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import com.googlecode.java2objc.objc.CompilationContext;
+import com.googlecode.java2objc.objc.ObjcTypeRepository;
+import com.googlecode.java2objc.objc.SourceCodeWriter;
 
 /**
  * An Objective C expression involving a method call

@@ -18,6 +18,7 @@ package com.googlecode.java2objc.objc;
 
 import japa.parser.ast.body.MethodDeclaration;
 
+import com.googlecode.java2objc.code.ObjcMethod;
 import com.googlecode.java2objc.javatypes.JavaMethod;
 
 /**

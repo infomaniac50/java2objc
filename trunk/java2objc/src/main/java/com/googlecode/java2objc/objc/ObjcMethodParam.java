@@ -15,6 +15,8 @@
  */
 package com.googlecode.java2objc.objc;
 
+import com.googlecode.java2objc.code.ObjcType;
+
 /**
  * Parameter for an Objective C method
  * 

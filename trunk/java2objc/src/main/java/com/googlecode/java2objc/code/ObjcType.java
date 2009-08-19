@@ -13,12 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.java2objc.objc;
+package com.googlecode.java2objc.code;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import com.googlecode.java2objc.javatypes.JavaClass;
+import com.googlecode.java2objc.objc.CompilationContext;
+import com.googlecode.java2objc.objc.ObjcField;
+import com.googlecode.java2objc.objc.ObjcNode;
+import com.googlecode.java2objc.objc.SourceCodeWriter;
 
 /**
  * Base class for all Objective C types
@@ -62,7 +66,7 @@ public class ObjcType extends ObjcNode {
     this(context, name, context.getTypeRepo().getNSObject(), true, javaClass);
   }
 
-  protected ObjcType(CompilationContext context, String name, ObjcType baseClass, boolean pointerType, JavaClass javaClass) {
+  public ObjcType(CompilationContext context, String name, ObjcType baseClass, boolean pointerType, JavaClass javaClass) {
     this.name = name;
     this.isInterface = false;
     this.baseClass = baseClass;

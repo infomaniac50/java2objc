@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.java2objc.objc;
+package com.googlecode.java2objc.code;
 
 import japa.parser.ast.stmt.ForStmt;
 
 import java.util.List;
+
+import com.googlecode.java2objc.objc.CompilationContext;
+import com.googlecode.java2objc.objc.SourceCodeWriter;
 
 /**
  * Objective C For statement

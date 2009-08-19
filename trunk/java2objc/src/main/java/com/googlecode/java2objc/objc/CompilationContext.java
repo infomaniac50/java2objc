@@ -17,6 +17,13 @@ package com.googlecode.java2objc.objc;
 
 import java.util.Set;
 
+import com.googlecode.java2objc.code.ObjcMethod;
+import com.googlecode.java2objc.code.ObjcType;
+import com.googlecode.java2objc.converters.ExpressionConverter;
+import com.googlecode.java2objc.converters.MethodConverter;
+import com.googlecode.java2objc.converters.StatementConverter;
+import com.googlecode.java2objc.converters.TypeConverter;
+
 /**
  * class to keep track of current method and type being navigated in the source-code
  * 
@@ -41,11 +48,11 @@ public class CompilationContext {
     this.expressionConverter = new ExpressionConverter(this);
   }
 
-  void initRepo(ObjcTypeRepository repo) {
+  public void initRepo(ObjcTypeRepository repo) {
     this.repo = repo;
   }
 
-  void init(Set<ObjcType> imports) {
+  public void init(Set<ObjcType> imports) {
     this.typeConverter = new TypeConverter(this, pkgName, imports);    
   }
 

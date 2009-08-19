@@ -31,7 +31,7 @@ public class AssortedExamples {
         for (int k = 0; k < value; ++k) {
           if (i*j*k == 27) {
             break outer;
-          } else {
+          } if (i*j*k == 33) {
             continue middle;
           }
         }

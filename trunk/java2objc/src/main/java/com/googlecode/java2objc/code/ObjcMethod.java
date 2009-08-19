@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.java2objc.objc;
+package com.googlecode.java2objc.code;
 
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.ModifierSet;
@@ -23,6 +23,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.googlecode.java2objc.javatypes.JavaMethod;
+import com.googlecode.java2objc.objc.CompilationContext;
+import com.googlecode.java2objc.objc.ObjcMethodParam;
+import com.googlecode.java2objc.objc.ObjcNode;
+import com.googlecode.java2objc.objc.ObjcTypeRepository;
+import com.googlecode.java2objc.objc.SourceCodeWriter;
 
 /**
  * Base class for all Objective C static or class methods
