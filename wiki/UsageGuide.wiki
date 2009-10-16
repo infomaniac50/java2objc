@@ -7,8 +7,8 @@ At the moment, there is no standalone java2objc tool that you can run to convert
 
 = Details =
 
-1. Creating a Java2Objc Eclipse project: 
-Java2Objc uses maven2.
+1. Creating a java2objc Eclipse project: 
+Note: java2objc uses maven2.
   * Checkout out all java2objc code svn checkout http://java2objc.googlecode.com/svn/trunk/ java2objc-read-only 
   * cd java2objc-read-only/java2objc 
   * run mvn eclipse:configure-workspace eclipse:eclipse 
