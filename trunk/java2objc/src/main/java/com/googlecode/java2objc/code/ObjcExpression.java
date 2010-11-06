@@ -16,30 +16,25 @@
 package com.googlecode.java2objc.code;
 
 import com.googlecode.java2objc.objc.ObjcNode;
-import com.googlecode.java2objc.objc.SourceCodeWriter;
 
 /**
  * Base class for all Objective C expressions
  * 
  * @author Inderjeet Singh
  */
-public class ObjcExpression extends ObjcNode {
+public abstract class ObjcExpression extends ObjcNode {
 
-  // TODO(inder); convert this to self
-  private final String expression;
-  
-  public ObjcExpression() {
-    this(null);
+  private final ObjcType type;
+
+  public ObjcExpression(ObjcType type) {
+    this.type = type;
   }
 
-  public ObjcExpression(String expression) {
-    this.expression = expression;
+  public ObjcExpression(ObjcExpression target) {
+    this.type = target.getType();
   }
 
-  @Override
-  public void append(SourceCodeWriter writer) {
-    if (expression != null) {
-      writer.append(expression);
-    }
+  public ObjcType getType() {
+    return type;
   }
 }

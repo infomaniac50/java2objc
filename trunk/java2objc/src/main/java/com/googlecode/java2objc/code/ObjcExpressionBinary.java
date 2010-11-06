@@ -15,12 +15,11 @@
  */
 package com.googlecode.java2objc.code;
 
-import com.googlecode.java2objc.converters.ExpressionConverter;
+import japa.parser.ast.expr.BinaryExpr;
+
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.ObjcOperator;
 import com.googlecode.java2objc.objc.SourceCodeWriter;
-
-import japa.parser.ast.expr.BinaryExpr;
 
 /**
  * A binary expression in Objective C
@@ -34,16 +33,26 @@ public class ObjcExpressionBinary extends ObjcExpression {
   private final ObjcExpression right;
 
   public ObjcExpressionBinary(CompilationContext context, BinaryExpr expr) {
-    operator = new ObjcOperator(expr.getOperator());
-    ExpressionConverter exprConverter = context.getExpressionConverter();
-    this.left = exprConverter.to(expr.getLeft());
-    this.right = exprConverter.to(expr.getRight());
+    this(new ObjcOperator(expr.getOperator()), context.getExpressionConverter().to(expr.getLeft()),
+        context.getExpressionConverter().to(expr.getRight()));
   }
-  
+
+  public ObjcExpressionBinary(ObjcOperator operator, ObjcExpression left, ObjcExpression right) {
+    super((ObjcType)null);
+    this.operator = operator;
+    this.left = left;
+    this.right = right;
+  }
+
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.append(left).append(" ");
-    writer.append(operator).append(" ");
-    writer.append(right);
+    if ("+".equals(operator.getOperator())
+        && (left instanceof ObjcExpressionStringLiteral || right instanceof ObjcExpressionStringLiteral)) {
+      writer.append('[').append(left).append(" stringByAppendingString:").append(right).append(']');
+    } else {
+      writer.append(left).append(" ");
+      writer.append(operator).append(" ");
+      writer.append(right);
+    }
   }
 }

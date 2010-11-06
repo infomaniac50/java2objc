@@ -15,6 +15,8 @@
  */
 package com.googlecode.java2objc.main;
 
+import java.io.File;
+
 import com.googlecode.java2objc.util.Preconditions;
 
 /**
@@ -23,10 +25,40 @@ import com.googlecode.java2objc.util.Preconditions;
  * @author Inderjeet Singh
  */
 public final class Config {
-  private String outputDir = null;
+  private File outputDir = null;
+  private File workingDir = null;
+  private boolean preserveDirs = false;
+  private int indentSize = 2;
+  private boolean indentTabs = false;
 
-  public String getOutputDir() {
-    return outputDir;
+  public File getOutputDir() {
+    if (!preserveDirs || workingDir == null) {
+      if (outputDir == null) {
+        outputDir = new File(".");
+      }
+      return outputDir;
+    } else {
+      return workingDir;
+    }
+  }
+
+  public File getWorkingDir() {
+    if (workingDir == null) {
+      workingDir = outputDir;
+    }
+    return workingDir;
+  }
+
+  public void setWorkingDir(File subDir) {
+    this.workingDir = subDir;
+  }
+
+  public String getIndent() {
+    StringBuilder indent = new StringBuilder(indentSize);
+    for (int i = 0; i < indentSize; i++) {
+      indent.append(indentTabs ? '\t' : ' ');
+    }
+    return indent.toString();
   }
 
   void update(String arg) {
@@ -35,11 +67,17 @@ public final class Config {
     String name = parts[0];
     String value = parts[1];
     if (name.equals("--outputdir")) {
-      outputDir = value;
+      outputDir = new File(value);
+    } else if (name.equals("--preservedirs")) {
+      preserveDirs = Boolean.parseBoolean(value);
+    } else if (name.equals("--indent")) {
+      indentSize = Integer.parseInt(value);
+    } else if (name.equals("--indentType")) {
+      indentTabs = value.toLowerCase().startsWith("tab");
     }
   }
 
   static String availableOptions() {
-    return "--outputdir=/tmp";
+    return "--outputdir=/tmp --preservedirs=false --indent=2 --indentType=space";
   }    
 }

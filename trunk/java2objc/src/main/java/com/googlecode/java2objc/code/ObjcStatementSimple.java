@@ -15,32 +15,37 @@
  */
 package com.googlecode.java2objc.code;
 
+import com.googlecode.java2objc.objc.SourceCodeWriter;
+
 /**
- * An Objective C boolean expression that is constructed by equating two expressions
+ * Base class for all Objective C statements
  * 
  * @author Inderjeet Singh
  */
-public final class ObjcExpressionBooleanEquality extends ObjcExpressionBoolean {
+public class ObjcStatementSimple extends ObjcStatement {
 
-  private final ObjcExpression left;
-  private final ObjcExpression right;
+  private final String stmt;
 
-  public ObjcExpressionBooleanEquality(String expression) {
-    super(expression);
-    this.left = null;
-    this.right = null;
-  }
-  
-  public ObjcExpressionBooleanEquality(ObjcExpression left, ObjcExpression right) {
-    this.left = left;
-    this.right = right;
+  public ObjcStatementSimple() {
+    this(null);
   }
 
-  public ObjcExpression getLeft() {
-    return left;
+  public ObjcStatementSimple(String stmt) {
+    if (stmt != null) {
+      if (!stmt.endsWith(";")) {
+        stmt = stmt + ";";
+      }
+      stmt = stmt.replace("this.", "");
+    }
+    this.stmt = stmt;
   }
 
-  public ObjcExpression getRight() {
-    return right;
+  @Override
+  public void append(SourceCodeWriter writer) {
+    if (stmt == null || stmt.trim().equals("")) {
+      return;
+    }
+    writer.append(stmt);
+    writer.newLine();
   }
 }

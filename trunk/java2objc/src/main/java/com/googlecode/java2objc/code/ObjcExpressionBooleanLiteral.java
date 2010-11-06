@@ -15,22 +15,27 @@
  */
 package com.googlecode.java2objc.code;
 
-import com.googlecode.java2objc.objc.SourceCodeWriter;
 
-import japa.parser.ast.stmt.EmptyStmt;
+import com.googlecode.java2objc.objc.CompilationContext;
+
+import japa.parser.ast.expr.Expression;
 
 /**
- * An empty Objective C statement.
+ * A boolean literal in Objective C
  * 
- * @author Inderjeet Singh
+ * @author David Gileadi
  */
-public final class ObjcEmptyStatement extends ObjcStatement {
+public final class ObjcExpressionBooleanLiteral extends ObjcExpressionSimple {
 
-  public ObjcEmptyStatement(EmptyStmt stmt) {
+  private ObjcExpressionBooleanLiteral(CompilationContext context, boolean value) {
+    super(value ? "YES" : "NO", context.getTypeRepo().get("BOOL"));
   }
-  
-  @Override
-  public void append(SourceCodeWriter writer) {
-    // do nothing
+
+  /**
+   * @param context TODO
+   * @param expr the Java expression
+   */
+  public ObjcExpressionBooleanLiteral(CompilationContext context, Expression expr) {
+    this(context, Boolean.parseBoolean(expr.toString()));
   }
 }

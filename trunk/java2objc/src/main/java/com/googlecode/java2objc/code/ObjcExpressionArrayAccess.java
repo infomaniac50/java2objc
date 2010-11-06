@@ -15,40 +15,32 @@
  */
 package com.googlecode.java2objc.code;
 
+import japa.parser.ast.expr.ArrayAccessExpr;
+
+import com.googlecode.java2objc.converters.ExpressionConverter;
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.SourceCodeWriter;
 
-import japa.parser.ast.stmt.WhileStmt;
-
 /**
- * An Objective C while statement
+ * An Objective C expression involving an array access
  * 
- * @author Inderjeet Singh
+ * @author David Gileadi
  */
-public final class ObjcStatementWhile extends ObjcStatement {
+public class ObjcExpressionArrayAccess
+    extends ObjcExpression {
 
-  private final ObjcExpression condition;
-  private final ObjcStatement body;
+  protected final ObjcExpression index;
+  protected final ObjcExpression name;
 
-  public ObjcStatementWhile(CompilationContext context, WhileStmt stmt) {
-    this.condition = context.getExpressionConverter().to(stmt.getCondition());
-    this.body = context.getStatementConverter().to(stmt.getBody());
+  public ObjcExpressionArrayAccess(CompilationContext context, ArrayAccessExpr expr) {
+    super(context.getExpressionConverter().to(expr.getName()));
+    ExpressionConverter converter = context.getExpressionConverter();
+    this.index = converter.to(expr.getIndex());
+    this.name = converter.to(expr.getName());
   }
 
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.newLine();
-    writer.append("while (").append(condition).append(')');
-    boolean isBlock = body instanceof ObjcStatementBlock;
-    if (isBlock) {
-      writer.append(' ');
-    } else {
-      writer.newLine().indent();
-    }
-    writer.append(body);
-    if (!isBlock) {
-      writer.unIndent();
-    }
-    writer.newLine();
+    writer.append(name).append('[').append(index).append(']');
   }
 }

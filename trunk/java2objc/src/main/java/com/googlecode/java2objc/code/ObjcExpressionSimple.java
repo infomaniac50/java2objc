@@ -13,31 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.googlecode.java2objc.code;
 
 import com.googlecode.java2objc.objc.CompilationContext;
-
-import japa.parser.ast.expr.MethodCallExpr;
+import com.googlecode.java2objc.objc.SourceCodeWriter;
 
 /**
- * Class to provide equivalent handling of Java String methods with NSString equivalents.
+ * Base class for all Objective C expressions
  * 
  * @author Inderjeet Singh
  */
-public class ObjcExpressionMethodCallString extends ObjcExpressionMethodCall {
+public class ObjcExpressionSimple extends ObjcExpression {
 
-  public ObjcExpressionMethodCallString(CompilationContext context, MethodCallExpr expr) {
-    super(context, expr, "NSString", getMethodName(expr));
+  private final String expression;
+
+  public ObjcExpressionSimple(CompilationContext context, String expression) {
+    super(context.typeOf(expression));
+    this.expression = expression;
   }
 
-  private static String getMethodName(MethodCallExpr expr) {
-    String name = expr.getName();
-    if (name.equals("valueOf")) {
-      // TODO: Need to add the format string with parameter values 
-      return "stringWithFormat";
-    } else {
-      return name;
+  public ObjcExpressionSimple(String expression, ObjcType type) {
+    super(type);
+    this.expression = expression;
+  }
+
+  public String getExpression() {
+    return expression;
+  }
+
+  @Override
+  public void append(SourceCodeWriter writer) {
+    if (expression != null) {
+      writer.append(expression);
     }
   }
 }

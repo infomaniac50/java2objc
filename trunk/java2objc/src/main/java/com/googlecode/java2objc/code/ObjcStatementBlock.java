@@ -46,28 +46,34 @@ public final class ObjcStatementBlock extends ObjcStatement {
   }
 
   private final List<ObjcStatement> stmts;
-  
+
   public ObjcStatementBlock(CompilationContext context, BlockStmt block) {
     stmts = new LinkedList<ObjcStatement>();
-    if (block != null) {
+    context.startBlock();
+    if (block != null && block.getStmts() != null) {
       for (Statement stmt : block.getStmts()) {
         stmts.add(context.getStatementConverter().to(stmt));
       }    
     }
+    context.endBlock();
   }
 
-  private ObjcStatementBlock(List<ObjcStatement> stmts) {
+  public ObjcStatementBlock(List<ObjcStatement> stmts) {
     this.stmts = stmts;
   }
-  
+
+  public List<ObjcStatement> getStatements() {
+    return stmts;
+  }
+
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.append("{");
+    writer.append("{").newLine();
     writer.indent();
     for (ObjcStatement stmt : stmts) {
       writer.append(stmt);
     }
     writer.unIndent();
-    writer.appendLine("}");
+    writer.append("}").newLine();
   }
 }

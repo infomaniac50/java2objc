@@ -37,6 +37,6 @@ public final class ObjcStatementLabeled extends ObjcStatement {
   
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.startNewLine().append(label).append(": ").append(stmt);
+    writer.newLine().append(label).append(": ").append(stmt);
   }
 }

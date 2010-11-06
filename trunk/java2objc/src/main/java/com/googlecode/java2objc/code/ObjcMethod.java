@@ -15,18 +15,20 @@
  */
 package com.googlecode.java2objc.code;
 
+import japa.parser.ast.body.JavadocComment;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.ModifierSet;
 import japa.parser.ast.body.Parameter;
+import japa.parser.ast.stmt.BlockStmt;
+import japa.parser.ast.type.Type;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import com.googlecode.java2objc.javatypes.JavaMethod;
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.ObjcMethodParam;
 import com.googlecode.java2objc.objc.ObjcNode;
-import com.googlecode.java2objc.objc.ObjcTypeRepository;
+import com.googlecode.java2objc.objc.ObjcUtils;
 import com.googlecode.java2objc.objc.SourceCodeWriter;
 
 /**
@@ -36,63 +38,102 @@ import com.googlecode.java2objc.objc.SourceCodeWriter;
  */
 public class ObjcMethod extends ObjcNode {
 
-  // TODO: Add special method classes for toString() and equals()
   private final List<ObjcMethodParam> params;
   private final ObjcType returnType;
   private final String name;
   private final ObjcStatementBlock methodBody;
   private final int modifiers;
-  private final JavaMethod javaMethod;
-  
-  public ObjcMethod(CompilationContext context, MethodDeclaration n, JavaMethod javaMethod) {
-    this(context, n, n.getName(), javaMethod);
+  private final boolean getter;
+  private final boolean setter;
+  private final boolean simple;
+  private final String propertyName;
+  private final String comments;
+
+  public ObjcMethod(CompilationContext context, MethodDeclaration n) {
+    this(context, n.getName(), n.getType(), n.getParameters(), n.getModifiers(), n.getBody(), n
+        .getJavaDoc());
   }
-  
-  public ObjcMethod(CompilationContext context, MethodDeclaration n, String name, JavaMethod javaMethod) {
+
+  public ObjcMethod(CompilationContext context, String name, Type returnType,
+      List<Parameter> parameters, int modifiers, BlockStmt body, JavadocComment comment) {
     if (context != null) {
       context.setCurentMethod(this);
     }
-    String pkgName = null; // TODO(inder): get the real package name for the return type
-    ObjcTypeRepository typeRepo = context.getTypeRepo();
-    this.returnType = typeRepo.getTypeFor(pkgName, n.getType());
-    this.name = name;
-    this.javaMethod = javaMethod;
-    this.methodBody = new ObjcStatementBlock(context, n.getBody());
-    this.modifiers = n.getModifiers();
-    this.params = new LinkedList<ObjcMethodParam>();
-    if (n.getParameters() != null) {
-      for (Parameter param : n.getParameters()) {
-        String paramPkgName = null; // TODO(inder): figure out the package name
-        ObjcType type = typeRepo.getTypeFor(paramPkgName, param.getType());
-        String typeName = param.getId().getName();
-        this.params.add(new ObjcMethodParam(type, typeName));
-      }
+
+    this.returnType = context.getTypeRepo().getOrCreate(returnType);
+    this.modifiers = modifiers;
+    this.comments = comment != null ? comment.getContent() : null;
+    this.params = convertParameters(context, parameters);
+
+    name = getMethodName(context, name, new ObjcExpressionSimple(context, "self"));
+    if ("copyWithZone".equals(name)) {
+      this.params.add(0, new ObjcMethodParam(new ObjcType(context, "NSZone"), "zone", 0));
     }
+
+    this.getter = ObjcUtils.isGetter(name, modifiers, this.returnType, this.params.size());
+    this.setter = !this.getter && ObjcUtils.isSetter(name, modifiers, this.returnType, this.params.size());
+    this.propertyName = (this.getter || this.setter) ? ObjcUtils.propertyNameFor(name) : null;
+
+    if (this.getter) {
+      this.name = this.propertyName;
+    } else {
+      this.name = name;
+    }
+
+    this.methodBody = new ObjcStatementBlock(context, body);
+    if (this.getter) {
+      this.simple = ObjcUtils.isSimpleGetter(methodBody);
+    } else if (this.setter) {
+      this.simple = ObjcUtils.isSimpleSetter(methodBody);
+    } else {
+      this.simple = false;
+    }
+
     if (context != null) {
       context.setCurentMethod(null);
     }
   }
 
-  public ObjcMethod(CompilationContext context, String name, ObjcType returnType, 
-      List<Parameter> params, int modifiers, ObjcStatementBlock methodBody, JavaMethod javaMethod) {
+  public ObjcMethod(CompilationContext context, String name, ObjcType returnType,
+      List<ObjcMethodParam> params, int modifiers, ObjcStatementBlock methodBody, String comments) {
     if (context != null) {
       context.setCurentMethod(this);
     }
+
     this.returnType = returnType;
-    this.name = name;
-    this.methodBody = methodBody;
-    this.javaMethod = javaMethod;
     this.modifiers = modifiers;
+    this.methodBody = methodBody;
+    this.comments = comments;
     this.params = new LinkedList<ObjcMethodParam>();
-    ObjcTypeRepository typeRepo = context.getTypeRepo();
     if (params != null) {
-      for (Parameter param : params) {
-        String paramPkgName = null; // TODO(inder): figure out the correct package name fo rhte parameter
-        ObjcType type = typeRepo.getTypeFor(paramPkgName, param.getType());
-        String typeName = param.getId().getName();
-        this.params.add(new ObjcMethodParam(type, typeName));
+      for (ObjcMethodParam param : params) {
+        this.params.add(param);
+        context.registerLocal(param);
       }
     }
+
+    if ("copyWithZone".equals(name)) {
+      this.params.add(0, new ObjcMethodParam(new ObjcType(context, "NSZone"), "zone", 0));
+    }
+
+    this.getter = ObjcUtils.isGetter(name, modifiers, returnType, this.params.size());
+    this.setter = !this.getter && ObjcUtils.isSetter(name, modifiers, returnType, this.params.size());
+    this.propertyName = (this.getter || this.setter) ? ObjcUtils.propertyNameFor(name) : null;
+
+    if (this.getter) {
+      this.name = this.propertyName;
+    } else {
+      this.name = name;
+    }
+
+    if (this.getter) {
+      this.simple = ObjcUtils.isSimpleGetter(methodBody);
+    } else if (this.setter) {
+      this.simple = ObjcUtils.isSimpleSetter(methodBody);
+    } else {
+      this.simple = false;
+    }
+
     if (context != null) {
       context.setCurentMethod(null);
     }
@@ -117,15 +158,18 @@ public class ObjcMethod extends ObjcNode {
   private void appendDeclaration(SourceCodeWriter writer) {
     if (!ModifierSet.isPrivate(modifiers)) {
       appendMethodSignature(writer);
-      writer.append(";").endLine();
+      writer.append(";").newLine();
     }
   }
   
   private void appendDefinition(SourceCodeWriter writer) {
+    if (comments != null) {
+      writer.appendDocComment(comments);
+    }
     appendMethodSignature(writer);
     writer.append(" ");
     writer.append(methodBody);
-    writer.endLine();
+    writer.newLine();
   }
   
   private void appendMethodSignature(SourceCodeWriter writer) {    
@@ -143,12 +187,81 @@ public class ObjcMethod extends ObjcNode {
       } else {
         writer.append(" ").append(param.getName()).append(":");
       }
-      writer.append('(').append(param.getType().getPointerTypeName()).append(")");
+      writer.append('(').append(param.getType().getPointerTypeName());
+      for (int i = 0; i < param.getArrayCount(); i++) {
+        writer.append("*");
+      }
+      writer.append(")");
       writer.append(param.getName());
-    }    
+    }
   }
 
-  public Object getName() {
+  public String getName() {
     return name;
+  }
+
+  public List<ObjcMethodParam> getParams() {
+    return params;
+  }
+
+  public ObjcType getReturnType() {
+    return returnType;
+  }
+
+  public ObjcStatementBlock getMethodBody() {
+    return methodBody;
+  }
+
+  public int getModifiers() {
+    return modifiers;
+  }
+
+  public boolean isGetter() {
+    return getter;
+  }
+
+  public boolean isSetter() {
+    return setter;
+  }
+
+  public boolean isSimple() {
+    return simple;
+  }
+
+  public String getPropertyName() {
+    return propertyName;
+  }
+
+  public static String getMethodName(CompilationContext context, String name, ObjcExpression target) {
+
+    // find the target type
+    if (target != null) {
+      ObjcType targetType = target.getType();
+      if (targetType != null) {
+        String mappedName = targetType.mapMethodName(name);
+        if (!mappedName.equals(name)) {
+          return mappedName;
+        }
+      }
+    }
+
+    // if not replaced, do replacements for NSObject
+    return context.getTypeRepo().getNSObject().mapMethodName(name);
+  }
+
+  public static List<ObjcMethodParam> convertParameters(CompilationContext context,
+      List<Parameter> params) {
+    List<ObjcMethodParam> result = new LinkedList<ObjcMethodParam>();
+    if (params != null) {
+      for (Parameter param : params) {
+        ObjcType type = context.getTypeRepo().getOrCreate(param.getType());
+        String typeName = param.getId().getName();
+        ObjcMethodParam objcParam =
+            new ObjcMethodParam(type, typeName, param.getId().getArrayCount());
+        result.add(objcParam);
+        context.registerLocal(objcParam);
+      }
+    }
+    return result;
   }
 }

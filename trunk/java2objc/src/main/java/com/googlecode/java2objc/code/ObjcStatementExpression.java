@@ -36,11 +36,19 @@ public final class ObjcStatementExpression extends ObjcStatement {
   private final ObjcExpression expr;
 
   public ObjcStatementExpression(CompilationContext context, ExpressionStmt stmt) {
-    this.expr = context.getExpressionConverter().to(stmt.getExpression());
+    this(context.getExpressionConverter().to(stmt.getExpression()));
+  }
+
+  public ObjcStatementExpression(ObjcExpression expr) {
+    this.expr = expr;
+  }
+
+  public ObjcExpression getExpression() {
+    return expr;
   }
 
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.startNewLine().append(expr).append(";").endLine();
+    writer.append(expr).endStatement();
   }
 }

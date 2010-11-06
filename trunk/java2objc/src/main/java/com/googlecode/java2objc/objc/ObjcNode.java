@@ -32,7 +32,7 @@ public class ObjcNode {
   @Override
   public String toString() {
     StringWriter sw = new StringWriter();
-    SourceCodeWriter scw = new SourceCodeWriter(new PrintWriter(sw), false);
+    SourceCodeWriter scw = new SourceCodeWriter(new PrintWriter(sw), false, "  ");
     append(scw);
     return sw.toString();
   }

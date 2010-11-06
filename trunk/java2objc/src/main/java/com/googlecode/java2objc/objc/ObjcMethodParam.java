@@ -26,10 +26,12 @@ public final class ObjcMethodParam extends ObjcNode {
 
   private final ObjcType type;
   private final String name;
+  private final int arrayCount;
 
-  public ObjcMethodParam(ObjcType type, String name) {
+  public ObjcMethodParam(ObjcType type, String name, int arrayCount) {
     this.type = type;
     this.name = name;
+    this.arrayCount = arrayCount;
   }
 
   public ObjcType getType() {
@@ -38,5 +40,9 @@ public final class ObjcMethodParam extends ObjcNode {
 
   public String getName() {
     return name;
+  }
+
+  public int getArrayCount() {
+    return arrayCount;
   }
 }

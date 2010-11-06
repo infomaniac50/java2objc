@@ -35,20 +35,27 @@ public final class ObjcStatementForeach extends ObjcStatement {
   public ObjcStatementForeach(CompilationContext context, ForeachStmt stmt) {
     VariableDeclarationExpr variable = stmt.getVariable();
     this.varName = variable.getVars().get(0).getId().getName();
-    String pkgName = null; // TODO(inder): Get the real package name for the type
-    this.varType = context.getTypeRepo().getTypeFor(pkgName, variable.getType());
+    this.varType = context.getTypeRepo().getOrCreate(variable.getType());
     this.iterable = context.getExpressionConverter().to(stmt.getIterable());
     this.body = context.getStatementConverter().to(stmt.getBody());
   }
   
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.startNewLine();
-    writer.append("for(").append(varType.getName()).append(" ");
+    writer.newLine();
+    writer.append("for (").append(varType.getPointerTypeName()).append(" ");
     writer.append(varName).append(" in ");
     writer.append(iterable);
-    writer.append(")");
+    writer.append(')');
+    if (body instanceof ObjcStatementBlock) {
+      writer.append(' ');
+    } else {
+      writer.newLine().indent();
+    }
     writer.append(body);
-    writer.endLine();    
+    if (!(body instanceof ObjcStatementBlock)) {
+      writer.unIndent();
+    }
+    writer.newLine();    
   }
 }

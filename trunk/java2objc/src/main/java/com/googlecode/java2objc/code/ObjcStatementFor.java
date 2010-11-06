@@ -43,12 +43,19 @@ public final class ObjcStatementFor extends ObjcStatement {
   
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.startNewLine();
-    writer.append("for(").append(init, ", ").append("; ");
+    writer.newLine();
+    writer.append("for (").append(init, ", ").append("; ");
     writer.append(compare).append("; ");
-    writer.append(update, ", ").append(") ");
+    writer.append(update, ", ").append(')');
+    if (body instanceof ObjcStatementBlock) {
+      writer.append(' ');
+    } else {
+      writer.newLine().indent();
+    }
     writer.append(body);
-    writer.endLine();
-    
+    if (!(body instanceof ObjcStatementBlock)) {
+      writer.unIndent();
+    }
+    writer.newLine();
   }
 }

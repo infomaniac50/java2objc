@@ -25,17 +25,19 @@ import java.util.List;
  * @author Inderjeet Singh
  */
 public final class SourceCodeWriter {
-  
-  private static final String INDENT = "  ";
-  
+
   private final PrintWriter writer;
   private boolean writingHeaderFile;  
   private int indentLevel;
+  private boolean newLine;
+  private final String indent;
   
-  public SourceCodeWriter(PrintWriter writer, boolean writingHeaderFile) {
+  public SourceCodeWriter(PrintWriter writer, boolean writingHeaderFile, String indent) {
     this.writer = writer;
     this.writingHeaderFile = writingHeaderFile;
     this.indentLevel = 0;
+    this.newLine = true;
+    this.indent = indent;
   }
 
   public boolean isWritingHeaderFile() {
@@ -53,25 +55,19 @@ public final class SourceCodeWriter {
   
   public SourceCodeWriter unIndent() {
     --indentLevel;
+    indentLevel = Math.max(indentLevel, 0);
     return this;
   }
 
   public SourceCodeWriter append(String str) {
+    applyIndent();
     writer.append(str);
     return this;
   }
 
   public SourceCodeWriter append(char ch) {
+    applyIndent();
     writer.append(ch);
-    return this;
-  }
-
-  public SourceCodeWriter appendLine(String line) {
-    indentLine();
-    writer.append(line);
-    if (!line.endsWith("\n")) {
-      writer.append("\n");
-    }
     return this;
   }
   
@@ -79,37 +75,36 @@ public final class SourceCodeWriter {
     node.append(this);
     return this;
   }
-  
-  public SourceCodeWriter startNewLine() {
-    return endLine().indentLine();
-  }
 
-  private SourceCodeWriter indentLine() {
-    for (int i = 0; i < indentLevel; ++i) {
-      writer.append(INDENT);
+  private SourceCodeWriter applyIndent() {
+    if (newLine) {
+      for (int i = 0; i < indentLevel; ++i) {
+        writer.append(indent);
+      }
+      newLine = false;
     }
     return this;
   }
     
   public SourceCodeWriter endStatement() {
-    return append(";").endLine();
+    return append(";").newLine();
   }
 
-  public SourceCodeWriter endLine() {
-    return append('\n');
+  public SourceCodeWriter newLine() {
+    newLine = true;
+    writer.append('\n');
+    return this;
   }
 
   public <T extends ObjcNode> SourceCodeWriter appendLine(T node) {
-    for (int i = 0; i < indentLevel; ++i) {
-      writer.append(INDENT);
-    }
+    applyIndent();
     node.append(this);
-    writer.append("\n");
+    newLine();
     return this;
   }
 
   public SourceCodeWriter appendBlankLine() {
-    return endLine();
+    return newLine();
   }
 
   public SourceCodeWriter appendToDo(String comment) {
@@ -117,12 +112,31 @@ public final class SourceCodeWriter {
   }
 
   public SourceCodeWriter appendComment(String comment) {
-    String[] lines = comment.split("\n");
+    String[] lines = comment.trim().split("\n");
     for (String line : lines) {
-      writer.append("\\\\ ");
+      applyIndent();
+      writer.append("// ");
       writer.append(line);
-      writer.append("\n");
+      newLine();
     }
+    return this;
+  }
+
+  public SourceCodeWriter appendDocComment(String comment) {
+    newLine();
+    applyIndent();
+    writer.append("/**");
+    newLine();
+    String[] lines = comment.trim().split("\n");
+    for (String line : lines) {
+      applyIndent();
+      line = line.replaceFirst("^\\s*\\*\\s*", "");
+      writer.append(" * ");
+      writer.append(line);
+      newLine();
+    }
+    writer.append(" */");
+    newLine();
     return this;
   }
 

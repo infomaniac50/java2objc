@@ -33,8 +33,16 @@ public final class ObjcStatementReturn extends ObjcStatement {
     this.expr = context.getExpressionConverter().to(stmt.getExpr());
   }
 
+  public ObjcExpression getExpression() {
+    return expr;
+  }
+
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.startNewLine().append("return ").append(expr).endStatement();
+    if (expr != null) {
+      writer.append("return ").append(expr).endStatement();
+    } else {
+      writer.append("return").endStatement();
+    }
   }
 }
