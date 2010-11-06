@@ -15,7 +15,9 @@
  */
 package com.googlecode.java2objc.objc;
 
-import java.util.Set;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Stack;
 
 import com.googlecode.java2objc.code.ObjcMethod;
 import com.googlecode.java2objc.code.ObjcType;
@@ -32,28 +34,30 @@ import com.googlecode.java2objc.converters.TypeConverter;
 public class CompilationContext {
 
   private ObjcTypeRepository repo;
-  private final String pkgName;
   private TypeConverter typeConverter;
   private final MethodConverter methodConverter;
   private final StatementConverter statementConverter;
   private final ExpressionConverter expressionConverter;
   private ObjcMethod currentMethod;
-  private ObjcType currentType;
+  private Stack<ObjcType> currentType;
+  private Stack<HashMap<String, ObjcType>> locals;
 
-  public CompilationContext(String pkgName) {
+  public CompilationContext() {
     this.repo = null;
-    this.pkgName = pkgName;
     this.methodConverter = new MethodConverter(this);
     this.statementConverter = new StatementConverter(this);
     this.expressionConverter = new ExpressionConverter(this);
+    this.currentType = new Stack<ObjcType>();
+    this.locals = new Stack<HashMap<String, ObjcType>>();
+    this.locals.push(new HashMap<String, ObjcType>());
   }
 
   public void initRepo(ObjcTypeRepository repo) {
     this.repo = repo;
   }
 
-  public void init(Set<ObjcType> imports) {
-    this.typeConverter = new TypeConverter(this, pkgName, imports);    
+  public void init(List<ObjcType> imports) {
+    this.typeConverter = new TypeConverter(this, imports);
   }
 
   /**
@@ -73,6 +77,7 @@ public class CompilationContext {
   public StatementConverter getStatementConverter() {
     return statementConverter;
   }
+
   /**
    * @return the expressionConverter
    */
@@ -85,20 +90,66 @@ public class CompilationContext {
    */
   public void setCurentMethod(ObjcMethod method) {
     this.currentMethod = method;
+    if (method == null) {
+      locals.pop();
+    } else {
+      locals.push(new HashMap<String, ObjcType>());
+    }
   }
-  
+
   public ObjcMethod getCurrentMethod() {
     return currentMethod;
   }
 
+  public void startBlock() {
+    locals.push(new HashMap<String, ObjcType>());
+  }
+
+  public void endBlock() {
+    locals.pop();
+  }
+
+  public void registerLocal(ObjcVariable var) {
+    for (ObjcVariableDeclarator decl : var.getVars()) {
+      locals.peek().put(decl.getName(), var.getType());
+    }
+  }
+
+  public void registerLocal(ObjcMethodParam param) {
+    locals.peek().put(param.getName(), param.getType());
+  }
+
+  public boolean isLocalDeclared(String name) {
+    return typeOf(name) != null;
+  }
+
+  public ObjcType typeOf(String name) {
+    if ("self".equals(name))
+      return getCurrentType();
+
+    for (int i = locals.size() - 1; i >= 0; i--) {
+      HashMap<String, ObjcType> block = locals.get(i);
+      if (block.containsKey(name))
+        return block.get(name);
+    }
+
+    return null;
+  }
+
   public void setCurrentType(ObjcType type) {
-    this.currentType = type;
+    if (type == null) {
+      this.currentType.pop();
+      this.locals.pop();
+    } else {
+      this.currentType.push(type);
+      this.locals.push(new HashMap<String, ObjcType>());
+    }
   }
 
   public ObjcType getCurrentType() {
-    return currentType;
+    return currentType.peek();
   }
-  
+
   public ObjcTypeRepository getTypeRepo() {
     return repo;
   }

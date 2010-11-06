@@ -16,6 +16,8 @@
 package com.googlecode.java2objc.code;
 
 
+import com.googlecode.java2objc.objc.CompilationContext;
+
 import japa.parser.ast.expr.Expression;
 
 /**
@@ -23,16 +25,17 @@ import japa.parser.ast.expr.Expression;
  * 
  * @author Inderjeet Singh
  */
-public final class ObjcExpressionStringLiteral extends ObjcExpression {
+public final class ObjcExpressionStringLiteral extends ObjcExpressionSimple {
 
-  private ObjcExpressionStringLiteral(String value) {
-    super("@" + value);
+  public ObjcExpressionStringLiteral(CompilationContext context, String value) {
+    super("@" + value, context.getTypeRepo().get("NSString"));
   }
 
   /**
+   * @param context TODO
    * @param expr the Java expression
    */
-  public ObjcExpressionStringLiteral(Expression expr) {
-    this(expr.toString());
+  public ObjcExpressionStringLiteral(CompilationContext context, Expression expr) {
+    this(context, expr.toString());
   }
 }

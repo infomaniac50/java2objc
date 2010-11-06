@@ -15,15 +15,16 @@
  */
 package com.googlecode.java2objc.code;
 
+import japa.parser.ast.body.ModifierSet;
 import japa.parser.ast.expr.Expression;
 import japa.parser.ast.expr.MethodCallExpr;
-import japa.parser.ast.type.Type;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import com.googlecode.java2objc.converters.ExpressionConverter;
 import com.googlecode.java2objc.objc.CompilationContext;
-import com.googlecode.java2objc.objc.ObjcTypeRepository;
+import com.googlecode.java2objc.objc.ObjcUtils;
 import com.googlecode.java2objc.objc.SourceCodeWriter;
 
 /**
@@ -33,56 +34,77 @@ import com.googlecode.java2objc.objc.SourceCodeWriter;
  */
 public class ObjcExpressionMethodCall extends ObjcExpression {
 
-  protected final String target;
+  protected final ObjcExpression target;
+  protected final ObjcType enclosingType;
   protected final String methodName;
-  protected final List<ObjcType> argTypes;
   protected final List<ObjcExpression> args;
   protected final int numParams;
+  protected final boolean getter;
+  protected final boolean setter;
   
   public ObjcExpressionMethodCall(CompilationContext context, MethodCallExpr expr) {
-    this(context, expr, getScope(context, expr), expr.getName());
+    this(context, getScope(context, expr), ObjcMethod.getMethodName(context, expr.getName(),
+        getScope(context, expr)), expr.getArgs());
   }
 
-  protected ObjcExpressionMethodCall(CompilationContext context, MethodCallExpr expr, 
-      String scope, String methodName) {
-    this.methodName = methodName;
+  protected ObjcExpressionMethodCall(CompilationContext context, ObjcExpression scope, 
+      String methodName, List<Expression> args) {
+    super(scope);
     this.target = scope;
-    argTypes = new LinkedList<ObjcType>();
-    List<Type> typeArgs = expr.getTypeArgs();
-    ObjcTypeRepository typeRepo = context.getTypeRepo();
-    if (typeArgs != null) {
-      for (Type argType : typeArgs) {
-        String argPkgName = null; // TODO(inder): figure out the correct package name for the arg type
-        argTypes.add(typeRepo.getTypeFor(argPkgName, argType));
-      }
-    }    
-    args = new LinkedList<ObjcExpression>();
-    List<Expression> actualArgs = expr.getArgs();
-    if (actualArgs != null) {
-      for (Expression arg : actualArgs) {
-        args.add(new ObjcExpression(arg.toString()));
+    if (scope instanceof ObjcExpressionSimple
+        && ("self".equals(((ObjcExpressionSimple)scope).getExpression()) || context
+            .getCurrentType().getName().equals(((ObjcExpressionSimple)scope).getExpression()))) {
+      this.enclosingType = context.getCurrentType();
+    } else {
+      this.enclosingType = null;
+    }
+    this.args = new LinkedList<ObjcExpression>();
+    if (args != null) {
+      ExpressionConverter converter = context.getExpressionConverter();
+      for (Expression arg : args) {
+        this.args.add(converter.to(arg));
       }
     }
-    //  TODO:    Preconditions.assertEquals(args.size(), argTypes.size());
-    numParams = args.size();
+    numParams = this.args.size();
+    this.getter = ObjcUtils.isGetter(methodName, ModifierSet.PUBLIC, null, numParams);
+    this.setter = !this.getter && ObjcUtils.isSetter(methodName, ModifierSet.PUBLIC, null, numParams);
+    if (this.getter) {
+      this.methodName = ObjcUtils.propertyNameFor(methodName);
+    } else {
+      this.methodName = methodName;
+    }
   }
 
-  private static String getScope(CompilationContext context, MethodCallExpr expr) {
+  private static ObjcExpression getScope(CompilationContext context, MethodCallExpr expr) {
     Expression scope = expr.getScope();
     String methodName = expr.getName();
     if (scope == null) {
       ObjcType enclosingType = context.getCurrentType();
       ObjcMethod invokedMethod = enclosingType.getMethodWithName(methodName);
-      if (invokedMethod == null || invokedMethod.isStatic()) {
-        return enclosingType.getName();
+      if (invokedMethod != null && invokedMethod.isStatic()) {
+        return new ObjcExpressionSimple(context, enclosingType.getName());
       } else {
-        return "self";
+        return new ObjcExpressionSimple(context, "self");
       }
-    } else if ("this".equals(scope.toString())) {
-      return "self";
     } else {
-      return scope.toString();
+      return context.getExpressionConverter().to(scope);
     }
+  }
+
+  public String getMethodName() {
+    return methodName;
+  }
+
+  public int getNumParams() {
+    return numParams;
+  }
+
+  public boolean isGetter() {
+    return getter;
+  }
+
+  public boolean isSetter() {
+    return setter;
   }
 
   @Override
@@ -91,13 +113,22 @@ public class ObjcExpressionMethodCall extends ObjcExpression {
     writer.append(methodName);
     if (numParams > 0) {
       // Write first argument
-      writer.append(" :").append(args.get(0));
+      writer.append(":").append(args.get(0));
     }
     // Write remaining params
     for (int i = 1; i < numParams; ++i) {
-      // TODO(inder): write formal parameter names as well
-      writer.append(" :").append(args.get(i));
+      writer.append(' ').append(getParamName(i)).append(':').append(args.get(i));
     }
     writer.append("]");
+  }
+
+  private String getParamName(int index) {
+    if (enclosingType != null) {
+      ObjcMethod method = enclosingType.getMethodWithName(methodName, args.size());
+      if (method != null) {
+        return method.getParams().get(index).getName();
+      }
+    }
+    return String.format("param%d", index);
   }
 }

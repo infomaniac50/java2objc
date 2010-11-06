@@ -15,40 +15,35 @@
  */
 package com.googlecode.java2objc.code;
 
+import japa.parser.ast.stmt.AssertStmt;
+
+import com.googlecode.java2objc.converters.ExpressionConverter;
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.SourceCodeWriter;
 
-import japa.parser.ast.stmt.WhileStmt;
-
 /**
- * An Objective C while statement
+ * Objective C assert statement
  * 
- * @author Inderjeet Singh
+ * @author David Gileadi
  */
-public final class ObjcStatementWhile extends ObjcStatement {
+public final class ObjcStatementAssert
+    extends ObjcStatement {
 
-  private final ObjcExpression condition;
-  private final ObjcStatement body;
+  private final ObjcExpression check;
+  private final ObjcExpression message;
 
-  public ObjcStatementWhile(CompilationContext context, WhileStmt stmt) {
-    this.condition = context.getExpressionConverter().to(stmt.getCondition());
-    this.body = context.getStatementConverter().to(stmt.getBody());
+  public ObjcStatementAssert(CompilationContext context, AssertStmt stmt) {
+    ExpressionConverter converter = context.getExpressionConverter();
+    this.check = converter.to(stmt.getCheck());
+    if (stmt.getMessage() != null) {
+      this.message = converter.to(stmt.getMessage());
+    } else {
+      this.message = new ObjcExpressionStringLiteral(context, "\"assert failed\"");
+    }
   }
 
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.newLine();
-    writer.append("while (").append(condition).append(')');
-    boolean isBlock = body instanceof ObjcStatementBlock;
-    if (isBlock) {
-      writer.append(' ');
-    } else {
-      writer.newLine().indent();
-    }
-    writer.append(body);
-    if (!isBlock) {
-      writer.unIndent();
-    }
-    writer.newLine();
+    writer.append("NSAssert(").append(check).append(", ").append(message).append(')').endStatement();
   }
 }

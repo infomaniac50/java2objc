@@ -1,0 +1,8 @@
+
+Support structs, configured via mappings.properties and maybe a compiler switch.
+
+Detect assignment of new objects to fields (as opposed to properties), remove " autorelease]".
+
+Move static field initialization expressions into + (void) initialize function.
+
+Perhaps detect finalize method, merge with existing dealloc function (except for GCed Objective C, it should still be finalize).

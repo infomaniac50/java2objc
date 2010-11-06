@@ -18,19 +18,22 @@ package com.googlecode.java2objc.converters;
 import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.body.ConstructorDeclaration;
+import japa.parser.ast.body.EnumConstantDeclaration;
+import japa.parser.ast.body.EnumDeclaration;
 import japa.parser.ast.body.FieldDeclaration;
+import japa.parser.ast.body.InitializerDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.TypeDeclaration;
-import japa.parser.ast.body.VariableDeclarator;
 import japa.parser.ast.type.ClassOrInterfaceType;
 
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
+import com.googlecode.java2objc.code.ObjcStatementBlock;
 import com.googlecode.java2objc.code.ObjcType;
-import com.googlecode.java2objc.javatypes.JavaClass;
-import com.googlecode.java2objc.javatypes.JavaUtils;
 import com.googlecode.java2objc.objc.CompilationContext;
+import com.googlecode.java2objc.objc.ObjcEnumType;
+import com.googlecode.java2objc.objc.ObjcEnumType.ObjcEnumEntry;
 import com.googlecode.java2objc.objc.ObjcField;
 import com.googlecode.java2objc.objc.UserDefinedObjcTypeBuilder;
 
@@ -40,50 +43,89 @@ import com.googlecode.java2objc.objc.UserDefinedObjcTypeBuilder;
  * @author Inderjeet Singh
  */
 public final class TypeConverter {
-  private final String pkgName;
   private final CompilationContext context;
-  private final Set<ObjcType> imports;
+  private final List<ObjcType> imports;
 
-  public TypeConverter(CompilationContext context, String pkgName, Set<ObjcType> imports) {
+  public TypeConverter(CompilationContext context, List<ObjcType> imports) {
     this.context = context;
-    this.pkgName = pkgName;
     this.imports = imports;
   }
 
-  public ObjcType to(ClassOrInterfaceDeclaration type) {
-    JavaClass javaClass = JavaUtils.getJavaType(pkgName, type.getName()); 
-    UserDefinedObjcTypeBuilder typeBuilder = 
-      new UserDefinedObjcTypeBuilder(context, type.getName(), type.isInterface(), imports, javaClass);
-    buildType(typeBuilder, type);
+  public ObjcType to(TypeDeclaration type, String pkgName) {
+    return to(type, pkgName, null);
+  }
+
+  public ObjcType to(TypeDeclaration type, String pkgName, ObjcType containingClass) {
+    String comments = null;
+    if (type.getJavaDoc() != null) {
+      comments = type.getJavaDoc().getContent();
+    }
+    ObjcType objcType = createType(type, containingClass);
+    context.getTypeRepo().put(pkgName, objcType.getName(), objcType);
+    UserDefinedObjcTypeBuilder typeBuilder = new UserDefinedObjcTypeBuilder(context, objcType, comments, containingClass);
+    buildType(typeBuilder, objcType, type, pkgName);
     return typeBuilder.build();
   }
 
-  private void buildType(UserDefinedObjcTypeBuilder typeBuilder, ClassOrInterfaceDeclaration type) {
-    if (type.getExtends() != null) {
-      for (ClassOrInterfaceType extendedClass : type.getExtends()) {
-        String pkgName = this.pkgName; // TODO(inder) :try finding the real pkage for the extends
-        typeBuilder.addBaseClass(context.getTypeRepo().getTypeFor(pkgName, extendedClass.getName()));
+  private ObjcType createType(TypeDeclaration type, ObjcType containingClass) {
+    ObjcType objcType;
+    if (type instanceof ClassOrInterfaceDeclaration) {
+      objcType =
+          new ObjcType(context, type.getName(), ((ClassOrInterfaceDeclaration)type).isInterface(),
+              imports);
+    } else if (type instanceof EnumDeclaration) {
+      List<ObjcEnumEntry> entries = new LinkedList<ObjcEnumEntry>();
+      for (EnumConstantDeclaration entry : ((EnumDeclaration)type).getEntries())
+        entries.add(new ObjcEnumEntry(context, entry));
+      objcType = new ObjcEnumType(context, type.getName(), imports, entries, containingClass);
+    } else {
+      throw new UnsupportedOperationException("Unsupported type: " + type.getClass().getSimpleName());
+    }
+    return objcType;
+  }
+
+  private void buildType(UserDefinedObjcTypeBuilder typeBuilder, ObjcType objcType, TypeDeclaration type, String pkgName) {
+    if (type instanceof ClassOrInterfaceDeclaration && ((ClassOrInterfaceDeclaration)type).getExtends() != null) {
+      if (((ClassOrInterfaceDeclaration)type).isInterface()) {
+        for (ClassOrInterfaceType implementedClass : ((ClassOrInterfaceDeclaration)type).getExtends()) {
+          typeBuilder.addProtocol(context.getTypeRepo().getOrCreate(implementedClass));
+        }
+      } else {
+        typeBuilder.setBaseClass(context.getTypeRepo().getOrCreate(((ClassOrInterfaceDeclaration)type).getExtends().iterator().next()));
       }
     }
-    if (type.getImplements() != null) {
-      for (ClassOrInterfaceType implementedClass : type.getImplements()) {
-        String pkgName = this.pkgName; // TODO(inder) :try finding the real pkage for the extends
-        typeBuilder.addBaseClass(context.getTypeRepo().getTypeFor(pkgName, implementedClass.getName()));
+    List<ClassOrInterfaceType> implemented = null;
+    if (type instanceof ClassOrInterfaceDeclaration)
+      implemented = ((ClassOrInterfaceDeclaration)type).getImplements();
+    else if (type instanceof EnumDeclaration)
+      implemented = ((EnumDeclaration)type).getImplements();
+    if (implemented != null) {
+      for (ClassOrInterfaceType implementedClass : implemented) {
+        typeBuilder.addProtocol(context.getTypeRepo().getOrCreate(implementedClass));
       }
     }
     List<BodyDeclaration> members = type.getMembers();
-    JavaClass containingClass = typeBuilder.getJavaClass();
-    for (BodyDeclaration member : members) {
-      if (member instanceof FieldDeclaration) {
-        FieldDeclaration field = (FieldDeclaration) member;
-        for (VariableDeclarator var : field.getVariables()) {
-          ObjcField objcField = new ObjcField(context, field.getType(), var);
+    if (members != null) {
+      for (BodyDeclaration member : members) {
+        if (member instanceof FieldDeclaration) {
+          FieldDeclaration field = (FieldDeclaration)member;
+          ObjcField objcField = new ObjcField(context, field);
           typeBuilder.addField(objcField);
+        } else if (member instanceof MethodDeclaration) {
+          typeBuilder.addMethod(context.getMethodConverter().to((MethodDeclaration) member));
+        } else if (member instanceof ConstructorDeclaration) {
+          typeBuilder.addMethod(context.getMethodConverter().to((ConstructorDeclaration) member));
+        } else if (member instanceof InitializerDeclaration) {
+          InitializerDeclaration init = (InitializerDeclaration)member;
+          if (init.isStatic()) {
+            typeBuilder.addMethod(context.getMethodConverter().to((InitializerDeclaration) member));
+          } else {
+            typeBuilder.addInitializer((ObjcStatementBlock)context.getStatementConverter().to(
+                ((InitializerDeclaration)member).getBlock()));
+          }
+        } else if (member instanceof ClassOrInterfaceDeclaration || member instanceof EnumDeclaration) {
+          typeBuilder.addSubType(context.getTypeConverter().to((TypeDeclaration) member, pkgName, objcType));
         }
-      } else if (member instanceof MethodDeclaration) {
-        typeBuilder.addMethod(context.getMethodConverter().to((MethodDeclaration) member, containingClass));
-      } else if (member instanceof ConstructorDeclaration) {
-        typeBuilder.addMethod(context.getMethodConverter().to((ConstructorDeclaration) member, containingClass));
       }
     }
   }

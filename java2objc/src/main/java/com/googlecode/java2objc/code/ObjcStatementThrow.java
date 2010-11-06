@@ -13,20 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.java2objc.objc;
+package com.googlecode.java2objc.code;
 
-import com.googlecode.java2objc.javatypes.JavaClass;
+import japa.parser.ast.stmt.ThrowStmt;
+
+import com.googlecode.java2objc.objc.CompilationContext;
+import com.googlecode.java2objc.objc.SourceCodeWriter;
 
 /**
- * Objective C id type
+ * Objective C throw statement
  * 
- * @author Inderjeet Singh
+ * @author David Gileadi
  */
-public final class NSId extends ObjcTypeStandard {
-  
-  public static final String[] JAVA_TYPES = {"id"};
+public final class ObjcStatementThrow
+    extends ObjcStatement {
 
-  NSId(CompilationContext context) {
-    super(context, "id", JavaClass.getJavaClassFor(Object.class));
+  private final ObjcExpression expr;
+
+  public ObjcStatementThrow(CompilationContext context, ThrowStmt stmt) {
+    this.expr = context.getExpressionConverter().to(stmt.getExpr());
+  }
+
+  @Override
+  public void append(SourceCodeWriter writer) {
+    writer.append("@throw ").append(expr).endStatement();
   }
 }

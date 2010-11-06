@@ -15,14 +15,14 @@
  */
 package com.googlecode.java2objc.code;
 
-import japa.parser.ast.body.ConstructorDeclaration;
-import japa.parser.ast.body.Parameter;
-
 import java.util.List;
 
-import com.googlecode.java2objc.javatypes.JavaClass;
-import com.googlecode.java2objc.javatypes.JavaConstructor;
+import japa.parser.ast.body.ConstructorDeclaration;
+import japa.parser.ast.stmt.ExplicitConstructorInvocationStmt;
+import japa.parser.ast.stmt.Statement;
+
 import com.googlecode.java2objc.objc.CompilationContext;
+import com.googlecode.java2objc.objc.ObjcMethodParam;
 
 /**
  * Method body for creating an init method
@@ -31,37 +31,68 @@ import com.googlecode.java2objc.objc.CompilationContext;
  */
 public final class ObjcMethodInit extends ObjcMethod {
 
-  public ObjcMethodInit(CompilationContext context, ConstructorDeclaration n, JavaClass containingClass) {
-    super(context, "init", context.getTypeRepo().getNSId(), n.getParameters(), n.getModifiers(), 
-        getConstructorBody(context, n), getJavaConstructor(context, containingClass, n));
-  }
-  
-  private static JavaConstructor getJavaConstructor(CompilationContext context,
-      JavaClass containingClass, ConstructorDeclaration n) {
-    ObjcType[] parameterTypes = convert(context, containingClass, n);
-    return containingClass.getJavaConstructor(parameterTypes);
+  private final boolean baseInit;
+
+  public ObjcMethodInit(CompilationContext context, ConstructorDeclaration n) {
+    super(context, getMethodName(context, n), context.getTypeRepo().getId(), ObjcMethod.convertParameters(context,
+        n.getParameters()), n.getModifiers(), getConstructorBody(context, n),
+        n.getJavaDoc() != null ? n.getJavaDoc().getContent() : null);
+    ExplicitConstructorInvocationStmt init = getInit(n);
+    baseInit = init == null || !init.isThis();
   }
 
-  private static ObjcType[] convert(CompilationContext context, JavaClass containingClass,
-      ConstructorDeclaration n) {
-    List<Parameter> params = n.getParameters();
-    ObjcType[] paramClasses = new ObjcType[params.size()];
-    for (int i = 0; i < params.size(); ++i) {
-      paramClasses[i] = context.getTypeRepo().get(params.get(0).getType().toString());
-    }
-    return paramClasses;
+  public ObjcMethodInit(CompilationContext context, String name, ObjcType returnType,
+      List<ObjcMethodParam> params, int modifiers, boolean baseInit, ObjcStatementBlock methodBody,
+      String comments) {
+    super(context, name, returnType, params, modifiers, methodBody, comments);
+    this.baseInit = baseInit;
   }
 
-  // TODO(inder): constructor body should treat this() as a call to another init method
-  
+  private static String getMethodName(CompilationContext context, ConstructorDeclaration n) {
+    if (n.getParameters() == null || n.getParameters().size() != 1)
+      return "init";
+    // if a single param, use "initWith" as the name to differentiate from no-param init
+    String name = n.getParameters().get(0).getId().getName();
+    return "initWith" + name.substring(0, 1).toUpperCase() + name.substring(1);
+  }
+
   private static ObjcStatementBlock getConstructorBody(CompilationContext context, 
       ConstructorDeclaration n) {
-    ObjcExpression condition = new ObjcExpression("self=[super init]");
+
+    ObjcExpression condition;
+    ExplicitConstructorInvocationStmt init = getInit(n);
+    if (init != null) {
+      ObjcExpression scope;
+      if (init.isThis()) {
+        scope = new ObjcExpressionSimple(context, "self");
+      } else {
+        scope = new ObjcExpressionSimple(context, "super");
+      }
+      ObjcExpressionMethodCall call = new ObjcExpressionMethodCall(context, scope, "init", init.getArgs());
+      condition = new ObjcExpressionAssign(new ObjcExpressionSimple(context, "self"), call);
+    } else {
+      condition = new ObjcExpressionSimple(context, "self = [super init]");
+    }
+
     ObjcStatement thenStmt = new ObjcStatementBlock(context, n.getBlock());
     ObjcStatementIf ifStmt = new ObjcStatementIf(condition, thenStmt, null);     
     return new ObjcStatementBlock.Builder()
       .addStatement(ifStmt)
-      .addStatement(new ObjcStatement("return self;"))
-      .build();    
+      .addStatement(new ObjcStatementSimple("return self;"))
+      .build();
+  }
+
+  private static ExplicitConstructorInvocationStmt getInit(ConstructorDeclaration n) {
+    if (n.getBlock().getStmts() != null && n.getBlock().getStmts().size() > 0) {
+      Statement statement = n.getBlock().getStmts().get(0);
+      if (statement instanceof ExplicitConstructorInvocationStmt) {
+        return (ExplicitConstructorInvocationStmt)statement;
+      }
+    }
+    return null;
+  }
+
+  public boolean isBaseInit() {
+    return baseInit;
   }
 }

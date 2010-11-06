@@ -16,13 +16,11 @@
 package com.googlecode.java2objc.code;
 
 import japa.parser.ast.body.ModifierSet;
-import japa.parser.ast.body.Parameter;
 
-import java.util.LinkedList;
-
-import com.googlecode.java2objc.javatypes.JavaClass;
-import com.googlecode.java2objc.javatypes.JavaMethod;
+import com.googlecode.java2objc.code.ObjcStatementBlock.Builder;
 import com.googlecode.java2objc.objc.CompilationContext;
+import com.googlecode.java2objc.objc.ObjcField;
+import com.googlecode.java2objc.objc.ObjcVariableDeclarator;
 
 /**
  * Method for implementing dealloc for an object
@@ -31,16 +29,25 @@ import com.googlecode.java2objc.objc.CompilationContext;
  */
 public final class ObjcMethodDealloc extends ObjcMethod {
 
-  private static final JavaMethod DEALLOC_METHOD = new JavaMethod(null);
-
-  public ObjcMethodDealloc(CompilationContext context, ObjcType parent, JavaClass containingClass) {
-    super(context, "dealloc", context.getTypeRepo().getNSVoid(), new LinkedList<Parameter>(), 
-        ModifierSet.PRIVATE, getDeallocBody(), DEALLOC_METHOD);
+  public ObjcMethodDealloc(CompilationContext context, ObjcType parent) {
+    super(context, "dealloc", context.getTypeRepo().getVoid(), null, ModifierSet.PRIVATE,
+        getDeallocBody(context, parent), null);
   }
 
-  private static ObjcStatementBlock getDeallocBody() {
-    return new ObjcStatementBlock.Builder()
-      .addStatement(new ObjcStatement("[super dealloc];"))
-      .build();    
+  private static ObjcStatementBlock getDeallocBody(CompilationContext context, ObjcType parent) {
+    // release all fields
+    Builder builder = new ObjcStatementBlock.Builder();
+    for (ObjcField field : parent.fields) {
+      if (!ModifierSet.isStatic(field.getModifiers()) && field.getType().isPointerType()) {
+        for (ObjcVariableDeclarator decl : field.getVars()) {
+          ObjcExpressionMethodCall release =
+              new ObjcExpressionMethodCall(context, new ObjcExpressionSimple(context, decl.getName()),
+                  "release", null);
+          builder.addStatement(new ObjcStatementExpression(release));
+        }
+      }
+    }
+    builder.addStatement(new ObjcStatementSimple("[super dealloc];"));
+    return builder.build();
   }
 }

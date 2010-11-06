@@ -38,21 +38,22 @@ public final class ObjcStatementSwitchEntry extends ObjcStatement {
     isDefault = stmt.getLabel() == null;
     this.label = isDefault ? null : context.getExpressionConverter().to(stmt.getLabel());
     this.stmts = new LinkedList<ObjcStatement>();
-    for (Statement caseStmt : stmt.getStmts()) {
-      this.stmts.add(context.getStatementConverter().to(caseStmt));
+    if (stmt != null && stmt.getStmts() != null) {
+      for (Statement caseStmt : stmt.getStmts()) {
+        this.stmts.add(context.getStatementConverter().to(caseStmt));
+      }
     }
   }
 
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.startNewLine();
     if (isDefault) {
       writer.append("default");
     } else {
       writer.append("case ").append(label);
     }
     writer.append(":");
-    writer.endLine();
+    writer.newLine();
     writer.indent();
     for (ObjcStatement stmt : stmts) {
       writer.append(stmt);

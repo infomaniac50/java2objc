@@ -15,10 +15,11 @@
  */
 package com.googlecode.java2objc.code;
 
-import com.googlecode.java2objc.objc.SourceCodeWriter;
-
 import japa.parser.ast.stmt.IfStmt;
-import japa.parser.ast.stmt.Statement;
+
+import com.googlecode.java2objc.converters.StatementConverter;
+import com.googlecode.java2objc.objc.CompilationContext;
+import com.googlecode.java2objc.objc.SourceCodeWriter;
 
 /**
  * Objective C if-then-else statement
@@ -30,28 +31,39 @@ public final class ObjcStatementIf extends ObjcStatement {
   private final ObjcStatement thenStmt;
   private final ObjcStatement elseStmt;
   
-  public ObjcStatementIf(IfStmt n) {
-    super(n);
-    this.condition = new ObjcExpression(n.getCondition().toString());
-    this.thenStmt = new ObjcStatement(n.getThenStmt());
-    Statement elseStmtNode = n.getElseStmt();
-    this.elseStmt = elseStmtNode == null ? null : new ObjcStatement(elseStmtNode);
+  public ObjcStatementIf(CompilationContext context, IfStmt n) {
+    this.condition = context.getExpressionConverter().to(n.getCondition());
+    StatementConverter converter = context.getStatementConverter();
+    this.thenStmt = converter.to(n.getThenStmt());
+    this.elseStmt = converter.to(n.getElseStmt());
   }
 
   public ObjcStatementIf(ObjcExpression condition, ObjcStatement thenStmt, ObjcStatement elseStmt) {
-    super("");
     this.condition = condition;
     this.thenStmt = thenStmt;
     this.elseStmt = elseStmt;
   }
 
+  public ObjcExpression getCondition() {
+    return condition;
+  }
+
+  public ObjcStatement getThenStmt() {
+    return thenStmt;
+  }
+
+  public ObjcStatement getElseStmt() {
+    return elseStmt;
+  }
+
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.startNewLine();
-    writer.append("if (").append(condition).append(") ");
+    writer.append("if (").append(condition).append(')');
     boolean isIfStmtABlock = thenStmt instanceof ObjcStatementBlock;
-    if (!isIfStmtABlock) {      
-      writer.indent();
+    if (isIfStmtABlock) {      
+      writer.append(' ');
+    } else {
+      writer.newLine().indent();
     }
     writer.append(thenStmt);
     if (!isIfStmtABlock) {
@@ -59,21 +71,20 @@ public final class ObjcStatementIf extends ObjcStatement {
     }
     if (elseStmt != null) {
       if (isIfStmtABlock) {
-        writer.append(" ");
+        writer.append(' ');
       }
       writer.append("else");      
       boolean isElseABlock = elseStmt instanceof ObjcStatementBlock;
       boolean isElseAnIfStmt = elseStmt instanceof ObjcStatementIf;
       if (isElseABlock || isElseAnIfStmt) {
-        writer.append(" ");
+        writer.append(' ');
       } else {
-        writer.indent();
+        writer.newLine().indent();
       }
       writer.append(elseStmt);      
-      if (isElseABlock || isElseAnIfStmt) {
+      if (!isElseABlock && !isElseAnIfStmt) {
         writer.unIndent();
       }
     }
-    writer.endLine();
   }
 }

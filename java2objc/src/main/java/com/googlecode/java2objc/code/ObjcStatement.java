@@ -15,57 +15,13 @@
  */
 package com.googlecode.java2objc.code;
 
-import japa.parser.ast.stmt.Statement;
-
-import java.util.LinkedList;
-import java.util.List;
-
 import com.googlecode.java2objc.objc.ObjcNode;
-import com.googlecode.java2objc.objc.SourceCodeWriter;
 
 /**
  * Base class for all Objective C statements
  * 
  * @author Inderjeet Singh
  */
-public class ObjcStatement extends ObjcNode {
+public abstract class ObjcStatement extends ObjcNode {
 
-  // TODO: Get rid of the String form of statement
-  private final String stmt;
-  private final List<ObjcExpression> expressions = new LinkedList<ObjcExpression>();
-
-  protected ObjcStatement() {
-    this((String) null);
-  }
-
-  public ObjcStatement(Statement stmt) {
-    this.stmt = stmt.toString();
-  }
-
-  public ObjcStatement(String stmt) {
-    if (stmt != null) {
-      if (!stmt.endsWith(";")) {
-        stmt = stmt + ";";
-      }
-      stmt = stmt.replace("this.", "");
-    }
-    this.stmt = stmt;
-  }
-
-  public void addExpression(ObjcExpression expression) {
-    expressions.add(expression);
-  }
-
-  @Override
-  public void append(SourceCodeWriter writer) {
-    if (stmt.trim().equals("")) {
-      return;
-    }
-    writer.startNewLine();
-    writer.append(stmt);
-    for (ObjcExpression expr : expressions) {
-      writer.append(expr);
-    }
-    writer.endLine();
-  }
 }

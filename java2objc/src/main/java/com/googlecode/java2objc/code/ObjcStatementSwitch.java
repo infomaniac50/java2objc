@@ -44,12 +44,12 @@ public final class ObjcStatementSwitch extends ObjcStatement {
   
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.startNewLine();
+    writer.newLine();
     writer.append("switch (").append(selector).append(") {");
-    writer.endLine();
+    writer.newLine();
     for (ObjcStatementSwitchEntry stmt : stmts) {
       writer.append(stmt);
     }
-    writer.appendLine("}");    
+    writer.append("}").newLine();    
   }
 }

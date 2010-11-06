@@ -22,7 +22,13 @@ public final class ObjcStatementSynchronized extends ObjcStatement {
   
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.startNewLine().appendToDo("handle synchronized " + expr);
-    writer.startNewLine().append(stmt);
+    writer.newLine().append("@synchronized(");
+    if (expr != null) {
+      writer.append(expr);
+    } else {
+      writer.append("self");
+    }
+    writer.append(") ");
+    writer.newLine().append(stmt);
   }
 }

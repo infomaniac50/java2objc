@@ -15,12 +15,12 @@
  */
 package com.googlecode.java2objc.objc;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.googlecode.java2objc.code.ObjcMethod;
+import com.googlecode.java2objc.code.ObjcStatementBlock;
 import com.googlecode.java2objc.code.ObjcType;
-import com.googlecode.java2objc.javatypes.JavaClass;
 
 /**
  * A Builder to build a user-defined Objective C type 
@@ -30,33 +30,50 @@ import com.googlecode.java2objc.javatypes.JavaClass;
 public final class UserDefinedObjcTypeBuilder {
   private final CompilationContext context;
   private final ObjcType type;
-  private final Set<ObjcType> baseClasses;
-  private final Set<ObjcMethod> methods;
-  private final Set<ObjcField> fields;
+  private final ObjcType containingClass;
+  private ObjcType baseClass;
+  private final List<ObjcType> protocols;
+  private final List<ObjcMethod> methods;
+  private final List<ObjcField> fields;
+  protected final List<ObjcStatementBlock> initializers;
+  private final List<ObjcType> subTypes;
+  private final String comments;
   
-  public UserDefinedObjcTypeBuilder(CompilationContext context, String name, boolean isInterface,
-      Set<ObjcType> imports, JavaClass javaClass) {
+  public UserDefinedObjcTypeBuilder(CompilationContext context, ObjcType type, String comments,
+      ObjcType containingClass) {
     this.context = context;
-    this.baseClasses = new HashSet<ObjcType>();
-    this.methods = new HashSet<ObjcMethod>();
-    this.fields = new HashSet<ObjcField>();
-    this.type = new ObjcType(context, name, isInterface, imports, javaClass);
+    this.containingClass = containingClass;
+    this.baseClass = context.getTypeRepo().getNSObject();
+    this.protocols = new LinkedList<ObjcType>();
+    this.methods = new LinkedList<ObjcMethod>();
+    this.fields = new LinkedList<ObjcField>();
+    this.initializers = new LinkedList<ObjcStatementBlock>();
+    this.subTypes = new LinkedList<ObjcType>();
+    this.type = type;
+    this.comments = comments;
     context.setCurrentType(type);
   }
 
   public ObjcType build() {
-    ObjcType baseClass = baseClasses.isEmpty() ? context.getTypeRepo().getNSObject() : baseClasses.iterator().next();
-    type.init(context, baseClass, methods, fields);
+    type.init(context, baseClass, protocols, containingClass, methods, fields, initializers, subTypes, comments);
     context.setCurrentType(null);
     return type;
   }
-  
-  public JavaClass getJavaClass() {
-    return type.getJavaClass();
+
+  public UserDefinedObjcTypeBuilder setBaseClass(ObjcType baseClass) {
+    this.baseClass = baseClass;
+    return this;
   }
 
-  public UserDefinedObjcTypeBuilder addBaseClass(ObjcType baseClass) {
-    baseClasses.add(baseClass);
+  public UserDefinedObjcTypeBuilder addProtocol(ObjcType protocol) {
+    if (protocol != null) {
+      protocols.add(protocol);
+    }
+    return this;
+  }
+
+  public UserDefinedObjcTypeBuilder addMethod(ObjcMethod objcMethod) {
+    methods.add(objcMethod);
     return this;
   }
 
@@ -65,8 +82,13 @@ public final class UserDefinedObjcTypeBuilder {
     return this;
   }
 
-  public UserDefinedObjcTypeBuilder addMethod(ObjcMethod objcMethod) {
-    methods.add(objcMethod);
+  public UserDefinedObjcTypeBuilder addInitializer(ObjcStatementBlock initializer) {
+    initializers.add(initializer);
+    return this;
+  }
+
+  public UserDefinedObjcTypeBuilder addSubType(ObjcType objcType) {
+    subTypes.add(objcType);
     return this;
   }
 }

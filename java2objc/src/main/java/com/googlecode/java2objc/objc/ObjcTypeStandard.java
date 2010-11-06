@@ -17,7 +17,6 @@
 package com.googlecode.java2objc.objc;
 
 import com.googlecode.java2objc.code.ObjcType;
-import com.googlecode.java2objc.javatypes.JavaClass;
 
 /**
  * A predefined in Objective C available through the standard libraries
@@ -31,15 +30,15 @@ public abstract class ObjcTypeStandard extends ObjcType {
    * @param baseClass base class
    * @param pointerType whether this is a pointer type or a primitive type
    */
-  protected ObjcTypeStandard(CompilationContext context, String className, ObjcType baseClass, boolean pointerType, JavaClass javaClass) {
-    super(context, className, baseClass, pointerType, javaClass);
+  protected ObjcTypeStandard(CompilationContext context, String className, ObjcType baseClass, boolean pointerType) {
+    super(context, className, baseClass, null, pointerType);
   }
 
   /**
    * @param name name of the type
    */
-  public ObjcTypeStandard(CompilationContext context, String name, JavaClass javaClass) {
-    super(context, name, javaClass);
+  public ObjcTypeStandard(CompilationContext context, String name) {
+    super(context, name);
   }
 
   @Override

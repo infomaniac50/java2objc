@@ -13,22 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.java2objc.objc;
+package com.googlecode.java2objc.code;
 
-import com.googlecode.java2objc.javatypes.JavaClass;
+import japa.parser.ast.expr.ClassExpr;
+
+import com.googlecode.java2objc.objc.CompilationContext;
+import com.googlecode.java2objc.objc.SourceCodeWriter;
 
 /**
- * Objective C native NSInteger type.
+ * A class expression in Objective C
  * 
- * @author Inderjeet Singh
+ * @author David Gileadi
  */
-public final class NSInteger extends ObjcTypeStandard {
+public class ObjcExpressionClass
+    extends ObjcExpression {
 
-  public static final String[] JAVA_TYPES = {"int", "Integer", "java.lang.Integer", "byte", "Byte", "java.lang.Byte",
-    "short", "Short", "java.lang.Short", "long", "Long", "java.lang.Long"
-  };
+  public ObjcExpressionClass(CompilationContext context, ClassExpr expr) {
+    super(context.getTypeRepo().getOrCreate(expr.getType()));
+  }
 
-  NSInteger(CompilationContext context) {
-    super(context, "NSInteger", null, false, JavaClass.getJavaClassFor(Integer.class));
+  @Override
+  public void append(SourceCodeWriter writer) {
+    writer.append('[').append(getType().getName()).append(" class]");
   }
 }

@@ -37,8 +37,9 @@ public final class ObjcStatementDoWhile extends ObjcStatement {
 
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.startNewLine().append("do ");
+    writer.newLine();
+    writer.append("do ");
     writer.append(body);
-    writer.append(" while (").append(condition).append(");").endLine();
+    writer.append(" while (").append(condition).append(");").newLine();
   }
 }
