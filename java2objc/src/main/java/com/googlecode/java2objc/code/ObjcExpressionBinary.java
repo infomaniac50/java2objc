@@ -46,13 +46,16 @@ public class ObjcExpressionBinary extends ObjcExpression {
 
   @Override
   public void append(SourceCodeWriter writer) {
-    if ("+".equals(operator.getOperator())
-        && (left instanceof ObjcExpressionStringLiteral || right instanceof ObjcExpressionStringLiteral)) {
+    if ("+".equals(operator.getOperator()) && (isString(left) || isString(right))) {
       writer.append('[').append(left).append(" stringByAppendingString:").append(right).append(']');
     } else {
       writer.append(left).append(" ");
       writer.append(operator).append(" ");
       writer.append(right);
     }
+  }
+
+  private boolean isString(ObjcExpression expr) {
+    return expr.getType() != null && "NSString".equals(expr.getType().getName());
   }
 }
