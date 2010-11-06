@@ -64,6 +64,15 @@ public class ObjcExpressionAssign extends ObjcExpression {
 
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.append(target).append(' ').append(operator).append(' ').append(value);
+    if ("+=".equals(operator.getOperator()) && (isString(target) || isString(value))) {
+      writer.append(target).append(" = ");
+      writer.append('[').append(target).append(" stringByAppendingString:").append(value).append(']');
+    } else {
+      writer.append(target).append(' ').append(operator).append(' ').append(value);
+    }
+  }
+
+  private boolean isString(ObjcExpression expr) {
+    return expr.getType() != null && "NSString".equals(expr.getType().getName());
   }
 }
