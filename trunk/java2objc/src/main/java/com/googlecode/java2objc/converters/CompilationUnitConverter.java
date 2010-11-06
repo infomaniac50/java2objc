@@ -63,7 +63,7 @@ public final class CompilationUnitConverter {
     addExternalMappings(context);
 
     PackageDeclaration pkg = cu.getPakage();
-    String pkgName = pkg.getName().toString();
+    String pkgName = pkg != null ? pkg.getName().toString() : null;
     List<ObjcType> imports = toObjcImports(pkgName, repo, cu.getImports());
     context.init(imports);
 
@@ -155,10 +155,12 @@ public final class CompilationUnitConverter {
     LinkedList<String> classNames = new LinkedList<String>();
     // try to find matching source code
     StringBuilder path = new StringBuilder("../");
-    int index = thisPkgName.indexOf('.');
-    while (index != -1) {
-      path.append("../");
-      index = thisPkgName.indexOf('.', index + 1);
+    if (thisPkgName != null) {
+      int index = thisPkgName.indexOf('.');
+      while (index != -1) {
+        path.append("../");
+        index = thisPkgName.indexOf('.', index + 1);
+      }
     }
     path.append(importPkgName.replace('.', '/'));
     File pkgFile = new File(file.getParentFile(), path.toString());
