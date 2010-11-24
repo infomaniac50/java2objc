@@ -57,7 +57,7 @@ public final class CompilationUnitConverter {
   }
 
   public void generateSourceCode() throws IOException {
-    CompilationContext context = new CompilationContext();
+    CompilationContext context = new CompilationContext(config);
     ObjcTypeRepository repo = new ObjcTypeRepository(context);
     context.initRepo(repo);
     addExternalMappings(context);
@@ -103,13 +103,14 @@ public final class CompilationUnitConverter {
         } else if ("protocol".equalsIgnoreCase(kind)) {
           ObjcType type = repo.getOrCreate(null, value[0], new ObjcType(context, value[0], true, true));
           repo.put(pkgName, className, type);
-        } else if ("function".equalsIgnoreCase(kind)) {
+        } else if ("method".equalsIgnoreCase(kind)) {
           String methodName = className;
-          String functionName = getClassName(value[0]);
+          String objcMethodName = getClassName(value[0]);
+          String objcClassName = getPkgName(value[0]);
           className = getClassName(pkgName);
           pkgName = getPkgName(pkgName);
-          ObjcType type = repo.getOrCreate(pkgName, className);
-          type.addMethodMapping(methodName, functionName);
+          ObjcType type = repo.getOrCreate(pkgName, className, objcClassName);
+          type.addMethodMapping(methodName, objcMethodName);
         }
       }
     }
@@ -127,18 +128,22 @@ public final class CompilationUnitConverter {
           pkgName = fullyQualifiedClassName;
           List<String> classNames = getClassNames(thisPkgName, pkgName);
           for (String name : classNames) {
-            imports.add(repo.getOrCreate(pkgName, name));
+            imports.add(repo.getOrCreate(pkgName, name, prefix(name)));
           }
         } else if (importedType.isStatic()) {
           className = getClassName(pkgName);
           pkgName = getPkgName(pkgName);
-          imports.add(repo.getOrCreate(pkgName, className));
+          imports.add(repo.getOrCreate(pkgName, className, prefix(className)));
         } else {
-          imports.add(repo.getOrCreate(pkgName, className));
+          imports.add(repo.getOrCreate(pkgName, className, prefix(className)));
         }
       }
     }
     return imports;
+  }
+
+  private String prefix(String name) {
+    return config.getPrefix() != null ? config.getPrefix() + name : name;
   }
 
   private String getPkgName(String fullyQualifiedClassName) {

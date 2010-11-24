@@ -70,14 +70,12 @@ public final class TypeConverter {
   private ObjcType createType(TypeDeclaration type, ObjcType containingClass) {
     ObjcType objcType;
     if (type instanceof ClassOrInterfaceDeclaration) {
-      objcType =
-          new ObjcType(context, type.getName(), ((ClassOrInterfaceDeclaration)type).isInterface(),
-              imports);
+      objcType = new ObjcType(context, context.prefix(type.getName()), ((ClassOrInterfaceDeclaration)type).isInterface(), imports);
     } else if (type instanceof EnumDeclaration) {
       List<ObjcEnumEntry> entries = new LinkedList<ObjcEnumEntry>();
       for (EnumConstantDeclaration entry : ((EnumDeclaration)type).getEntries())
         entries.add(new ObjcEnumEntry(context, entry));
-      objcType = new ObjcEnumType(context, type.getName(), imports, entries, containingClass);
+      objcType = new ObjcEnumType(context, context.prefix(type.getName()), imports, entries, containingClass);
     } else {
       throw new UnsupportedOperationException("Unsupported type: " + type.getClass().getSimpleName());
     }

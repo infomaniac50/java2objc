@@ -1,8 +1,10 @@
 
-Support structs, configured via mappings.properties and maybe a compiler switch.
+* mappings.properties allows a "struct" type to be declared.  It's currently used for non-pointer things like "int" but it would be better if it could support generating structs from Java classes.  All members would become public, and all methods would be changed into external C functions with an explicit "this" argument.
 
-Detect assignment of new objects to fields (as opposed to properties), remove " autorelease]".
+* Support for renaming methods via mappings.properties is very basic--it works only on the method name and so it doesn't support overloading.  In addition any portions of the Objective-C selector (i.e. named parameters) are not supported.  We should support overloaded methods and Objective-C named parameters.
 
-Move static field initialization expressions into + (void) initialize function.
+* When an object is created it is in the form of [[[MyObject alloc] init] autorelease];  This is fine when assigning to something that retains it (like a NSArray or a property) or when returning the object, but is not fine when assigning directly to a field.  Java2objc should detect assignment of new objects to fields (as opposed to properties), and remove the call to autorelease.
 
-Perhaps detect finalize method, merge with existing dealloc function (except for GCed Objective C, it should still be finalize).
+* Currently all static field initializations are done in-line, like Java does it.  In many cases this won't compile in Objective-C.  Java2objc should be made smart enough to move these initialization expressions into a static + (void) initialize function.
+
+* Perhaps detect Java's finalize method and merge with Objective-C's existing dealloc method.  However for GCed Objective C the method should still be finalize.  Perhaps a program argument could be used for this.

@@ -36,8 +36,6 @@ import com.googlecode.java2objc.converters.ExpressionConverter;
  */
 public final class ObjcEnumType extends ObjcType {
 
-  public static final String[] JAVA_TYPES = {"enum", "Enum", "java.lang.Enum"};
-  
   private final List<ObjcEnumEntry> entries;
 
   public ObjcEnumType(CompilationContext context, String name, List<ObjcType> imports, List<ObjcEnumEntry> entries, ObjcType containingClass) {

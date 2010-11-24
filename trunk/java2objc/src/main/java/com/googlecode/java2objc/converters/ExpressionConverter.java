@@ -33,6 +33,7 @@ import japa.parser.ast.expr.InstanceOfExpr;
 import japa.parser.ast.expr.IntegerLiteralExpr;
 import japa.parser.ast.expr.LongLiteralExpr;
 import japa.parser.ast.expr.MethodCallExpr;
+import japa.parser.ast.expr.NameExpr;
 import japa.parser.ast.expr.NullLiteralExpr;
 import japa.parser.ast.expr.ObjectCreationExpr;
 import japa.parser.ast.expr.StringLiteralExpr;
@@ -133,6 +134,10 @@ public final class ExpressionConverter {
       return new ObjcExpressionClass(context, (ClassExpr) expr);
     } else if (expr instanceof ThisExpr) {
       return new ObjcExpressionSimple(context, "self");
+    } else if (expr instanceof NameExpr) {
+      String name = expr.toString();
+      name = context.isLocalDeclared(name) ? name : context.prefix(name);
+      return new ObjcExpressionSimple(context, name);
     } else if (expr != null) {
       return new ObjcExpressionSimple(context, expr.toString());
     } else {
