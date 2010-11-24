@@ -25,6 +25,7 @@ import com.googlecode.java2objc.converters.ExpressionConverter;
 import com.googlecode.java2objc.converters.MethodConverter;
 import com.googlecode.java2objc.converters.StatementConverter;
 import com.googlecode.java2objc.converters.TypeConverter;
+import com.googlecode.java2objc.main.Config;
 
 /**
  * class to keep track of current method and type being navigated in the source-code
@@ -33,6 +34,7 @@ import com.googlecode.java2objc.converters.TypeConverter;
  */
 public class CompilationContext {
 
+  private Config config;
   private ObjcTypeRepository repo;
   private TypeConverter typeConverter;
   private final MethodConverter methodConverter;
@@ -42,7 +44,8 @@ public class CompilationContext {
   private Stack<ObjcType> currentType;
   private Stack<HashMap<String, ObjcType>> locals;
 
-  public CompilationContext() {
+  public CompilationContext(Config config) {
+    this.config = config;
     this.repo = null;
     this.methodConverter = new MethodConverter(this);
     this.statementConverter = new StatementConverter(this);
@@ -152,5 +155,9 @@ public class CompilationContext {
 
   public ObjcTypeRepository getTypeRepo() {
     return repo;
+  }
+
+  public String prefix(String name) {
+    return config.getPrefix() != null ? config.getPrefix() + name : name;
   }
 }

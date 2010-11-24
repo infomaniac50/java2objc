@@ -33,7 +33,12 @@ public class ObjcTypeRepository {
   }
 
   public ObjcType get(Type type) {
-    return types.get(getTypeName(type));
+    String typeName = getTypeName(type);
+    ObjcType objcType = types.get(typeName);
+    if (objcType == null) {
+      objcType = types.get(context.prefix(typeName));
+    }
+    return objcType;
   }
 
   public ObjcType get(String className) {
@@ -57,7 +62,7 @@ public class ObjcTypeRepository {
   public ObjcType getOrCreate(Type type) {
     String name = getTypeName(type);
     boolean pointerType = type instanceof ReferenceType || type instanceof ClassOrInterfaceType;
-    return getOrCreate(null, name, getNSObject(), pointerType);
+    return getOrCreate(null, name, context.prefix(name), getNSObject(), pointerType);
   }
 
   private String getTypeName(Type type) {
@@ -77,12 +82,15 @@ public class ObjcTypeRepository {
     return name;
   }
   
-  public ObjcType getOrCreate(String pkgName, String name) {
-    return getOrCreate(pkgName, name, getNSObject(), true);
+  public ObjcType getOrCreate(String pkgName, String name, String objcName) {
+    return getOrCreate(pkgName, name, objcName, getNSObject(), true);
   }
 
-  private ObjcType getOrCreate(String pkgName, String className, ObjcType baseType, boolean pointerType) {
-    return getOrCreate(pkgName, className, new ObjcType(context, className, baseType, null, pointerType));
+  private ObjcType getOrCreate(String pkgName, String className, String objcName, ObjcType baseType, boolean pointerType) {
+    if (objcName == null) {
+      objcName = className;
+    }
+    return getOrCreate(pkgName, className, new ObjcType(context, objcName, baseType, null, pointerType));
   }
 
   public ObjcType getOrCreate(String pkgName, String className, ObjcType defaultType) {
@@ -100,14 +108,14 @@ public class ObjcTypeRepository {
   }
 
   public ObjcType getNSObject() {
-    return getOrCreate(null, "NSObject", null, true);
+    return getOrCreate(null, "NSObject", null, null, true);
   }
 
   public ObjcType getVoid() {
-    return getOrCreate(null, "void", null, false);
+    return getOrCreate(null, "void", null, null, false);
   }
 
   public ObjcType getId() {
-    return getOrCreate(null, "id", null, false);
+    return getOrCreate(null, "id", null, null, false);
   }
 }

@@ -255,8 +255,8 @@ public class ObjcType extends ObjcNode {
     subTypes.add(subType);
   }
 
-  public void addMethodMapping(String methodName, String functionName) {
-    methodMappings.put(methodName, functionName);
+  public void addMethodMapping(String methodName, String objcMethodName) {
+    methodMappings.put(methodName, objcMethodName);
   }
 
   public String mapMethodName(String name) {

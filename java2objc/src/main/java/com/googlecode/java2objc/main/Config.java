@@ -27,6 +27,7 @@ import com.googlecode.java2objc.util.Preconditions;
 public final class Config {
   private File outputDir = null;
   private File workingDir = null;
+  private String prefix = null;
   private boolean preserveDirs = false;
   private int indentSize = 2;
   private boolean indentTabs = false;
@@ -53,6 +54,10 @@ public final class Config {
     this.workingDir = subDir;
   }
 
+  public String getPrefix() {
+    return prefix;
+  }
+
   public String getIndent() {
     StringBuilder indent = new StringBuilder(indentSize);
     for (int i = 0; i < indentSize; i++) {
@@ -65,11 +70,13 @@ public final class Config {
     Preconditions.assertTrue(arg.startsWith("--"));
     String[] parts = arg.split("=");
     String name = parts[0];
-    String value = parts[1];
+    String value = parts.length > 1 ? parts[1] : null;
     if (name.equals("--outputdir")) {
       outputDir = new File(value);
+    } else if (name.equals("--prefix")) {
+      prefix = value;
     } else if (name.equals("--preservedirs")) {
-      preserveDirs = Boolean.parseBoolean(value);
+      preserveDirs = value != null ? Boolean.parseBoolean(value) : true;
     } else if (name.equals("--indent")) {
       indentSize = Integer.parseInt(value);
     } else if (name.equals("--indentType")) {
