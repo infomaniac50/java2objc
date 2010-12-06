@@ -34,7 +34,11 @@ public class ObjcExpressionVariableDeclaration extends ObjcExpression {
     super(context.getTypeRepo().getOrCreate(expr.getType()));
     this.var = new ObjcVariable(context, expr.getVars(), expr.getType());
   }
-  
+
+  public ObjcVariable getVar() {
+    return var;
+  }
+
   @Override
   public void append(SourceCodeWriter writer) {
     var.appendExpression(writer);
