@@ -101,6 +101,7 @@ public class ObjcType extends ObjcNode {
     this.methods.addAll(methods);
     this.fields.addAll(fields);
 
+    // look for member pointer types; add them to a dealloc method
     boolean cleanup = false;
     for (ObjcField field : this.fields) {
       if (!ModifierSet.isStatic(field.getModifiers()) && field.getType().isPointerType()) {
@@ -112,6 +113,7 @@ public class ObjcType extends ObjcNode {
       this.methods.add(new ObjcMethodDealloc(context, this));
     }
 
+    // find all inline initializers; add them to constructors
     this.initializers.addAll(initializers);
     ObjcStatementBlock fieldInitializer = getFieldInitializer(context, this.fields);
     if (fieldInitializer != null) {
@@ -120,6 +122,11 @@ public class ObjcType extends ObjcNode {
     addInitializersToConstructors(context, this.initializers, this.methods);
     this.subTypes.addAll(subTypes);
     this.comments = comments;
+
+    // Java's base clone() shallow-copies all fields; Objective-C must copy by hand
+    ObjcMethod copy = getMethodWithName("copyWithZone");
+    if (copy != null)
+      addFieldsToCopyMethod(context, copy);
   }
 
   private static ObjcStatementBlock getFieldInitializer(CompilationContext context, List<ObjcField> fields) {
@@ -173,6 +180,62 @@ public class ObjcType extends ObjcNode {
         methods.add(0, init);
       }
     }
+  }
+
+  private void addFieldsToCopyMethod(CompilationContext context, ObjcMethod copy) {
+    if (fields.size() == 0)
+      return;
+
+    List<ObjcStatement> methodBody = copy.getMethodBody().getStatements();
+    String varName = "copy";
+    ObjcExpressionMethodCall superCall = null;
+
+    // try to find the copy variable's name and the call to [super copyWithZone]
+    int i = 0;
+    for (i = 0; i < methodBody.size(); i++) {
+      ObjcStatement statement = methodBody.get(i);
+      if (statement instanceof ObjcStatementExpression) {
+        ObjcExpression expression = ((ObjcStatementExpression)statement).getExpression();
+
+        if (expression instanceof ObjcExpressionVariableDeclaration) {
+          for (ObjcVariableDeclarator var : ((ObjcExpressionVariableDeclaration)expression)
+              .getVar().getVars()) {
+            varName = var.getName();
+            if (var.getInit() instanceof ObjcExpressionCast) {
+              ObjcExpression castExpr = ((ObjcExpressionCast)var.getInit()).getExpression();
+              if (castExpr instanceof ObjcExpressionMethodCall
+                  && ((ObjcExpressionMethodCall)castExpr).getMethodName().equals("copyWithZone")) {
+                superCall = (ObjcExpressionMethodCall)castExpr;
+                break;
+              }
+            }
+          }
+        } else if (expression instanceof ObjcExpressionMethodCall
+            && ((ObjcExpressionMethodCall)expression).getMethodName().equals("copyWithZone")) superCall =
+            (ObjcExpressionMethodCall)expression;
+      }
+
+      if (superCall != null) break;
+    }
+
+    // TODO: if the superCall is against the baseClass NSObject, replace it with
+    // (ThisClass *)[[[self class] allocWithZone:zone] init]
+
+    if (i < methodBody.size()) i++;
+    else i--;
+
+    // add assign statements for all fields
+    ObjcExpressionSimple self = new ObjcExpressionSimple("self", this);
+    ObjcExpressionSimple target = new ObjcExpressionSimple(varName, this);
+    for (ObjcField field : fields)
+      if (!ModifierSet.isStatic(field.getModifiers())) {
+        for (ObjcVariableDeclarator var : field.getVars()) {
+          ObjcExpressionAssign expr =
+              new ObjcExpressionAssign(new ObjcExpressionFieldAccess(target, var.getName()),
+                  new ObjcExpressionFieldAccess(self, var.getName()));
+          methodBody.add(i++, new ObjcStatementExpression(expr));
+        }
+      }
   }
 
   public String getName() {

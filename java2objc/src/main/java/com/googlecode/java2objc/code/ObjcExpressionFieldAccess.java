@@ -39,7 +39,7 @@ public class ObjcExpressionFieldAccess
   }
 
   public ObjcExpressionFieldAccess(ObjcExpression target, String field) {
-    super(target);
+    super(getFieldType(target, field));
     this.field = field;
     this.target = target;
   }
@@ -58,6 +58,15 @@ public class ObjcExpressionFieldAccess
     } else {
       return context.getExpressionConverter().to(scope);
     }
+  }
+
+  private static ObjcType getFieldType(ObjcExpression target, String fieldName) {
+    if (target.getType() != null) {
+      ObjcField field = target.getType().getFieldWithName(fieldName);
+      if (field != null)
+        return field.getType();
+    }
+    return null;
   }
 
   public String getField() {

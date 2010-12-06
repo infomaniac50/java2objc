@@ -29,16 +29,18 @@ public class ObjcExpressionCast
     extends ObjcExpression {
 
   private final ObjcExpression expr;
-  private final ObjcType type;
 
   public ObjcExpressionCast(CompilationContext context, CastExpr expr) {
     super(context.getTypeRepo().getOrCreate(expr.getType()));
     this.expr = context.getExpressionConverter().to(expr.getExpr());
-    this.type = context.getTypeRepo().getOrCreate(expr.getType());
+  }
+
+  public ObjcExpression getExpression() {
+    return expr;
   }
 
   @Override
   public void append(SourceCodeWriter writer) {
-    writer.append('(').append(type.getPointerTypeName()).append(')').append(expr);
+    writer.append('(').append(getType().getPointerTypeName()).append(')').append(expr);
   }
 }

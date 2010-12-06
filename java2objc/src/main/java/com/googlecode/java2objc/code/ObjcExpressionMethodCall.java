@@ -49,7 +49,7 @@ public class ObjcExpressionMethodCall extends ObjcExpression {
 
   protected ObjcExpressionMethodCall(CompilationContext context, ObjcExpression scope, 
       String methodName, List<Expression> args) {
-    super(scope);
+    super(getReturnType(scope, methodName));
     this.target = scope;
     if (scope instanceof ObjcExpressionSimple
         && ("self".equals(((ObjcExpressionSimple)scope).getExpression()) || context
@@ -89,6 +89,15 @@ public class ObjcExpressionMethodCall extends ObjcExpression {
     } else {
       return context.getExpressionConverter().to(scope);
     }
+  }
+
+  private static ObjcType getReturnType(ObjcExpression scope, String methodName) {
+    if (scope.getType() != null) {
+      ObjcMethod method = scope.getType().getMethodWithName(methodName);
+      if (method != null)
+        return method.getReturnType();
+    }
+    return null;
   }
 
   public String getMethodName() {
