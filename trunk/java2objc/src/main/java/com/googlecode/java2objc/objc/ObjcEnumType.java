@@ -39,7 +39,7 @@ public final class ObjcEnumType extends ObjcType {
   private final List<ObjcEnumEntry> entries;
 
   public ObjcEnumType(CompilationContext context, String name, List<ObjcType> imports, List<ObjcEnumEntry> entries, ObjcType containingClass) {
-    super(context, name, true, false);
+    super(context, name, false, false);
     this.entries = entries;
   }
 
@@ -65,7 +65,7 @@ public final class ObjcEnumType extends ObjcType {
 
   @Override
   public boolean isProtocol() {
-    return true;
+    return false;
   }
 
   public boolean hasImpl() {
