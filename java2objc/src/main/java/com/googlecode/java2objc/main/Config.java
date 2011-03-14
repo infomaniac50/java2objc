@@ -66,7 +66,7 @@ public final class Config {
     return indent.toString();
   }
 
-  void update(String arg) {
+  public void update(String arg) {
     Preconditions.assertTrue(arg.startsWith("--"));
     String[] parts = arg.split("=");
     String name = parts[0];
