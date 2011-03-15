@@ -13,28 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package examples;
+package com.google.code.java2objc.examples.lang;
 
 /**
- * Examples of how java2objc converts Java constructors into Objective C init methods
+ * Example of how java2objc converts Java return statements into their Objective C equivalent
  * 
  * @author Inderjeet Singh
  */
-@SuppressWarnings("unused")
-public class InitExamples {
-  private final int a;
-  private final String b;
-  private final String c;
-  private final double d;
+public class ReturnExamples {
   
-  public InitExamples(int a, String b) {
-    this(a, b, "c", 2.0);
-  }
-
-  public InitExamples(int a, String b, String c, double d) {
-    this.a = a;
-    this.b = b;
-    this.c = c;
-    this.d = d;
+  public int returnExample() {
+    int value = 5;
+    switch (value) {
+      case 0:
+        return 1;
+      case 1:
+        return value;
+      case 2:
+        return value * value;
+      case 3:
+        return value * value * value;
+      case 4:
+        return value * value * value * value;
+      case 5:
+        return ((value * value) * value) * value;
+      default:
+        return -1;
+    }
   }
 }

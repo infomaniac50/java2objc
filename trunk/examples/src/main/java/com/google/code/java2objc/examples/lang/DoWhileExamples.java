@@ -13,24 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package examples;
+package com.google.code.java2objc.examples.lang;
 
 /**
- * Example of how java2objc converts Java while statements into their Objective C equivalent
+ * Example of how java2objc converts Java do-while statements into their Objective C equivalent
  * 
  * @author Inderjeet Singh
  */
-public class WhileExamples {
+public class DoWhileExamples {
 
-  public void whileDemo() {
+  public void doWhile() {
     int value = 5;
-    while (value > 0) {
-      value--;
-    }
-    
-    while (value < 5) value++;
-    
-    while (value > 0)
-      value --;
+    do {
+      value--;      
+    } while (value > 0);
   }
 }

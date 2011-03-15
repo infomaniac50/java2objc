@@ -13,29 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package examples;
-
+package com.google.code.java2objc.examples.lang;
 /**
- * Example of how java2objc converts Java switch statements into their Objective C equivalent
+ * Demo of assorted language constructs
  * 
  * @author Inderjeet Singh
  */
-public class SwitchExamples {
-  int newValue;
+public class AssortedExamples {
 
-  public void switchWithInt(int value) {
-    switch (value) {
-      case 0:
-        newValue = 0;
-        break;
-      case 1:
-        newValue = value;
-        break;
-      case 2:
-        newValue = value * value;
-      default:
-        newValue = -1;
-        break;
+  public int labeledStatement() {
+    int value = 4;
+
+    outer:
+    for (int i = 0; i < value; ++i) {
+      middle:
+      for (int j = 0; j < value; ++j) {
+        for (int k = 0; k < value; ++k) {
+          if (i*j*k == 27) {
+            break outer;
+          } if (i*j*k == 33) {
+            continue middle;
+          }
+        }
+      }
     }
-  }
+    return value;
+  }  
 }

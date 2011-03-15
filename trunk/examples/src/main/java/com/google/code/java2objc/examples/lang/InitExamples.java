@@ -13,19 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package examples;
+package com.google.code.java2objc.examples.lang;
 
 /**
- * Example of how java2objc converts Java synchronized statements into their Objective C equivalent
+ * Examples of how java2objc converts Java constructors into Objective C init methods
  * 
  * @author Inderjeet Singh
  */
-public class SynchronizedExamples {
+@SuppressWarnings("unused")
+public class InitExamples {
+  private final int a;
+  private final String b;
+  private final String c;
+  private final double d;
+  
+  public InitExamples(int a, String b) {
+    this(a, b, "c", 2.0);
+  }
 
-  public void synchronizedDemo() {
-    Integer value = 10;
-    synchronized(value) {
-      value = 15;
-    }
+  public InitExamples(int a, String b, String c, double d) {
+    this.a = a;
+    this.b = b;
+    this.c = c;
+    this.d = d;
   }
 }

@@ -1,3 +1,4 @@
+package com.google.code.java2objc.examples;
 import java.util.Collection;
 
 public class Teacher extends Person {

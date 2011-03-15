@@ -1,3 +1,4 @@
+package com.google.code.java2objc.examples;
 public class Person {
   private final int id;
   private final String firstName;

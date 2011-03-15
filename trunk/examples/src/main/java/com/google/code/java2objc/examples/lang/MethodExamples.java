@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package examples;
+package com.google.code.java2objc.examples.lang;
 
 /**
  * Examples of how java2objc converts Java static and object method invocations into their 

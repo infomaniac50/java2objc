@@ -13,30 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package examples;
+package com.google.code.java2objc.examples.lang;
+
 /**
- * Demo of assorted language constructs
+ * Example of how java2objc converts Java while statements into their Objective C equivalent
  * 
  * @author Inderjeet Singh
  */
-public class AssortedExamples {
+public class WhileExamples {
 
-  public int labeledStatement() {
-    int value = 4;
-
-    outer:
-    for (int i = 0; i < value; ++i) {
-      middle:
-      for (int j = 0; j < value; ++j) {
-        for (int k = 0; k < value; ++k) {
-          if (i*j*k == 27) {
-            break outer;
-          } if (i*j*k == 33) {
-            continue middle;
-          }
-        }
-      }
+  public void whileDemo() {
+    int value = 5;
+    while (value > 0) {
+      value--;
     }
-    return value;
-  }  
+    
+    while (value < 5) value++;
+    
+    while (value > 0)
+      value --;
+  }
 }
