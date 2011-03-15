@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package examples;
+package com.google.code.java2objc.examples.lang;
 
 /**
- * Example of how java2objc converts Java do-while statements into their Objective C equivalent
+ * Example of how java2objc converts Java synchronized statements into their Objective C equivalent
  * 
  * @author Inderjeet Singh
  */
-public class DoWhileExamples {
+public class SynchronizedExamples {
 
-  public void doWhile() {
-    int value = 5;
-    do {
-      value--;      
-    } while (value > 0);
+  public void synchronizedDemo() {
+    Integer value = 10;
+    synchronized(value) {
+      value = 15;
+    }
   }
 }
