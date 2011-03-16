@@ -1,4 +1,4 @@
-package com.google.code.java2objc.examples;
+package com.google.code.java2objc.examples.inheritance;
 public class Person {
   private final int id;
   private final String firstName;
