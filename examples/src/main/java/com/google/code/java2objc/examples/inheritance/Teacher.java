@@ -1,4 +1,4 @@
-package com.google.code.java2objc.examples;
+package com.google.code.java2objc.examples.inheritance;
 import java.util.Collection;
 
 public class Teacher extends Person {
