@@ -18,9 +18,11 @@ package com.googlecode.java2objc.code;
 import japa.parser.ast.body.ModifierSet;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.ObjcField;
@@ -41,8 +43,8 @@ public class ObjcType extends ObjcNode {
   protected ObjcType baseClass;
   protected final List<ObjcType> protocols;
   protected final boolean pointerType;
-  protected final List<ObjcType> importsInHeader;
-  protected final List<ObjcType> importsInImpl;
+  protected final Set<ObjcType> importsInHeader;
+  protected final Set<ObjcType> importsInImpl;
   protected final List<ObjcMethod> methods;
   protected final List<ObjcField> fields;
   protected final List<ObjcStatementBlock> initializers;
@@ -52,7 +54,7 @@ public class ObjcType extends ObjcNode {
   protected int anonCounter;
 
   public ObjcType(CompilationContext context, String name, boolean isProtocol,
-      List<ObjcType> imports) {
+      Set<ObjcType> imports) {
     this(context, name, isProtocol, true);
     importsInHeader.addAll(imports);
   }
@@ -61,7 +63,8 @@ public class ObjcType extends ObjcNode {
     this(context, name, context.getTypeRepo().getNSObject(), null, true);
   }
 
-  public ObjcType(CompilationContext context, String name, ObjcType baseClass, List<ObjcType> protocols, boolean pointerType) {
+  public ObjcType(CompilationContext context, String name, ObjcType baseClass,
+      Set<ObjcType> protocols, boolean pointerType) {
     this(context, name, false, pointerType);
     this.baseClass = baseClass;
     if (protocols != null) {
@@ -69,7 +72,8 @@ public class ObjcType extends ObjcNode {
     }
   }
 
-  public ObjcType(CompilationContext context, String name, boolean isProtocol, boolean pointerType) {
+  public ObjcType(CompilationContext context, String name, boolean isProtocol,
+      boolean pointerType) {
     this.name = name;
     this.isProtocol = isProtocol;
     this.pointerType = pointerType;
@@ -77,8 +81,8 @@ public class ObjcType extends ObjcNode {
     if (isProtocol) {
       this.protocols.add(context.getTypeRepo().getNSObject());
     }
-    importsInHeader = new LinkedList<ObjcType>();
-    importsInImpl = new LinkedList<ObjcType>();
+    importsInHeader = new HashSet<ObjcType>();
+    importsInImpl = new HashSet<ObjcType>();
     importsInImpl.add(this);
     methods = new LinkedList<ObjcMethod>();
     fields = new LinkedList<ObjcField>();
@@ -129,7 +133,8 @@ public class ObjcType extends ObjcNode {
       addFieldsToCopyMethod(context, copy);
   }
 
-  private static ObjcStatementBlock getFieldInitializer(CompilationContext context, List<ObjcField> fields) {
+  private static ObjcStatementBlock getFieldInitializer(CompilationContext context,
+      List<ObjcField> fields) {
     List<ObjcStatement> initializer = new LinkedList<ObjcStatement>();
     for (ObjcField field : fields) {
       if (!ModifierSet.isStatic(field.getModifiers())) {

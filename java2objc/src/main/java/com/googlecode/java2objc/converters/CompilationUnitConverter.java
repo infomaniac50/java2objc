@@ -26,9 +26,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import com.googlecode.java2objc.code.ObjcType;
 import com.googlecode.java2objc.main.Config;
@@ -64,7 +66,7 @@ public final class CompilationUnitConverter {
 
     PackageDeclaration pkg = cu.getPakage();
     String pkgName = pkg != null ? pkg.getName().toString() : null;
-    List<ObjcType> imports = toObjcImports(pkgName, repo, cu.getImports());
+    Set<ObjcType> imports = toObjcImports(pkgName, repo, cu.getImports());
     context.init(imports);
 
     List<ObjcType> objcTypes = new LinkedList<ObjcType>();
@@ -116,9 +118,9 @@ public final class CompilationUnitConverter {
     }
   }
 
-  private List<ObjcType> toObjcImports(String thisPkgName, ObjcTypeRepository repo,
+  private Set<ObjcType> toObjcImports(String thisPkgName, ObjcTypeRepository repo,
       List<ImportDeclaration> importedTypes) {
-    List<ObjcType> imports = new LinkedList<ObjcType>();
+    Set<ObjcType> imports = new HashSet<ObjcType>();
     if (importedTypes != null) {
       for (ImportDeclaration importedType : importedTypes) {
         String fullyQualifiedClassName = importedType.getName().toString();
