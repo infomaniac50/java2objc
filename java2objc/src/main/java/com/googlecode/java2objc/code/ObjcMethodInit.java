@@ -71,8 +71,9 @@ public final class ObjcMethodInit extends ObjcMethod {
       ObjcExpressionMethodCall call = new ObjcExpressionMethodCall(context, scope, "init", init.getArgs());
       condition = new ObjcExpressionAssign(new ObjcExpressionSimple(context, "self"), call);
     } else {
-      condition = new ObjcExpressionSimple(context, "(self = [super init])");
+      condition = new ObjcExpressionSimple(context, "self = [super init]");
     }
+    condition = new ObjcExpressionEnclosed(context, condition);
 
     ObjcStatement thenStmt = new ObjcStatementBlock(context, n.getBlock());
     ObjcStatementIf ifStmt = new ObjcStatementIf(condition, thenStmt, null);     
