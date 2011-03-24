@@ -17,7 +17,6 @@ package com.googlecode.java2objc.code;
 
 import japa.parser.ast.expr.EnclosedExpr;
 
-import com.googlecode.java2objc.converters.ExpressionConverter;
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.SourceCodeWriter;
 

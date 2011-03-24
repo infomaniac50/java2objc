@@ -25,10 +25,14 @@ import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
 
+import com.google.common.collect.Lists;
+import com.googlecode.java2objc.code.ObjcType;
 import com.googlecode.java2objc.converters.CompilationUnitConverter;
 import com.googlecode.java2objc.util.OrderedProperties;
 import com.googlecode.java2objc.util.Preconditions;
@@ -81,11 +85,15 @@ public final class Main {
       mappings.load(in);
     }
 
-    processFiles(null, javaFiles.toArray(new String[0]), mappings);
+    List<List<ObjcType>> objcTypes = Lists.newArrayList();
+    processFiles(null, javaFiles.toArray(new String[0]), mappings, objcTypes);
+    ObjcFileGenerator generator = new ObjcFileGenerator(config.getOutputDir(), config.getIndent());
+    generator.writeSourceCodeForFiles(objcTypes);
   }
 
-  private void processFiles(File dir, String[] fileNames, Properties mappings)
-      throws FileNotFoundException, ParseException, IOException {
+  private void processFiles(File dir, String[] fileNames, Properties mappings,
+      List<List<ObjcType>> objcTypes)
+      throws ParseException, IOException {
     for (String fileName : fileNames) {
       fileName = fileName.trim();
       File file = (dir != null) ? new File(dir, fileName) : new File(fileName);
@@ -106,15 +114,21 @@ public final class Main {
         if (dir != null) {
           config.setWorkingDir(new File(config.getWorkingDir(), file.getName()));
         }
-        processFiles(file, files, mappings);
+        processFiles(file, files, mappings, objcTypes);
         config.setWorkingDir(workingDir);
       } else {
-        // If a .java file, convert
-        Preconditions.assertTrue(fileName.endsWith(".java"), fileName + " isn't a Java file.");
-        FileInputStream in = new FileInputStream(file);
-        parseJavaFileAndWriteObjcType(in, file, mappings);
+        objcTypes.add(convertJavaFileToObjcTypes(mappings, fileName, file));
       }
     }
+  }
+
+  private List<ObjcType> convertJavaFileToObjcTypes(Properties mappings, String fileName, File file)
+      throws FileNotFoundException, ParseException {
+    Preconditions.assertTrue(fileName.endsWith(".java"), fileName + " isn't a Java file.");
+    FileInputStream in = new FileInputStream(file);
+    CompilationUnit cu = JavaParser.parse(in);
+    CompilationUnitConverter conv = new CompilationUnitConverter(config, cu, file, mappings);
+    return conv.getObjcTypes();
   }
 
   private Properties loadLocalMappings(File forFile, Properties mappings) {
@@ -133,12 +147,5 @@ public final class Main {
       }
     }
     return mappings;
-  }
-
-  private void parseJavaFileAndWriteObjcType(InputStream in, File file, Properties mappings)
-      throws ParseException, IOException {
-    CompilationUnit cu = JavaParser.parse(in);
-    CompilationUnitConverter conv = new CompilationUnitConverter(config, cu, file, mappings);
-    conv.generateSourceCode();
   }
 }
