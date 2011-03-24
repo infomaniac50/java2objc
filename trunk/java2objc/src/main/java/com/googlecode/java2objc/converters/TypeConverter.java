@@ -28,6 +28,7 @@ import japa.parser.ast.type.ClassOrInterfaceType;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import com.googlecode.java2objc.code.ObjcStatementBlock;
 import com.googlecode.java2objc.code.ObjcType;
@@ -44,9 +45,9 @@ import com.googlecode.java2objc.objc.UserDefinedObjcTypeBuilder;
  */
 public final class TypeConverter {
   private final CompilationContext context;
-  private final List<ObjcType> imports;
+  private final Set<ObjcType> imports;
 
-  public TypeConverter(CompilationContext context, List<ObjcType> imports) {
+  public TypeConverter(CompilationContext context, Set<ObjcType> imports) {
     this.context = context;
     this.imports = imports;
   }
@@ -62,7 +63,8 @@ public final class TypeConverter {
     }
     ObjcType objcType = createType(type, containingClass);
     context.getTypeRepo().put(pkgName, objcType.getName(), objcType);
-    UserDefinedObjcTypeBuilder typeBuilder = new UserDefinedObjcTypeBuilder(context, objcType, comments, containingClass);
+    UserDefinedObjcTypeBuilder typeBuilder =
+      new UserDefinedObjcTypeBuilder(context, objcType, comments, containingClass);
     buildType(typeBuilder, objcType, type, pkgName);
     return typeBuilder.build();
   }
@@ -70,26 +72,31 @@ public final class TypeConverter {
   private ObjcType createType(TypeDeclaration type, ObjcType containingClass) {
     ObjcType objcType;
     if (type instanceof ClassOrInterfaceDeclaration) {
-      objcType = new ObjcType(context, context.prefix(type.getName()), ((ClassOrInterfaceDeclaration)type).isInterface(), imports);
+      objcType = new ObjcType(context, context.prefix(type.getName()),
+          ((ClassOrInterfaceDeclaration)type).isInterface(), imports);
     } else if (type instanceof EnumDeclaration) {
       List<ObjcEnumEntry> entries = new LinkedList<ObjcEnumEntry>();
       for (EnumConstantDeclaration entry : ((EnumDeclaration)type).getEntries())
         entries.add(new ObjcEnumEntry(context, entry));
-      objcType = new ObjcEnumType(context, context.prefix(type.getName()), imports, entries, containingClass);
+      objcType = new ObjcEnumType(
+          context, context.prefix(type.getName()), imports, entries, containingClass);
     } else {
       throw new UnsupportedOperationException("Unsupported type: " + type.getClass().getSimpleName());
     }
     return objcType;
   }
 
-  private void buildType(UserDefinedObjcTypeBuilder typeBuilder, ObjcType objcType, TypeDeclaration type, String pkgName) {
-    if (type instanceof ClassOrInterfaceDeclaration && ((ClassOrInterfaceDeclaration)type).getExtends() != null) {
+  private void buildType(UserDefinedObjcTypeBuilder typeBuilder,
+      ObjcType objcType, TypeDeclaration type, String pkgName) {
+    if (type instanceof ClassOrInterfaceDeclaration
+        && ((ClassOrInterfaceDeclaration)type).getExtends() != null) {
       if (((ClassOrInterfaceDeclaration)type).isInterface()) {
         for (ClassOrInterfaceType implementedClass : ((ClassOrInterfaceDeclaration)type).getExtends()) {
           typeBuilder.addProtocol(context.getTypeRepo().getOrCreate(implementedClass));
         }
       } else {
-        typeBuilder.setBaseClass(context.getTypeRepo().getOrCreate(((ClassOrInterfaceDeclaration)type).getExtends().iterator().next()));
+        typeBuilder.setBaseClass(context.getTypeRepo().getOrCreate(
+            ((ClassOrInterfaceDeclaration)type).getExtends().iterator().next()));
       }
     }
     List<ClassOrInterfaceType> implemented = null;

@@ -21,6 +21,7 @@ import japa.parser.ast.expr.Expression;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import com.googlecode.java2objc.code.ObjcExpression;
 import com.googlecode.java2objc.code.ObjcMethod;
@@ -38,7 +39,8 @@ public final class ObjcEnumType extends ObjcType {
 
   private final List<ObjcEnumEntry> entries;
 
-  public ObjcEnumType(CompilationContext context, String name, List<ObjcType> imports, List<ObjcEnumEntry> entries, ObjcType containingClass) {
+  public ObjcEnumType(CompilationContext context, String name, Set<ObjcType> imports,
+      List<ObjcEnumEntry> entries, ObjcType containingClass) {
     super(context, name, false, false);
     this.entries = entries;
   }
@@ -52,7 +54,8 @@ public final class ObjcEnumType extends ObjcType {
   public void init(CompilationContext context, ObjcType baseClass, List<ObjcType> protocols,
       ObjcType containingClass, List<ObjcMethod> methods, List<ObjcField> fields,
       List<ObjcStatementBlock> initializers, List<ObjcType> subTypes, String comments) {
-    super.init(context, baseClass, protocols, containingClass, methods, fields, initializers, subTypes, comments);
+    super.init(context, baseClass, protocols, containingClass, methods, fields,
+        initializers, subTypes, comments);
 
     for (ObjcMethod method : this.methods) {
       method.getParams().add(0, new ObjcMethodParam(this, "e", 0));
@@ -134,7 +137,8 @@ public final class ObjcEnumType extends ObjcType {
       // *ValueOf and *Description functions
       writer.newLine();
       writer.append(name).append(' ').append(name).append("ValueOf(NSString *text);").newLine();
-      writer.append(name).append(' ').append(name).append("Description(").append(name).append(" value);").newLine();
+      writer.append(name).append(' ').append(name).append("Description(")
+          .append(name).append(" value);").newLine();
 
       // if other methods, append their signatures
       if (methods.size() > 0) {
@@ -182,7 +186,8 @@ public final class ObjcEnumType extends ObjcType {
       } else {
         writer.append("else ");
       }
-      writer.append("if ([text isEqualToString:@\"").append(entry.getName()).append("\"])").newLine();
+      writer.append("if ([text isEqualToString:@\"").append(entry.getName())
+          .append("\"])").newLine();
       writer.indent().append("return ").append(entry.getName()).endStatement().unIndent();
     }
     writer.unIndent().append('}').newLine();
@@ -192,7 +197,8 @@ public final class ObjcEnumType extends ObjcType {
 
   private void appendDescription(SourceCodeWriter writer) {
     writer.newLine();
-    writer.append(name).append(' ').append(name).append("Description(").append(name).append(" value) {").newLine();
+    writer.append(name).append(' ').append(name).append("Description(")
+        .append(name).append(" value) {").newLine();
     writer.indent().append("switch (value) {").newLine();
     writer.indent();
     boolean first = true;
@@ -203,7 +209,8 @@ public final class ObjcEnumType extends ObjcType {
         writer.append("else ");
       }
       writer.append("case ").append(entry.getName()).append(':').newLine();
-      writer.indent().append("return ").append("@\"").append(entry.getName()).append('"').endStatement().unIndent();
+      writer.indent().append("return ").append("@\"").append(entry.getName())
+          .append('"').endStatement().unIndent();
     }
     writer.unIndent().append('}').newLine();
     writer.append("return nil").endStatement().unIndent();

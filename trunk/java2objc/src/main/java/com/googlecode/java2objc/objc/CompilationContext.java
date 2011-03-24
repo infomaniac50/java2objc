@@ -16,7 +16,7 @@
 package com.googlecode.java2objc.objc;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 import com.googlecode.java2objc.code.ObjcMethod;
@@ -59,7 +59,7 @@ public class CompilationContext {
     this.repo = repo;
   }
 
-  public void init(List<ObjcType> imports) {
+  public void init(Set<ObjcType> imports) {
     this.typeConverter = new TypeConverter(this, imports);
   }
 
