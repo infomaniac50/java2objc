@@ -31,9 +31,12 @@ public class ObjcExpressionEnclosed extends ObjcExpression {
   private final ObjcExpression inner;
 
   public ObjcExpressionEnclosed(CompilationContext context, EnclosedExpr expr) {
+    this(context, context.getExpressionConverter().to(expr.getInner()));
+  }
+
+  public ObjcExpressionEnclosed(CompilationContext context, ObjcExpression inner) {
     super((ObjcType)null);
-    ExpressionConverter exprConverter = context.getExpressionConverter();
-    this.inner = exprConverter.to(expr.getInner());
+    this.inner = inner;
   }
 
   @Override
