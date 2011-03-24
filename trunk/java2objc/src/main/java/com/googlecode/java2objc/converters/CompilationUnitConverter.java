@@ -23,9 +23,6 @@ import japa.parser.ast.body.EnumDeclaration;
 import japa.parser.ast.body.TypeDeclaration;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,7 +33,6 @@ import com.googlecode.java2objc.code.ObjcType;
 import com.googlecode.java2objc.main.Config;
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.ObjcTypeRepository;
-import com.googlecode.java2objc.objc.SourceCodeWriter;
 
 /**
  * Converts a Java compilation unit into its equivalent Objective C classes
@@ -49,6 +45,7 @@ public final class CompilationUnitConverter {
   private final Config config;
   private final File file;
   private final Properties mappings;
+  private final List<ObjcType> objcTypes;
 
   public CompilationUnitConverter(Config config, CompilationUnit cu, File file,
       Properties mappings) {
@@ -56,9 +53,14 @@ public final class CompilationUnitConverter {
     this.config = config;
     this.file = file;
     this.mappings = mappings;
+    this.objcTypes = parseInput();
   }
 
-  public void generateSourceCode() throws IOException {
+  public List<ObjcType> getObjcTypes() {
+    return objcTypes;
+  }
+
+  private List<ObjcType> parseInput() {
     CompilationContext context = new CompilationContext(config);
     ObjcTypeRepository repo = new ObjcTypeRepository(context);
     context.initRepo(repo);
@@ -80,8 +82,7 @@ public final class CompilationUnitConverter {
         }
       }
     }
-
-    writeSourceCodeForTypes(objcTypes);
+    return objcTypes;
   }
 
   private void addExternalMappings(CompilationContext context) {
@@ -180,43 +181,5 @@ public final class CompilationUnitConverter {
       }
     }
     return classNames;
-  }
-
-  private void writeSourceCodeForTypes(List<ObjcType> types)
-      throws IOException {
-    SourceCodeWriter headerWriter = null;
-    SourceCodeWriter implWriter = null;
-    try {
-      config.getOutputDir().mkdirs();
-      File headerFile = new File(config.getOutputDir(), types.get(0).getHeaderFileName());
-      headerWriter =
-          new SourceCodeWriter(new PrintWriter(new FileOutputStream(headerFile)), true,
-              config.getIndent());
-      types.get(0).appendHeaderImports(headerWriter);
-      File implFile = null;
-
-      for (ObjcType currentType : types) {
-        headerWriter.append(currentType);
-
-        if (currentType.hasImpl()) {
-          if (implFile == null) {
-            implFile = new File(config.getOutputDir(), types.get(0).getImplFileName());
-            implWriter =
-                new SourceCodeWriter(new PrintWriter(new FileOutputStream(implFile)), false,
-                    config.getIndent());
-            types.get(0).appendBodyImports(implWriter);
-          }
-          implWriter.append(currentType);
-        }
-      }
-
-      System.out.printf("Generated %s\n", headerFile.getAbsolutePath());
-      if (implFile != null) {
-        System.out.printf("Generated %s\n", implFile.getAbsolutePath());
-      }
-    } finally {
-      if (headerWriter != null) headerWriter.close();
-      if (implWriter != null) implWriter.close();
-    }
   }
 }
