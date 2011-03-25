@@ -27,8 +27,8 @@ import com.google.code.java2objc.code.ObjcExpression;
 import com.google.code.java2objc.code.ObjcMethod;
 import com.google.code.java2objc.code.ObjcStatementBlock;
 import com.google.code.java2objc.code.ObjcType;
+import com.google.code.java2objc.converters.ExpressionConverter;
 import com.google.common.collect.Lists;
-import com.googlecode.java2objc.converters.ExpressionConverter;
 
 /**
  * Representation of an Objective C Enum. Objective C doesn't have rich object based Enums like

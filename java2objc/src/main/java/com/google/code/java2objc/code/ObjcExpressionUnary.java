@@ -18,7 +18,7 @@ package com.google.code.java2objc.code;
 import japa.parser.ast.expr.UnaryExpr;
 import japa.parser.ast.expr.UnaryExpr.Operator;
 
-import com.googlecode.java2objc.converters.ExpressionConverter;
+import com.google.code.java2objc.converters.ExpressionConverter;
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.ObjcOperator;
 import com.googlecode.java2objc.objc.SourceCodeWriter;
