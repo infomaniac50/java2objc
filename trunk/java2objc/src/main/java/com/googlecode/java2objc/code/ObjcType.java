@@ -251,6 +251,10 @@ public class ObjcType extends ObjcNode {
     return isProtocol;
   }
 
+  public boolean isArray() {
+    return "NSArray".equals(name) || "NSMutableArray".equals(name);
+  }
+
   public boolean hasImpl() {
     return !isProtocol;
   }

@@ -44,6 +44,11 @@ public class ObjcExpressionFieldAccess
     this.target = target;
   }
 
+  
+  public ObjcExpression getTarget() {
+    return target;
+  }
+
   private static ObjcExpression getScope(CompilationContext context, FieldAccessExpr expr) {
     Expression scope = expr.getScope();
     String field = expr.getField();
@@ -78,6 +83,8 @@ public class ObjcExpressionFieldAccess
     // reduce to bare field access if the target is self
     if (target instanceof ObjcExpressionSimple && "self".equals(((ObjcExpressionSimple) target).getExpression())) {
       writer.append(field);
+    } else if (target.getType().isArray() && "length".equals(field)) {
+      writer.append('[').append(target).append(" count]");
     } else {
       writer.append(target).append('.').append(field);
     }

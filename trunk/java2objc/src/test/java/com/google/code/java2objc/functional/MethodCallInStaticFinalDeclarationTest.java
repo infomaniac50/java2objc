@@ -26,6 +26,7 @@ import org.junit.Test;
 
 import com.google.code.java2objc.testtypes.ClassWithStaticFinal;
 import com.google.code.java2objc.testtypes.Player;
+import com.google.code.java2objc.utils.ObjcTypeUtils;
 import com.googlecode.java2objc.code.ObjcExpressionObjectCreation;
 import com.googlecode.java2objc.code.ObjcType;
 import com.googlecode.java2objc.main.Config;
@@ -59,8 +60,8 @@ public class MethodCallInStaticFinalDeclarationTest {
     List<List<ObjcType>> objcTypes = main.convertFilesToObjcTypes();
     ObjcType type1 = objcTypes.get(0).get(0);
     ObjcType type2 = objcTypes.get(1).get(0);
-    player = findClassName(Player.class.getSimpleName(), type1, type2);
-    classWithStaticFinal = findClassName(ClassWithStaticFinal.class.getSimpleName(), type1, type2);
+    player = ObjcTypeUtils.findClassName(Player.class.getSimpleName(), type1, type2);
+    classWithStaticFinal = ObjcTypeUtils.findClassName(ClassWithStaticFinal.class.getSimpleName(), type1, type2);
   }
 
   @Test
@@ -79,15 +80,4 @@ public class MethodCallInStaticFinalDeclarationTest {
     Assert.assertEquals("init", init.getMethodName());
     Assert.assertEquals(2, init.getNumParams());
   }
-
-  private ObjcType findClassName(String name, ObjcType... types) {
-    for (ObjcType type : types) {
-      if (type.getName().equals(name)) {
-        return type;
-      }
-    }
-    Assert.fail();
-    return null;
-  }
 }
-

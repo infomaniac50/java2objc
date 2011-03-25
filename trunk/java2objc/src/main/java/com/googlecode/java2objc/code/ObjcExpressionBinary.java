@@ -44,6 +44,18 @@ public class ObjcExpressionBinary extends ObjcExpression {
     this.right = right;
   }
 
+  public ObjcOperator getOperator() {
+    return operator;
+  }
+
+  public ObjcExpression getLeft() {
+    return left;
+  }
+
+  public ObjcExpression getRight() {
+    return right;
+  }
+
   @Override
   public void append(SourceCodeWriter writer) {
     if ("+".equals(operator.getOperator()) && (isString(left) || isString(right))) {

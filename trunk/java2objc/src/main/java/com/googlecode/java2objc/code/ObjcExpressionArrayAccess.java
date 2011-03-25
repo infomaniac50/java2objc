@@ -26,8 +26,7 @@ import com.googlecode.java2objc.objc.SourceCodeWriter;
  * 
  * @author David Gileadi
  */
-public class ObjcExpressionArrayAccess
-    extends ObjcExpression {
+public class ObjcExpressionArrayAccess extends ObjcExpression {
 
   protected final ObjcExpression index;
   protected final ObjcExpression name;
@@ -41,6 +40,12 @@ public class ObjcExpressionArrayAccess
 
   @Override
   public void append(SourceCodeWriter writer) {
+    // TODO(inder): If we are accessing an NSArray for RHS expression we should instead be
+    // returning [name objectAtIndex: index]. The following expression achieves that
+    // writer.append('[').append(name).append(" objectAtIndex: ").append(index).append(']');
+    // However, for LHS access of an array (for array assignment), we should be using
+    // [name insertObject: @value atIndex: index]
+    
     writer.append(name).append('[').append(index).append(']');
   }
 }

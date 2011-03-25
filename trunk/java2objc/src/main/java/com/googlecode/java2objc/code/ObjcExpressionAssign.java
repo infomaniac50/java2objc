@@ -52,6 +52,18 @@ public class ObjcExpressionAssign extends ObjcExpression {
     this.operator = operator;
   }
 
+  public ObjcExpression getTarget() {
+    return target;
+  }
+
+  public ObjcExpression getValue() {
+    return value;
+  }
+
+  public ObjcOperator getOperator() {
+    return operator;
+  }
+
   private static ObjcExpression getTarget(CompilationContext context, AssignExpr expr) {
     // rewrite to self.target if not accessing a local
     if ((expr.getTarget() instanceof NameExpr) && !context.isLocalDeclared(((NameExpr)expr.getTarget()).getName())) {
