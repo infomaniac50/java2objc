@@ -15,9 +15,9 @@
  */
 package com.googlecode.java2objc.objc;
 
-import java.util.LinkedList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.googlecode.java2objc.code.ObjcMethod;
 import com.googlecode.java2objc.code.ObjcStatementBlock;
 import com.googlecode.java2objc.code.ObjcType;
@@ -44,11 +44,11 @@ public final class UserDefinedObjcTypeBuilder {
     this.context = context;
     this.containingClass = containingClass;
     this.baseClass = context.getTypeRepo().getNSObject();
-    this.protocols = new LinkedList<ObjcType>();
-    this.methods = new LinkedList<ObjcMethod>();
-    this.fields = new LinkedList<ObjcField>();
-    this.initializers = new LinkedList<ObjcStatementBlock>();
-    this.subTypes = new LinkedList<ObjcType>();
+    this.protocols = Lists.newArrayList();
+    this.methods = Lists.newArrayList();
+    this.fields = Lists.newArrayList();
+    this.initializers = Lists.newArrayList();
+    this.subTypes = Lists.newArrayList();
     this.type = type;
     this.comments = comments;
     context.setCurrentType(type);

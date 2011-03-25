@@ -18,9 +18,9 @@ package com.googlecode.java2objc.code;
 import japa.parser.ast.expr.ArrayInitializerExpr;
 import japa.parser.ast.expr.Expression;
 
-import java.util.LinkedList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.googlecode.java2objc.converters.ExpressionConverter;
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.SourceCodeWriter;
@@ -37,7 +37,7 @@ public class ObjcExpressionArrayInit extends ObjcExpression {
   public ObjcExpressionArrayInit(CompilationContext context, ArrayInitializerExpr expr) {
     super(context.getTypeRepo().get("NSArray"));
     ExpressionConverter converter = context.getExpressionConverter();
-    this.initializers = new LinkedList<ObjcExpression>();
+    this.initializers = Lists.newArrayList();
     if (expr != null) {
       for (Expression value : expr.getValues()) {
         this.initializers.add(converter.to(value));

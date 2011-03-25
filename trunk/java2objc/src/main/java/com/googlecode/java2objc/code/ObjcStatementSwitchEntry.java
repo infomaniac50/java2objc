@@ -18,9 +18,9 @@ package com.googlecode.java2objc.code;
 import japa.parser.ast.stmt.Statement;
 import japa.parser.ast.stmt.SwitchEntryStmt;
 
-import java.util.LinkedList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.SourceCodeWriter;
 
@@ -37,7 +37,7 @@ public final class ObjcStatementSwitchEntry extends ObjcStatement {
   public ObjcStatementSwitchEntry(CompilationContext context, SwitchEntryStmt stmt) {
     isDefault = stmt.getLabel() == null;
     this.label = isDefault ? null : context.getExpressionConverter().to(stmt.getLabel());
-    this.stmts = new LinkedList<ObjcStatement>();
+    this.stmts = Lists.newArrayList();
     if (stmt != null && stmt.getStmts() != null) {
       for (Statement caseStmt : stmt.getStmts()) {
         this.stmts.add(context.getStatementConverter().to(caseStmt));

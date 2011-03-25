@@ -15,12 +15,12 @@
  */
 package com.googlecode.java2objc.code;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import japa.parser.ast.stmt.CatchClause;
 import japa.parser.ast.stmt.TryStmt;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.SourceCodeWriter;
 
@@ -43,7 +43,7 @@ public final class ObjcStatementTry
     } else {
       this.finallyBlock = null;
     }
-    this.catchs = new LinkedList<ObjcCatchClause>();
+    this.catchs = Lists.newArrayList();
     if (stmt.getCatchs() != null) {
       for (CatchClause clause : stmt.getCatchs()) {
         this.catchs.add(new ObjcCatchClause(context, clause));

@@ -16,9 +16,11 @@
 package com.googlecode.java2objc.objc;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+import com.google.common.collect.Maps;
 import com.googlecode.java2objc.code.ObjcMethod;
 import com.googlecode.java2objc.code.ObjcType;
 import com.googlecode.java2objc.converters.ExpressionConverter;
@@ -52,7 +54,7 @@ public class CompilationContext {
     this.expressionConverter = new ExpressionConverter(this);
     this.currentType = new Stack<ObjcType>();
     this.locals = new Stack<HashMap<String, ObjcType>>();
-    this.locals.push(new HashMap<String, ObjcType>());
+    this.locals.push(Maps.<String, ObjcType>newHashMap());
   }
 
   public void initRepo(ObjcTypeRepository repo) {
@@ -96,7 +98,7 @@ public class CompilationContext {
     if (method == null) {
       locals.pop();
     } else {
-      locals.push(new HashMap<String, ObjcType>());
+      locals.push(Maps.<String, ObjcType>newHashMap());
     }
   }
 
@@ -105,7 +107,7 @@ public class CompilationContext {
   }
 
   public void startBlock() {
-    locals.push(new HashMap<String, ObjcType>());
+    locals.push(Maps.<String, ObjcType>newHashMap());
   }
 
   public void endBlock() {
@@ -131,7 +133,7 @@ public class CompilationContext {
       return getCurrentType();
 
     for (int i = locals.size() - 1; i >= 0; i--) {
-      HashMap<String, ObjcType> block = locals.get(i);
+      Map<String, ObjcType> block = locals.get(i);
       if (block.containsKey(name))
         return block.get(name);
     }
@@ -145,7 +147,7 @@ public class CompilationContext {
       this.locals.pop();
     } else {
       this.currentType.push(type);
-      this.locals.push(new HashMap<String, ObjcType>());
+      this.locals.push(Maps.<String, ObjcType>newHashMap());
     }
   }
 

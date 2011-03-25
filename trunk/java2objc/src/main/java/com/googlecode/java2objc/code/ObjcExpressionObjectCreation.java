@@ -20,9 +20,9 @@ import japa.parser.ast.body.ModifierSet;
 import japa.parser.ast.expr.ObjectCreationExpr;
 import japa.parser.ast.type.ClassOrInterfaceType;
 
-import java.util.LinkedList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.SourceCodeWriter;
 
@@ -54,7 +54,7 @@ public class ObjcExpressionObjectCreation
 
     // if an anonymous object, create it and modify the name
     if (expr.getAnonymousClassBody() != null) {
-      List<ClassOrInterfaceType> implementsList = new LinkedList<ClassOrInterfaceType>();
+      List<ClassOrInterfaceType> implementsList = Lists.newArrayList();
       implementsList.add(new ClassOrInterfaceType(0, 0, 0, 0, null, name, null));
 
       name = context.getCurrentType().getNextAnonymousName();

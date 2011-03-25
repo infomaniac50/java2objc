@@ -17,13 +17,13 @@ package com.googlecode.java2objc.code;
 
 import japa.parser.ast.body.ModifierSet;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.ObjcField;
 import com.googlecode.java2objc.objc.ObjcNode;
@@ -77,18 +77,18 @@ public class ObjcType extends ObjcNode {
     this.name = name;
     this.isProtocol = isProtocol;
     this.pointerType = pointerType;
-    this.protocols = new LinkedList<ObjcType>();
+    this.protocols = Lists.newArrayList();
     if (isProtocol) {
       this.protocols.add(context.getTypeRepo().getNSObject());
     }
-    importsInHeader = new HashSet<ObjcType>();
-    importsInImpl = new HashSet<ObjcType>();
+    importsInHeader = Sets.newHashSet();
+    importsInImpl = Sets.newHashSet();
     importsInImpl.add(this);
-    methods = new LinkedList<ObjcMethod>();
-    fields = new LinkedList<ObjcField>();
-    initializers = new LinkedList<ObjcStatementBlock>();
-    subTypes = new LinkedList<ObjcType>();
-    methodMappings = new HashMap<String, String>();
+    methods = Lists.newArrayList();
+    fields = Lists.newArrayList();
+    initializers = Lists.newArrayList();
+    subTypes = Lists.newArrayList();
+    methodMappings = Maps.newHashMap();
   }
 
   public void init(CompilationContext context, ObjcType baseClass, List<ObjcType> protocols,
@@ -135,7 +135,7 @@ public class ObjcType extends ObjcNode {
 
   private static ObjcStatementBlock getFieldInitializer(CompilationContext context,
       List<ObjcField> fields) {
-    List<ObjcStatement> initializer = new LinkedList<ObjcStatement>();
+    List<ObjcStatement> initializer = Lists.newArrayList();
     for (ObjcField field : fields) {
       if (!ModifierSet.isStatic(field.getModifiers())) {
         for (ObjcVariableDeclarator var : field.getVars()) {
@@ -152,7 +152,7 @@ public class ObjcType extends ObjcNode {
   private static void addInitializersToConstructors(CompilationContext context,
       List<ObjcStatementBlock> initializers, List<ObjcMethod> methods) {
     if (initializers.size() > 0) {
-      List<ObjcStatement> initializer = new LinkedList<ObjcStatement>();
+      List<ObjcStatement> initializer = Lists.newArrayList();
       for (ObjcStatementBlock block : initializers) {
         initializer.addAll(block.getStatements());
       }
