@@ -18,9 +18,9 @@ package com.googlecode.java2objc.code;
 import japa.parser.ast.stmt.BlockStmt;
 import japa.parser.ast.stmt.Statement;
 
-import java.util.LinkedList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.SourceCodeWriter;
 
@@ -32,10 +32,7 @@ import com.googlecode.java2objc.objc.SourceCodeWriter;
 public final class ObjcStatementBlock extends ObjcStatement {
   
   public static class Builder {
-    private final List<ObjcStatement> stmts;
-    public Builder() {
-      stmts = new LinkedList<ObjcStatement>();
-    }
+    private final List<ObjcStatement> stmts = Lists.newArrayList();
     public Builder addStatement(ObjcStatement stmt) {
       stmts.add(stmt);
       return this;
@@ -48,7 +45,7 @@ public final class ObjcStatementBlock extends ObjcStatement {
   private final List<ObjcStatement> stmts;
 
   public ObjcStatementBlock(CompilationContext context, BlockStmt block) {
-    stmts = new LinkedList<ObjcStatement>();
+    stmts = Lists.newArrayList();
     context.startBlock();
     if (block != null && block.getStmts() != null) {
       for (Statement stmt : block.getStmts()) {

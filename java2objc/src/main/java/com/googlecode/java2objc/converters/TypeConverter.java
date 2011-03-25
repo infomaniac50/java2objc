@@ -26,10 +26,10 @@ import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.TypeDeclaration;
 import japa.parser.ast.type.ClassOrInterfaceType;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.collect.Lists;
 import com.googlecode.java2objc.code.ObjcStatementBlock;
 import com.googlecode.java2objc.code.ObjcType;
 import com.googlecode.java2objc.objc.CompilationContext;
@@ -75,7 +75,7 @@ public final class TypeConverter {
       objcType = new ObjcType(context, context.prefix(type.getName()),
           ((ClassOrInterfaceDeclaration)type).isInterface(), imports);
     } else if (type instanceof EnumDeclaration) {
-      List<ObjcEnumEntry> entries = new LinkedList<ObjcEnumEntry>();
+      List<ObjcEnumEntry> entries = Lists.newArrayList();
       for (EnumConstantDeclaration entry : ((EnumDeclaration)type).getEntries())
         entries.add(new ObjcEnumEntry(context, entry));
       objcType = new ObjcEnumType(

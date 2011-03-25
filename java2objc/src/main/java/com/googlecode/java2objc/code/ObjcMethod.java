@@ -22,9 +22,9 @@ import japa.parser.ast.body.Parameter;
 import japa.parser.ast.stmt.BlockStmt;
 import japa.parser.ast.type.Type;
 
-import java.util.LinkedList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.ObjcMethodParam;
 import com.googlecode.java2objc.objc.ObjcNode;
@@ -104,7 +104,7 @@ public class ObjcMethod extends ObjcNode {
     this.modifiers = modifiers;
     this.methodBody = methodBody;
     this.comments = comments;
-    this.params = new LinkedList<ObjcMethodParam>();
+    this.params = Lists.newArrayList();
     if (params != null) {
       for (ObjcMethodParam param : params) {
         this.params.add(param);
@@ -251,7 +251,7 @@ public class ObjcMethod extends ObjcNode {
 
   public static List<ObjcMethodParam> convertParameters(CompilationContext context,
       List<Parameter> params) {
-    List<ObjcMethodParam> result = new LinkedList<ObjcMethodParam>();
+    List<ObjcMethodParam> result = Lists.newArrayList();
     if (params != null) {
       for (Parameter param : params) {
         ObjcType type = context.getTypeRepo().getOrCreate(param.getType());

@@ -25,9 +25,7 @@ import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
@@ -64,7 +62,7 @@ public final class Main {
       printUsageAndExit();
     }
     Config config = new Config();
-    Collection<String> javaFiles = new LinkedList<String>();
+    List<String> javaFiles = Lists.newArrayList();
     for (String arg : args) {
       if (arg.startsWith("--")) {
         // A configuration setting

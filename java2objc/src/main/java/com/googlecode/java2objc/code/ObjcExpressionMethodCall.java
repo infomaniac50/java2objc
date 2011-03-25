@@ -19,9 +19,9 @@ import japa.parser.ast.body.ModifierSet;
 import japa.parser.ast.expr.Expression;
 import japa.parser.ast.expr.MethodCallExpr;
 
-import java.util.LinkedList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.googlecode.java2objc.converters.ExpressionConverter;
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.ObjcUtils;
@@ -58,7 +58,7 @@ public class ObjcExpressionMethodCall extends ObjcExpression {
     } else {
       this.enclosingType = null;
     }
-    this.args = new LinkedList<ObjcExpression>();
+    this.args = Lists.newArrayList();
     if (args != null) {
       ExpressionConverter converter = context.getExpressionConverter();
       for (Expression arg : args) {

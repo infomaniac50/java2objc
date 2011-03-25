@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.collect.Lists;
 import com.googlecode.java2objc.code.ObjcExpression;
 import com.googlecode.java2objc.code.ObjcMethod;
 import com.googlecode.java2objc.code.ObjcStatementBlock;
@@ -243,7 +244,7 @@ public final class ObjcEnumType extends ObjcType {
 
     public ObjcEnumEntry(CompilationContext context, EnumConstantDeclaration entry) {
       this.name = entry.getName();
-      this.args = new LinkedList<ObjcExpression>();
+      this.args = Lists.newArrayList();
       if (entry.getArgs() != null) {
         ExpressionConverter converter = context.getExpressionConverter();
         for (Expression expression : entry.getArgs()) {

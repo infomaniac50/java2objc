@@ -18,9 +18,9 @@ package com.googlecode.java2objc.code;
 import japa.parser.ast.stmt.SwitchEntryStmt;
 import japa.parser.ast.stmt.SwitchStmt;
 
-import java.util.LinkedList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.SourceCodeWriter;
 
@@ -36,7 +36,7 @@ public final class ObjcStatementSwitch extends ObjcStatement {
 
   public ObjcStatementSwitch(CompilationContext context, SwitchStmt stmt) {
     selector = context.getExpressionConverter().to(stmt.getSelector());
-    stmts = new LinkedList<ObjcStatementSwitchEntry>();
+    stmts = Lists.newArrayList();
     for (SwitchEntryStmt entry : stmt.getEntries()) {
       stmts.add(new ObjcStatementSwitchEntry(context, entry));
     }

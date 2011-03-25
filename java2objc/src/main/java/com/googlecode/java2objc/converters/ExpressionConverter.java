@@ -41,9 +41,9 @@ import japa.parser.ast.expr.ThisExpr;
 import japa.parser.ast.expr.UnaryExpr;
 import japa.parser.ast.expr.VariableDeclarationExpr;
 
-import java.util.LinkedList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.googlecode.java2objc.code.ObjcExpression;
 import com.googlecode.java2objc.code.ObjcExpressionArrayAccess;
 import com.googlecode.java2objc.code.ObjcExpressionArrayInit;
@@ -81,7 +81,7 @@ public final class ExpressionConverter {
   }
 
   public List<ObjcExpression> to(List<Expression> expressions) {
-    List<ObjcExpression> objcExpressions = new LinkedList<ObjcExpression>();
+    List<ObjcExpression> objcExpressions = Lists.newArrayList();
     if (expressions != null) {
       for (Expression expr : expressions) {
         ObjcExpression oexpr = to(expr);

@@ -23,13 +23,12 @@ import japa.parser.ast.body.EnumDeclaration;
 import japa.parser.ast.body.TypeDeclaration;
 
 import java.io.File;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.googlecode.java2objc.code.ObjcType;
 import com.googlecode.java2objc.main.Config;
 import com.googlecode.java2objc.objc.CompilationContext;
@@ -122,7 +121,7 @@ public final class CompilationUnitConverter {
 
   private Set<ObjcType> toObjcImports(String thisPkgName, ObjcTypeRepository repo,
       List<ImportDeclaration> importedTypes) {
-    Set<ObjcType> imports = new HashSet<ObjcType>();
+    Set<ObjcType> imports = Sets.newHashSet();
     if (importedTypes != null) {
       for (ImportDeclaration importedType : importedTypes) {
         String fullyQualifiedClassName = importedType.getName().toString();
@@ -161,7 +160,7 @@ public final class CompilationUnitConverter {
   }
 
   private List<String> getClassNames(String thisPkgName, String importPkgName) {
-    LinkedList<String> classNames = new LinkedList<String>();
+    List<String> classNames = Lists.newArrayList();
     // try to find matching source code
     StringBuilder path = new StringBuilder("../");
     if (thisPkgName != null) {

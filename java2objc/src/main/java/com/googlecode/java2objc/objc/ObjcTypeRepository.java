@@ -18,15 +18,15 @@ import japa.parser.ast.type.ClassOrInterfaceType;
 import japa.parser.ast.type.ReferenceType;
 import japa.parser.ast.type.Type;
 
-import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
 import com.googlecode.java2objc.code.ObjcType;
 
 public class ObjcTypeRepository {
 
   private final CompilationContext context;
-  private final Map<String, ObjcType> types = new HashMap<String, ObjcType>();
+  private final Map<String, ObjcType> types = Maps.newHashMap();
   
   public ObjcTypeRepository(CompilationContext context) {
     this.context = context;
