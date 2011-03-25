@@ -21,6 +21,7 @@ import japa.parser.ast.type.Type;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.googlecode.java2objc.code.ObjcType;
 import com.googlecode.java2objc.converters.ExpressionConverter;
 
@@ -36,7 +37,7 @@ public class ObjcVariable extends ObjcNode {
 
   public ObjcVariable(CompilationContext context, List<VariableDeclarator> vars, Type type) {
     this.type = context.getTypeRepo().getOrCreate(type);
-    this.vars = new LinkedList<ObjcVariableDeclarator>();
+    this.vars = Lists.newArrayList();
     ExpressionConverter converter = context.getExpressionConverter();
     for (VariableDeclarator var : vars) {
       ObjcVariableDeclarator decl =
