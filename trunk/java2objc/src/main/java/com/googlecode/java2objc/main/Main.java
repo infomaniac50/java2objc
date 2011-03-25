@@ -30,8 +30,8 @@ import java.util.List;
 import java.util.Properties;
 
 import com.google.code.java2objc.code.ObjcType;
+import com.google.code.java2objc.converters.CompilationUnitConverter;
 import com.google.common.collect.Lists;
-import com.googlecode.java2objc.converters.CompilationUnitConverter;
 import com.googlecode.java2objc.util.OrderedProperties;
 import com.googlecode.java2objc.util.Preconditions;
 

@@ -17,7 +17,7 @@ package com.google.code.java2objc.code;
 
 import japa.parser.ast.stmt.AssertStmt;
 
-import com.googlecode.java2objc.converters.ExpressionConverter;
+import com.google.code.java2objc.converters.ExpressionConverter;
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.SourceCodeWriter;
 

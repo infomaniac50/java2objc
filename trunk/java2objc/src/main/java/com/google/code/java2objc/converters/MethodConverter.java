@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.googlecode.java2objc.converters;
+package com.google.code.java2objc.converters;
 
 import japa.parser.ast.body.ConstructorDeclaration;
 import japa.parser.ast.body.InitializerDeclaration;
