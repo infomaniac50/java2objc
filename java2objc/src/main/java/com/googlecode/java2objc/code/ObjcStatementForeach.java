@@ -40,6 +40,26 @@ public final class ObjcStatementForeach extends ObjcStatement {
     this.body = context.getStatementConverter().to(stmt.getBody());
   }
   
+  public String getVarName() {
+    return varName;
+  }
+
+  public ObjcType getVarType() {
+    return varType;
+  }
+
+  public ObjcExpression getIterable() {
+    return iterable;
+  }
+
+  public ObjcStatement getBody() {
+    return body;
+  }
+
+  public ObjcStatementBlock getBodyAsBlock() {
+    return (ObjcStatementBlock) body;
+  }
+
   @Override
   public void append(SourceCodeWriter writer) {
     writer.newLine();

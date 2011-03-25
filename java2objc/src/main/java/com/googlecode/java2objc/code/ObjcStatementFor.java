@@ -41,6 +41,26 @@ public final class ObjcStatementFor extends ObjcStatement {
     this.body = context.getStatementConverter().to(stmt.getBody());
   }
   
+  public List<ObjcExpression> getInit() {
+    return init;
+  }
+
+  public ObjcExpression getCompare() {
+    return compare;
+  }
+
+  public List<ObjcExpression> getUpdate() {
+    return update;
+  }
+
+  public ObjcStatement getBody() {
+    return body;
+  }
+
+  public ObjcStatementBlock getBodyAsBlock() {
+    return (ObjcStatementBlock) body;
+  }
+
   @Override
   public void append(SourceCodeWriter writer) {
     writer.newLine();
