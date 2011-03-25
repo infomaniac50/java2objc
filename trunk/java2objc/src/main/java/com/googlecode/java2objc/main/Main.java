@@ -78,6 +78,12 @@ public final class Main {
   }
   
   public void execute() throws IOException, ParseException {
+    List<List<ObjcType>> objcTypes = convertFilesToObjcTypes();
+    ObjcFileGenerator generator = new ObjcFileGenerator(config.getOutputDir(), config.getIndent());
+    generator.writeSourceCodeForFiles(objcTypes);
+  }
+
+  public List<List<ObjcType>> convertFilesToObjcTypes() throws IOException, ParseException {
     // load the default mappings
     Properties mappings = new OrderedProperties();
     InputStream in = getClass().getClassLoader().getResourceAsStream("mappings.properties");
@@ -87,8 +93,7 @@ public final class Main {
 
     List<List<ObjcType>> objcTypes = Lists.newArrayList();
     processFiles(null, javaFiles.toArray(new String[0]), mappings, objcTypes);
-    ObjcFileGenerator generator = new ObjcFileGenerator(config.getOutputDir(), config.getIndent());
-    generator.writeSourceCodeForFiles(objcTypes);
+    return objcTypes;
   }
 
   private void processFiles(File dir, String[] fileNames, Properties mappings,

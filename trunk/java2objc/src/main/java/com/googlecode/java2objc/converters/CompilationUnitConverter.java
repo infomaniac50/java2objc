@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import com.google.common.collect.Lists;
 import com.googlecode.java2objc.code.ObjcType;
 import com.googlecode.java2objc.main.Config;
 import com.googlecode.java2objc.objc.CompilationContext;
@@ -71,7 +72,7 @@ public final class CompilationUnitConverter {
     Set<ObjcType> imports = toObjcImports(pkgName, repo, cu.getImports());
     context.init(imports);
 
-    List<ObjcType> objcTypes = new LinkedList<ObjcType>();
+    List<ObjcType> objcTypes = Lists.newArrayList();
     if (cu.getTypes() != null) {
       for (TypeDeclaration type : cu.getTypes()) {
         if (type instanceof ClassOrInterfaceDeclaration || type instanceof EnumDeclaration) {
