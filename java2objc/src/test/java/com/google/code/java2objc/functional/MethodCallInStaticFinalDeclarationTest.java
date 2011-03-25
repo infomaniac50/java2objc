@@ -26,10 +26,12 @@ import org.junit.Test;
 
 import com.google.code.java2objc.testtypes.ClassWithStaticFinal;
 import com.google.code.java2objc.testtypes.Player;
+import com.googlecode.java2objc.code.ObjcExpressionObjectCreation;
 import com.googlecode.java2objc.code.ObjcType;
 import com.googlecode.java2objc.main.Config;
 import com.googlecode.java2objc.main.Main;
 import com.googlecode.java2objc.objc.ObjcField;
+import com.googlecode.java2objc.objc.ObjcVariableDeclarator;
 
 /**
  * Functional test to verify the behavior for invocation of static final constants that
@@ -71,6 +73,11 @@ public class MethodCallInStaticFinalDeclarationTest {
   public void testMethodCallInStaticFinalDeclaration() throws Exception {
     ObjcField player1Field = classWithStaticFinal.getFieldWithName("PLAYER1");
     Assert.assertEquals("Player", player1Field.getType().getName());
+    ObjcVariableDeclarator declarator = player1Field.getVars().get(0);
+    Assert.assertEquals("PLAYER1", declarator.getName());
+    ObjcExpressionObjectCreation init = (ObjcExpressionObjectCreation) declarator.getInit();
+    Assert.assertEquals("init", init.getMethodName());
+    Assert.assertEquals(2, init.getNumParams());
   }
 
   private ObjcType findClassName(String name, ObjcType... types) {
