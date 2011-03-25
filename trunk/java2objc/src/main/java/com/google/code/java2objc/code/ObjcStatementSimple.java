@@ -13,36 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.java2objc.objc;
+package com.google.code.java2objc.code;
 
-import com.google.code.java2objc.code.ObjcType;
+import com.googlecode.java2objc.objc.SourceCodeWriter;
 
 /**
- * Parameter for an Objective C method
+ * Base class for all Objective C statements
  * 
  * @author Inderjeet Singh
  */
-public final class ObjcMethodParam extends ObjcNode {
+public class ObjcStatementSimple extends ObjcStatement {
 
-  private final ObjcType type;
-  private final String name;
-  private final int arrayCount;
+  private final String stmt;
 
-  public ObjcMethodParam(ObjcType type, String name, int arrayCount) {
-    this.type = type;
-    this.name = name;
-    this.arrayCount = arrayCount;
+  public ObjcStatementSimple() {
+    this(null);
   }
 
-  public ObjcType getType() {
-    return type;
+  public ObjcStatementSimple(String stmt) {
+    if (stmt != null) {
+      if (!stmt.endsWith(";")) {
+        stmt = stmt + ";";
+      }
+      stmt = stmt.replace("this.", "");
+    }
+    this.stmt = stmt;
   }
 
-  public String getName() {
-    return name;
-  }
-
-  public int getArrayCount() {
-    return arrayCount;
+  @Override
+  public void append(SourceCodeWriter writer) {
+    if (stmt == null || stmt.trim().equals("")) {
+      return;
+    }
+    writer.append(stmt);
+    writer.newLine();
   }
 }

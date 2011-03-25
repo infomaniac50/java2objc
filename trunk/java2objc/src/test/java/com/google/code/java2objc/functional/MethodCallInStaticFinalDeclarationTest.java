@@ -24,11 +24,11 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.code.java2objc.code.ObjcExpressionObjectCreation;
+import com.google.code.java2objc.code.ObjcType;
 import com.google.code.java2objc.testtypes.ClassWithStaticFinal;
 import com.google.code.java2objc.testtypes.Player;
 import com.google.code.java2objc.utils.ObjcTypeUtils;
-import com.googlecode.java2objc.code.ObjcExpressionObjectCreation;
-import com.googlecode.java2objc.code.ObjcType;
 import com.googlecode.java2objc.main.Config;
 import com.googlecode.java2objc.main.Main;
 import com.googlecode.java2objc.objc.ObjcField;

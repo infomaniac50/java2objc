@@ -20,9 +20,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+import com.google.code.java2objc.code.ObjcMethod;
+import com.google.code.java2objc.code.ObjcType;
 import com.google.common.collect.Maps;
-import com.googlecode.java2objc.code.ObjcMethod;
-import com.googlecode.java2objc.code.ObjcType;
 import com.googlecode.java2objc.converters.ExpressionConverter;
 import com.googlecode.java2objc.converters.MethodConverter;
 import com.googlecode.java2objc.converters.StatementConverter;

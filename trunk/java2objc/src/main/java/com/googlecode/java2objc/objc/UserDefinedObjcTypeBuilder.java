@@ -17,10 +17,10 @@ package com.googlecode.java2objc.objc;
 
 import java.util.List;
 
+import com.google.code.java2objc.code.ObjcMethod;
+import com.google.code.java2objc.code.ObjcStatementBlock;
+import com.google.code.java2objc.code.ObjcType;
 import com.google.common.collect.Lists;
-import com.googlecode.java2objc.code.ObjcMethod;
-import com.googlecode.java2objc.code.ObjcStatementBlock;
-import com.googlecode.java2objc.code.ObjcType;
 
 /**
  * A Builder to build a user-defined Objective C type 

@@ -1,6 +1,6 @@
 package com.googlecode.java2objc.objc;
 
-import com.googlecode.java2objc.code.ObjcExpression;
+import com.google.code.java2objc.code.ObjcExpression;
 
 public class ObjcVariableDeclarator extends ObjcNode {
 

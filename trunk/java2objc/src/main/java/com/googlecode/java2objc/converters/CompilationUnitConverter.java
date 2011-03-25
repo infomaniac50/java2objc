@@ -27,9 +27,9 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import com.google.code.java2objc.code.ObjcType;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.googlecode.java2objc.code.ObjcType;
 import com.googlecode.java2objc.main.Config;
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.ObjcTypeRepository;

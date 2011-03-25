@@ -2,15 +2,15 @@ package com.googlecode.java2objc.objc;
 
 import japa.parser.ast.body.ModifierSet;
 
-import com.googlecode.java2objc.code.ObjcExpression;
-import com.googlecode.java2objc.code.ObjcExpressionAssign;
-import com.googlecode.java2objc.code.ObjcExpressionFieldAccess;
-import com.googlecode.java2objc.code.ObjcExpressionSimple;
-import com.googlecode.java2objc.code.ObjcStatement;
-import com.googlecode.java2objc.code.ObjcStatementBlock;
-import com.googlecode.java2objc.code.ObjcStatementExpression;
-import com.googlecode.java2objc.code.ObjcStatementReturn;
-import com.googlecode.java2objc.code.ObjcType;
+import com.google.code.java2objc.code.ObjcExpression;
+import com.google.code.java2objc.code.ObjcExpressionAssign;
+import com.google.code.java2objc.code.ObjcExpressionFieldAccess;
+import com.google.code.java2objc.code.ObjcExpressionSimple;
+import com.google.code.java2objc.code.ObjcStatement;
+import com.google.code.java2objc.code.ObjcStatementBlock;
+import com.google.code.java2objc.code.ObjcStatementExpression;
+import com.google.code.java2objc.code.ObjcStatementReturn;
+import com.google.code.java2objc.code.ObjcType;
 
 public class ObjcUtils {
 
