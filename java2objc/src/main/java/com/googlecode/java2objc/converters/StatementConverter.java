@@ -34,23 +34,23 @@ import japa.parser.ast.stmt.TryStmt;
 import japa.parser.ast.stmt.TypeDeclarationStmt;
 import japa.parser.ast.stmt.WhileStmt;
 
-import com.googlecode.java2objc.code.ObjcStatement;
-import com.googlecode.java2objc.code.ObjcStatementAssert;
-import com.googlecode.java2objc.code.ObjcStatementBlock;
-import com.googlecode.java2objc.code.ObjcStatementDoWhile;
-import com.googlecode.java2objc.code.ObjcStatementExpression;
-import com.googlecode.java2objc.code.ObjcStatementFor;
-import com.googlecode.java2objc.code.ObjcStatementForeach;
-import com.googlecode.java2objc.code.ObjcStatementIf;
-import com.googlecode.java2objc.code.ObjcStatementLabeled;
-import com.googlecode.java2objc.code.ObjcStatementReturn;
-import com.googlecode.java2objc.code.ObjcStatementSimple;
-import com.googlecode.java2objc.code.ObjcStatementSwitch;
-import com.googlecode.java2objc.code.ObjcStatementSynchronized;
-import com.googlecode.java2objc.code.ObjcStatementThrow;
-import com.googlecode.java2objc.code.ObjcStatementTry;
-import com.googlecode.java2objc.code.ObjcStatementWhile;
-import com.googlecode.java2objc.code.ObjcType;
+import com.google.code.java2objc.code.ObjcStatement;
+import com.google.code.java2objc.code.ObjcStatementAssert;
+import com.google.code.java2objc.code.ObjcStatementBlock;
+import com.google.code.java2objc.code.ObjcStatementDoWhile;
+import com.google.code.java2objc.code.ObjcStatementExpression;
+import com.google.code.java2objc.code.ObjcStatementFor;
+import com.google.code.java2objc.code.ObjcStatementForEach;
+import com.google.code.java2objc.code.ObjcStatementIf;
+import com.google.code.java2objc.code.ObjcStatementLabeled;
+import com.google.code.java2objc.code.ObjcStatementReturn;
+import com.google.code.java2objc.code.ObjcStatementSimple;
+import com.google.code.java2objc.code.ObjcStatementSwitch;
+import com.google.code.java2objc.code.ObjcStatementSynchronized;
+import com.google.code.java2objc.code.ObjcStatementThrow;
+import com.google.code.java2objc.code.ObjcStatementTry;
+import com.google.code.java2objc.code.ObjcStatementWhile;
+import com.google.code.java2objc.code.ObjcType;
 import com.googlecode.java2objc.objc.CompilationContext;
 
 /**
@@ -74,7 +74,7 @@ public final class StatementConverter {
     } else if (stmt instanceof ForStmt) {
       return new ObjcStatementFor(context, (ForStmt)stmt);
     } else if (stmt instanceof ForeachStmt) {
-      return new ObjcStatementForeach(context, (ForeachStmt)stmt);
+      return new ObjcStatementForEach(context, (ForeachStmt)stmt);
     } else if (stmt instanceof SwitchStmt) {
       return new ObjcStatementSwitch(context, (SwitchStmt)stmt);
     } else if (stmt instanceof DoStmt) {

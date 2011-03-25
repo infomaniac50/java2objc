@@ -20,8 +20,8 @@ import japa.parser.ast.type.Type;
 
 import java.util.List;
 
+import com.google.code.java2objc.code.ObjcType;
 import com.google.common.collect.Lists;
-import com.googlecode.java2objc.code.ObjcType;
 import com.googlecode.java2objc.converters.ExpressionConverter;
 
 /**

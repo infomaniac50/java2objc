@@ -21,9 +21,9 @@ import japa.parser.ast.body.InitializerDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.ModifierSet;
 
-import com.googlecode.java2objc.code.ObjcMethod;
-import com.googlecode.java2objc.code.ObjcMethodInit;
-import com.googlecode.java2objc.code.ObjcStatementBlock;
+import com.google.code.java2objc.code.ObjcMethod;
+import com.google.code.java2objc.code.ObjcMethodInit;
+import com.google.code.java2objc.code.ObjcStatementBlock;
 import com.googlecode.java2objc.objc.CompilationContext;
 
 /**

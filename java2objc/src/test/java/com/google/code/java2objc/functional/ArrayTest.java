@@ -24,16 +24,16 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.code.java2objc.code.ObjcExpressionArrayAccess;
+import com.google.code.java2objc.code.ObjcExpressionAssign;
+import com.google.code.java2objc.code.ObjcMethod;
+import com.google.code.java2objc.code.ObjcStatement;
+import com.google.code.java2objc.code.ObjcStatementExpression;
+import com.google.code.java2objc.code.ObjcStatementFor;
+import com.google.code.java2objc.code.ObjcStatementForEach;
+import com.google.code.java2objc.code.ObjcType;
 import com.google.code.java2objc.testtypes.ClassWithArray;
 import com.google.code.java2objc.utils.ObjcTypeUtils;
-import com.googlecode.java2objc.code.ObjcExpressionArrayAccess;
-import com.googlecode.java2objc.code.ObjcExpressionAssign;
-import com.googlecode.java2objc.code.ObjcMethod;
-import com.googlecode.java2objc.code.ObjcStatement;
-import com.googlecode.java2objc.code.ObjcStatementExpression;
-import com.googlecode.java2objc.code.ObjcStatementFor;
-import com.googlecode.java2objc.code.ObjcStatementForeach;
-import com.googlecode.java2objc.code.ObjcType;
 import com.googlecode.java2objc.main.Config;
 import com.googlecode.java2objc.main.Main;
 import com.googlecode.java2objc.objc.ObjcField;
@@ -74,7 +74,7 @@ public class ArrayTest {
 
   @Test
   public void testForEachOnArray() throws Exception {
-    ObjcStatementForeach foreach = ObjcTypeUtils.findStatementOfType(statements, ObjcStatementForeach.class);
+    ObjcStatementForEach foreach = ObjcTypeUtils.findStatementOfType(statements, ObjcStatementForEach.class);
     Assert.assertEquals("s", foreach.getVarName());
     Assert.assertEquals("NSString", foreach.getVarType().getName());
     Assert.assertEquals(1, foreach.getBodyAsBlock().getStatements().size());

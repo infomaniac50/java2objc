@@ -13,36 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.googlecode.java2objc.objc;
+package com.google.code.java2objc.code;
 
-import com.google.code.java2objc.code.ObjcType;
+import com.googlecode.java2objc.objc.ObjcNode;
 
 /**
- * Parameter for an Objective C method
+ * Base class for all Objective C statements
  * 
  * @author Inderjeet Singh
  */
-public final class ObjcMethodParam extends ObjcNode {
+public abstract class ObjcStatement extends ObjcNode {
 
-  private final ObjcType type;
-  private final String name;
-  private final int arrayCount;
-
-  public ObjcMethodParam(ObjcType type, String name, int arrayCount) {
-    this.type = type;
-    this.name = name;
-    this.arrayCount = arrayCount;
-  }
-
-  public ObjcType getType() {
-    return type;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public int getArrayCount() {
-    return arrayCount;
-  }
 }

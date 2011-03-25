@@ -19,8 +19,8 @@ import java.util.List;
 
 import junit.framework.Assert;
 
-import com.googlecode.java2objc.code.ObjcStatement;
-import com.googlecode.java2objc.code.ObjcType;
+import com.google.code.java2objc.code.ObjcStatement;
+import com.google.code.java2objc.code.ObjcType;
 
 public final class ObjcTypeUtils {
 

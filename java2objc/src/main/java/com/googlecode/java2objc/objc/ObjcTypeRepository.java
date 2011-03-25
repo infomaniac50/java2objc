@@ -20,8 +20,8 @@ import japa.parser.ast.type.Type;
 
 import java.util.Map;
 
+import com.google.code.java2objc.code.ObjcType;
 import com.google.common.collect.Maps;
-import com.googlecode.java2objc.code.ObjcType;
 
 public class ObjcTypeRepository {
 

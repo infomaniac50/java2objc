@@ -29,9 +29,9 @@ import japa.parser.ast.type.ClassOrInterfaceType;
 import java.util.List;
 import java.util.Set;
 
+import com.google.code.java2objc.code.ObjcStatementBlock;
+import com.google.code.java2objc.code.ObjcType;
 import com.google.common.collect.Lists;
-import com.googlecode.java2objc.code.ObjcStatementBlock;
-import com.googlecode.java2objc.code.ObjcType;
 import com.googlecode.java2objc.objc.CompilationContext;
 import com.googlecode.java2objc.objc.ObjcEnumType;
 import com.googlecode.java2objc.objc.ObjcEnumType.ObjcEnumEntry;

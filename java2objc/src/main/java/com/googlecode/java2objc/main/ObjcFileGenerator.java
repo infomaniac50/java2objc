@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-import com.googlecode.java2objc.code.ObjcType;
+import com.google.code.java2objc.code.ObjcType;
 import com.googlecode.java2objc.objc.SourceCodeWriter;
 
 final class ObjcFileGenerator {
