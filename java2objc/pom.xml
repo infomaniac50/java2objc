@@ -8,9 +8,34 @@
   <artifactId>java2objc</artifactId>
   <packaging>jar</packaging>
   <version>1.1-SNAPSHOT</version>
+  <inceptionYear>2009</inceptionYear>
   <name>java2objc</name>
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>5</version>
+  </parent>
   <url>http://code.google.com/p/java2objc/</url>
   <description>A Tool to Convert Java code to Objective C</description>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <connection>scm:svn:http://java2objc.googlecode.com/svn/trunk/java2objc</connection>
+    <developerConnection>scm:svn:https://java2objc.googlecode.com/svn/trunk/java2objc</developerConnection>
+    <url>http://java2objc.codegoogle.com/svn/trunk/java2objc</url>
+  </scm>
+  <issueManagement>
+    <system>Google Code Issue Tracking</system>
+    <url>http://code.google.com/p/java2ojbc/issues/list</url>
+  </issueManagement>
 
   <dependencies>
     <dependency>
@@ -32,9 +57,38 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <profiles>
+    <!-- Activate PGP signing only when performing a release -->
+    <profile>
+      <id>release-sign-artifacts</id>
+      <activation>
+        <property>
+          <name>performRelease</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.2</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>  
 
   <build>
-    <finalName>java2objc</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -105,4 +159,9 @@
       </plugin>
     </plugins>
   </build>
+    <developers>
+    <developer>
+      <name>Inderjeet Singh</name>
+    </developer>
+  </developers>
 </project>
