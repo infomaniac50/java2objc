@@ -5,7 +5,7 @@
   <groupId>com.google.code.java2objc</groupId>
   <artifactId>java2objc-examples</artifactId>
   <packaging>jar</packaging>
-  <version>1.1</version>
+  <version>1.2-SNAPSHOT</version>
   <name>java2objc-examples</name>
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -25,9 +25,9 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:svn:http://java2objc.googlecode.com/svn/tags/java2objc-examples-1.1</connection>
-    <developerConnection>scm:svn:https://java2objc.googlecode.com/svn/tags/java2objc-examples-1.1</developerConnection>
-    <url>http://java2objc.codegoogle.com/svn/tags/java2objc-examples-1.1</url>
+    <connection>scm:svn:http://java2objc.googlecode.com/svn/trunk/examples</connection>
+    <developerConnection>scm:svn:https://java2objc.googlecode.com/svn/trunk/examples</developerConnection>
+    <url>http://java2objc.codegoogle.com/svn/trunk/examples</url>
   </scm>
   <issueManagement>
     <system>Google Code Issue Tracking</system>
