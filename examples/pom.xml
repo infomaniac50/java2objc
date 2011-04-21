@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.google.code.java2objc</groupId>
   <artifactId>java2objc-examples</artifactId>
   <packaging>jar</packaging>
-  <version>1.1-SNAPSHOT</version>
+  <version>1.1</version>
   <name>java2objc-examples</name>
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -27,9 +25,9 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:svn:http://java2objc.googlecode.com/svn/trunk/examples</connection>
-    <developerConnection>scm:svn:https://java2objc.googlecode.com/svn/trunk/examples</developerConnection>
-    <url>http://java2objc.codegoogle.com/svn/trunk/examples</url>
+    <connection>scm:svn:http://java2objc.googlecode.com/svn/tags/java2objc-examples-1.1</connection>
+    <developerConnection>scm:svn:https://java2objc.googlecode.com/svn/tags/java2objc-examples-1.1</developerConnection>
+    <url>http://java2objc.codegoogle.com/svn/tags/java2objc-examples-1.1</url>
   </scm>
   <issueManagement>
     <system>Google Code Issue Tracking</system>
