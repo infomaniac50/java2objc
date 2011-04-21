@@ -9,14 +9,38 @@
   <packaging>jar</packaging>
   <version>1.1-SNAPSHOT</version>
   <name>java2objc-examples</name>
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>5</version>
+  </parent>
   <url>http://code.google.com/p/java2objc/</url>
   <description>Examples for java2objc</description>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <connection>scm:svn:http://java2objc.googlecode.com/svn/trunk/examples</connection>
+    <developerConnection>scm:svn:https://java2objc.googlecode.com/svn/trunk/examples</developerConnection>
+    <url>http://java2objc.codegoogle.com/svn/trunk/examples</url>
+  </scm>
+  <issueManagement>
+    <system>Google Code Issue Tracking</system>
+    <url>http://code.google.com/p/java2ojbc/issues/list</url>
+  </issueManagement>
 
   <dependencies>
     <dependency>
       <groupId>com.google.code.java2objc</groupId>
       <artifactId>java2objc</artifactId>
-      <version>1.1-SNAPSHOT</version>
+      <version>1.1</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -26,6 +50,37 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <profiles>
+    <!-- Activate PGP signing only when performing a release -->
+    <profile>
+      <id>release-sign-artifacts</id>
+      <activation>
+        <property>
+          <name>performRelease</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.2</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>  
 
   <build>
     <plugins>
@@ -96,6 +151,20 @@
           <show>public</show>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.1</version>
+        <configuration>
+          <arguments>-DenableCiProfile=true</arguments>
+          <tagBase>https://java2objc.googlecode.com/svn/tags/</tagBase>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
+  <developers>
+    <developer>
+      <name>Inderjeet Singh</name>
+    </developer>
+  </developers>
 </project>
